@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Repositories;
+namespace Gate\Repositories;
 
-use BMMatic\Core\Clock;
-use BMMatic\Core\Database;
-use BMMatic\Reviews\ReviewData;
+use Gate\Core\Clock;
+use Gate\Core\Database;
+use Gate\Reviews\ReviewData;
 
 /**
  * The imported Google reviews. `is_visible` belongs to the workshop: a sync never changes it, and a review that

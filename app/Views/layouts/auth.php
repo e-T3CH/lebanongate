@@ -2,7 +2,7 @@
 /**
  * Sign-in screens: admin workspace background with a centered card (admin components only).
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var string $content
  */
 ?>

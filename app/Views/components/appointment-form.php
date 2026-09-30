@@ -6,14 +6,14 @@
  * sending (no double submit).
  * Parameters: Components::SPECS['appointment-form'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{action: string, title: string, submitLabel: string, token: string, values: array<string, mixed>, errors: array<string, mixed>, privacyHref: ?string, idPrefix: string, selectName: string, origin: string, class: string} $p
  */
 
-use BMMatic\Core\Html;
-use BMMatic\Core\Props;
-use BMMatic\Security\SpamGuard;
-use BMMatic\Site\AppointmentForm;
+use Gate\Core\Html;
+use Gate\Core\Props;
+use Gate\Security\SpamGuard;
+use Gate\Site\AppointmentForm;
 
 $id = static fn (string $suffix): string => $p['idPrefix'] . '-' . $suffix;
 $value = static fn (string $field): ?string => is_scalar($p['values'][$field] ?? null) ? (string) $p['values'][$field] : null;

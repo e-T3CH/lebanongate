@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Mail;
+namespace Gate\Mail;
 
-use BMMatic\I18n\Translator;
+use Gate\I18n\Translator;
 
 /**
  * Emails of the admin panel itself: an invitation to a new colleague, the confirmation of an own email change and

@@ -2,7 +2,7 @@
 /**
  * Settings → Security (Phase 1 part of the approved admin-security mock-up), built from components.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array<string, mixed> $values
  * @var array<string, string> $errors
  * @var bool $twoFactorOn

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Console;
+namespace Gate\Console;
 
 /**
  * Reads a password without echoing it. Windows: PowerShell Read-Host -AsSecureString; Unix: stty -echo.

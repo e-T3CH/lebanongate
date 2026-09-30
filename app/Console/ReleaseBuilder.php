@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Console;
+namespace Gate\Console;
 
-use BMMatic\Core\Paths;
+use Gate\Core\Paths;
 
 /**
  * build:release — a deployable zip for the standard or split layout:
@@ -38,7 +38,7 @@ final class ReleaseBuilder
         if (!in_array($layout, ['standard', 'split', 'webroot'], true)) {
             throw new \InvalidArgumentException('Use --layout=standard, --layout=split or --layout=webroot');
         }
-        $appDirName = $options['app-dir'] ?? 'bmmatic-app';
+        $appDirName = $options['app-dir'] ?? 'gate-app';
         Paths::appRootFor(Paths::root('public'), 'split', $appDirName); // validates the folder name
         $output = rtrim($options['output'] ?? Paths::root('build'), '/\\');
         $composer = $this->findComposer($options['composer'] ?? '');
@@ -53,7 +53,7 @@ final class ReleaseBuilder
         $stamp = gmdate('Ymd-His');
         $stage = $output . DIRECTORY_SEPARATOR . 'stage-' . $layout . '-' . $stamp;
         // webroot: the zip holds the application itself (no wrapper folder), to be unpacked straight into the web root.
-        $top = $layout === 'standard' ? $stage . DIRECTORY_SEPARATOR . 'bm-matic' : $stage;
+        $top = $layout === 'standard' ? $stage . DIRECTORY_SEPARATOR . 'gate-lebanon' : $stage;
         $appDir = $layout === 'split' ? $stage . DIRECTORY_SEPARATOR . $appDirName : $top;
         // split: the web folder is named like the host names it (public_html on cPanel, httpd.www on one.com).
         $webDirName = $options['web-dir'] ?? 'public_html';
@@ -116,7 +116,7 @@ final class ReleaseBuilder
             throw new \RuntimeException('Release incomplete (assets or vendor missing).');
         }
 
-        $zip = $output . DIRECTORY_SEPARATOR . 'bm-matic-' . $layout . '-' . $stamp . '.zip';
+        $zip = $output . DIRECTORY_SEPARATOR . 'gate-lebanon-' . $layout . '-' . $stamp . '.zip';
         $count = $this->zip($stage, $zip);
         if (!isset($options['keep'])) {
             $this->remove($stage);

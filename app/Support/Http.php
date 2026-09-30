@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Support;
+namespace Gate\Support;
 
 /**
  * The small HTTP client the review providers use. cURL when it is available, streams otherwise, so it also works on

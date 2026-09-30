@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var list<array{key: string, ok: bool, required: bool, detail: string}> $checks
  * @var bool $passes
  */

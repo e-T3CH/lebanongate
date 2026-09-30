@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Admin;
+namespace Gate\Http\Controllers\Admin;
 
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
-use BMMatic\Mail\AdminMails;
-use BMMatic\Mail\MailQueue;
-use BMMatic\Mail\SmtpTransport;
-use BMMatic\Repositories\InvitationRepository;
-use BMMatic\Repositories\UserRepository;
-use BMMatic\Security\PasswordHasher;
-use BMMatic\Services\AuditLog;
+use Gate\Http\Request;
+use Gate\Http\Response;
+use Gate\Mail\AdminMails;
+use Gate\Mail\MailQueue;
+use Gate\Mail\SmtpTransport;
+use Gate\Repositories\InvitationRepository;
+use Gate\Repositories\UserRepository;
+use Gate\Security\PasswordHasher;
+use Gate\Services\AuditLog;
 
 /**
  * The signed-in user's own account: name, email address (only after confirming from the new address) and password
@@ -145,7 +145,7 @@ final class ProfileController extends AdminController
         (new MailQueue($this->app->db(), $this->app->clock))->enqueue(AdminMails::emailChange(
             $email,
             (string) $user['name'],
-            $settings->string('site.name', 'BM-Matic'),
+            $settings->string('site.name', 'GATE Lebanon'),
             $link,
             InvitationRepository::EMAIL_CHANGE_TTL_HOURS,
             $this->app->translator()

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Support;
+namespace Gate\Support;
 
 /** One HTTP answer: the status, the body, and the transport error when there was no answer at all. */
 final class HttpResponse

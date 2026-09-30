@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Core;
+namespace Gate\Core;
 
 /**
  * Parameter specifications of every component in app/Views/components (see Props for the type syntax).
@@ -216,7 +216,7 @@ final class Components
             'menu' => 'list',                                   // AdminMenu::build() output
             'active' => ['string', ''],
             'brandMark' => ['string', 'BM'],
-            'brandName' => ['string', 'BM-Matic'],
+            'brandName' => ['string', 'GATE Lebanon'],
             'logoutAction' => ['?url', null],                   // POST form with CSRF token
             'open' => ['bool', false],
             'id' => ['id', 'sb'],
@@ -289,7 +289,7 @@ final class Components
             'homeHref' => 'url',
             'logoSrc' => 'url',
             'logoAlt' => 'string',
-            'siteName' => ['string', 'BM-Matic'],
+            'siteName' => ['string', 'GATE Lebanon'],
             'ctaLabel' => ['?string', null],
             'ctaHref' => ['?url', null],
             'menuHref' => ['url', '#mnav'],

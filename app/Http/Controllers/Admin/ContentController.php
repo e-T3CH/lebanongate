@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Admin;
+namespace Gate\Http\Controllers\Admin;
 
-use BMMatic\Repositories\ContentAdminRepository;
-use BMMatic\Site\RichText;
+use Gate\Repositories\ContentAdminRepository;
+use Gate\Site\RichText;
 
 /**
  * Shared ground for the content modules: the language tabs (EN/FR/NL with their translation state), the slug rules

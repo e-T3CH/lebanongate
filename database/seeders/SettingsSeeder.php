@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Database\Seeders;
+namespace Gate\Database\Seeders;
 
-use BMMatic\Core\ThemeDefaults;
-use BMMatic\Services\Settings;
+use Gate\Core\ThemeDefaults;
+use Gate\Services\Settings;
 
 /**
  * Default settings: design colors (Appearance), [bracket] content placeholders, security, i18n, motion and site toggles.
@@ -24,7 +24,7 @@ final class SettingsSeeder
     {
         $d = [
             // Site
-            'site.name' => ['BM-Matic', 'string'],
+            'site.name' => ['GATE Lebanon', 'string'],
             'site.url' => ['', 'string'],
             'site.online_booking' => [true, 'bool'],
             'site.maintenance_mode' => [false, 'bool'],
@@ -58,7 +58,7 @@ final class SettingsSeeder
             'mail.username' => ['', 'string'],
             'mail.password' => ['', 'string'],
             'mail.from_email' => ['', 'string'],
-            'mail.from_name' => ['BM-Matic', 'string'],
+            'mail.from_name' => ['GATE Lebanon', 'string'],
             'mail.to_email' => ['', 'string'],
 
             // Cookie consent and analytics (loaded only after consent)

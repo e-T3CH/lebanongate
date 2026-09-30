@@ -3,7 +3,7 @@
  * System → Users → one user: name, role, activation and a 2FA reset. The last active administrator keeps the
  * administrator role and stays active, so nobody can lock everyone out.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{id: int, name: string, email: string, role: string, active: bool, two_factor: bool, last_login: string} $editUser
  * @var bool $isLastAdmin
  * @var bool $isYou

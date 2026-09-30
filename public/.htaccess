@@ -1,4 +1,4 @@
-# BM-Matic — Apache / LiteSpeed configuration for the web root (/public).
+# GATE Lebanon — Apache / LiteSpeed configuration for the web root (/public).
 
 Options -Indexes -MultiViews
 DirectoryIndex index.php

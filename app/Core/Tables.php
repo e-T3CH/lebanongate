@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Core;
+namespace Gate\Core;
 
 /**
  * Table whitelist. Every table name that reaches SQL passes through here; anything else throws.

@@ -3,7 +3,7 @@
  * Breadcrumb trail (nav + ordered list); the last item is the current page (aria-current).
  * Parameters: Components::SPECS['breadcrumbs'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{items: list<array{label: string, href?: ?string}>} $p
  */
 

@@ -3,7 +3,7 @@
  * Home page: the enabled sections in their configured order (SectionOrder). Top bar, header and footer are part of the
  * layout; the rest are rendered from app/Views/site/sections.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var list<array<string, mixed>> $sections SectionOrder::visible() output
  * @var array<string, mixed> $home
  */

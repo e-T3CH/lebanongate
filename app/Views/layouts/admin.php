@@ -2,7 +2,7 @@
 /**
  * Admin layout: sidebar + top bar components, flash toast, confirm modal.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var string $content
  * @var string $pageTitle
  * @var string $pageSubtitle

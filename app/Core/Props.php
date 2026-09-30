@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Core;
+namespace Gate\Core;
 
 /**
  * Typed component parameters. Every component declares its parameters in Components::SPECS; View::component()

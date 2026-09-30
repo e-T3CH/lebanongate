@@ -8,7 +8,7 @@
  * replaced in Appearance), the height is kept and the width follows the file, and the variant widths and the
  * sizes hint scale with it, so the browser reserves the right space and still picks a sharp variant.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{src: string, alt: string, width: int, height: int, widths: list<int>, sizes: ?string, loading: string, priority: bool, class: string} $p
  */
 
@@ -18,7 +18,7 @@ $width = $p['width'];
 $height = $p['height'];
 $widths = array_values(array_filter($p['widths'], 'is_int'));
 $sizes = $p['sizes'];
-if ($media instanceof \BMMatic\Site\Media) {
+if ($media instanceof \Gate\Site\Media) {
     $info = $media->size($p['src']);
     if ($info !== null && $width > 0 && $height > 0) {
         $factor = ($info[0] / $info[1]) / ($width / $height);

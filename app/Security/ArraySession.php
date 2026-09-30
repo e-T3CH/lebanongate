@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Security;
+namespace Gate\Security;
 
 /** In-memory session for tests and CLI. */
 final class ArraySession implements Session

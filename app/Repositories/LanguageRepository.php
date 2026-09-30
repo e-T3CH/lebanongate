@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Repositories;
+namespace Gate\Repositories;
 
-use BMMatic\Core\Database;
-use BMMatic\I18n\LanguageRules;
+use Gate\Core\Database;
+use Gate\I18n\LanguageRules;
 
 /**
  * @phpstan-type LanguageRow array{code: string, name: string, native_name: string, is_enabled: bool, is_default: bool, sort_order: int}

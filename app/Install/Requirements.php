@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Install;
+namespace Gate\Install;
 
-use BMMatic\Core\Paths;
-use BMMatic\Security\PasswordHasher;
-use BMMatic\Support\Http;
-use BMMatic\Support\HttpClient;
+use Gate\Core\Paths;
+use Gate\Security\PasswordHasher;
+use Gate\Support\Http;
+use Gate\Support\HttpClient;
 
 /**
  * Step 1: server requirements.

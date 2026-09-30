@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Database\Seeders;
+namespace Gate\Database\Seeders;
 
-use BMMatic\Core\Clock;
-use BMMatic\Core\Database;
-use BMMatic\I18n\Translator;
+use Gate\Core\Clock;
+use Gate\Core\Database;
+use Gate\I18n\Translator;
 
 /**
  * Copies the lang/{code}/*.php strings into ui_translations: new keys are added, and a key whose text changed in the

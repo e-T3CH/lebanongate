@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Admin;
+namespace Gate\Http\Controllers\Admin;
 
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
-use BMMatic\I18n\Translator;
-use BMMatic\Mail\MailMessage;
-use BMMatic\Mail\MailQueue;
-use BMMatic\Mail\SmtpTransport;
-use BMMatic\Repositories\AppointmentRepository;
-use BMMatic\Services\AuditLog;
-use BMMatic\Services\StatusEmails;
+use Gate\Http\Request;
+use Gate\Http\Response;
+use Gate\I18n\Translator;
+use Gate\Mail\MailMessage;
+use Gate\Mail\MailQueue;
+use Gate\Mail\SmtpTransport;
+use Gate\Repositories\AppointmentRepository;
+use Gate\Services\AuditLog;
+use Gate\Services\StatusEmails;
 
 /**
  * Settings → Email: SMTP server, sender, the address that receives appointment requests, and a test button that
@@ -37,7 +37,7 @@ final class EmailSettingsController extends AdminController
                 'encryption' => $s->string('mail.encryption', 'tls'),
                 'username' => $s->string('mail.username'),
                 'from_email' => $s->string('mail.from_email'),
-                'from_name' => $s->string('mail.from_name', 'BM-Matic'),
+                'from_name' => $s->string('mail.from_name', 'GATE Lebanon'),
                 'to_email' => $s->string('mail.to_email'),
             ],
             'errors' => is_array($errors) ? $errors : [],
@@ -143,7 +143,7 @@ final class EmailSettingsController extends AdminController
         $s->set('mail.encryption', $values['encryption']);
         $s->set('mail.username', $values['username']);
         $s->set('mail.from_email', $values['from_email']);
-        $s->set('mail.from_name', $values['from_name'] !== '' ? $values['from_name'] : 'BM-Matic');
+        $s->set('mail.from_name', $values['from_name'] !== '' ? $values['from_name'] : 'GATE Lebanon');
         $s->set('mail.to_email', $values['to_email']);
         $password = $request->input('password');
         if ($request->input('clear_password') === '1') {
@@ -165,7 +165,7 @@ final class EmailSettingsController extends AdminController
             return $this->back($this->app->adminPath('settings/email'));
         }
         $s = $this->app->settings();
-        $site = $s->string('site.name', 'BM-Matic');
+        $site = $s->string('site.name', 'GATE Lebanon');
         $lang = $s->string('admin.language', 'en');
         $t = new Translator($lang, 'en', $this->app->db());
         try {

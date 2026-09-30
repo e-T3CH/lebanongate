@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Security;
+namespace Gate\Security;
 
-use BMMatic\Http\Response;
+use Gate\Http\Response;
 
 /**
  * Security headers for every response. The CSP uses a per-request nonce for the few inline <script>/<style>
  * blocks (the motion head script and the theme colors); everything else is loaded from 'self'.
  */
-final class SecurityHeaders implements \BMMatic\Site\SecurityHeadersAllow
+final class SecurityHeaders implements \Gate\Site\SecurityHeadersAllow
 {
     private readonly string $nonce;
 

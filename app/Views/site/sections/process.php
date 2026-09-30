@@ -2,7 +2,7 @@
 /**
  * Home section "process": header and the numbered steps.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{number: ?string, label: string, title: string, highlight: string} $section
  * @var array<string, mixed> $home
  */

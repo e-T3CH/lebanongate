@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\I18n;
+namespace Gate\I18n;
 
 /** Absolute and localized URLs, canonical links and hreflang alternates. */
 final class UrlGenerator

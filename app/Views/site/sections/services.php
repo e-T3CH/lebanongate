@@ -2,7 +2,7 @@
 /**
  * Home section "services": header with the "All services" link and the service cards.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{number: ?string, label: string, title: string, highlight: string, extra: array<string, mixed>} $section
  * @var array<string, mixed> $home
  */

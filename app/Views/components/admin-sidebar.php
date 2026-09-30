@@ -4,11 +4,11 @@
  * Items, sections, badges and role permissions come from config/admin-menu.php through AdminMenu::build().
  * Parameters: Components::SPECS['admin-sidebar'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{menu: list<array{section: string, items: list<array{key: string, label: string, icon: string, href: string, badge: ?int}>}>, active: string, brandMark: string, brandName: string, logoutAction: ?string, open: bool, id: string} $p
  */
 
-use BMMatic\Core\Props;
+use Gate\Core\Props;
 
 ?>
 <aside class="<?= e_attr(Props::classes('sb', $p['open'] ? 'open' : null)) ?>" id="<?= e_attr($p['id']) ?>" aria-label="<?= e_attr($view->t('admin.nav.label')) ?>">

@@ -3,7 +3,7 @@
  * System → Appearance: logo and favicon from the media library, the colour tokens with a live contrast check,
  * the corner radii and the motion setting, plus a reset to the approved design.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var list<array{label: string, href: string, active: bool}> $tabs
  * @var array<string, list<array{token: string, label: string, value: string, default: string}>> $colors
  * @var list<array{token: string, label: string, value: string}> $radii

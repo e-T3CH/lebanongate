@@ -2,7 +2,7 @@
 /**
  * Content → Pages → home page → one section: the texts of that section in one language.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{id: int, type: string, page_id: int, locked: bool, enabled: bool} $section
  * @var string $lang
  * @var array<string, string> $values

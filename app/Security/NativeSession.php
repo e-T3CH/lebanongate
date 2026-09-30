@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Security;
+namespace Gate\Security;
 
 /**
  * PHP session with hardened settings: strict mode, cookies only, HttpOnly, SameSite=Strict, Secure (+ __Host- prefix)

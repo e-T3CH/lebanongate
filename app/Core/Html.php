@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Core;
+namespace Gate\Core;
 
 /**
  * Markup that is already safe to output: the result of a component or template render.

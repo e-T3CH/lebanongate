@@ -2,31 +2,31 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Site;
+namespace Gate\Http\Controllers\Site;
 
-use BMMatic\Core\App;
-use BMMatic\Http\Flash;
-use BMMatic\Http\HttpException;
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
-use BMMatic\I18n\LocaleResolver;
-use BMMatic\I18n\Translator;
-use BMMatic\Mail\AppointmentMails;
-use BMMatic\Mail\MailQueue;
-use BMMatic\Repositories\AppointmentRepository;
-use BMMatic\Repositories\ContentRepository;
-use BMMatic\Repositories\RedirectRepository;
-use BMMatic\Repositories\ReviewRepository;
-use BMMatic\Reviews\ReviewPhotos;
-use BMMatic\Security\Csrf;
-use BMMatic\Security\SpamGuard;
-use BMMatic\Site\AppointmentForm;
-use BMMatic\Site\Consent;
-use BMMatic\Site\Media;
-use BMMatic\Site\RichText;
-use BMMatic\Site\Seo;
-use BMMatic\Site\SitePresenter;
-use BMMatic\Site\SiteUrls;
+use Gate\Core\App;
+use Gate\Http\Flash;
+use Gate\Http\HttpException;
+use Gate\Http\Request;
+use Gate\Http\Response;
+use Gate\I18n\LocaleResolver;
+use Gate\I18n\Translator;
+use Gate\Mail\AppointmentMails;
+use Gate\Mail\MailQueue;
+use Gate\Repositories\AppointmentRepository;
+use Gate\Repositories\ContentRepository;
+use Gate\Repositories\RedirectRepository;
+use Gate\Repositories\ReviewRepository;
+use Gate\Reviews\ReviewPhotos;
+use Gate\Security\Csrf;
+use Gate\Security\SpamGuard;
+use Gate\Site\AppointmentForm;
+use Gate\Site\Consent;
+use Gate\Site\Media;
+use Gate\Site\RichText;
+use Gate\Site\Seo;
+use Gate\Site\SitePresenter;
+use Gate\Site\SiteUrls;
 
 /**
  * The public website: language routing with translated slugs, pages, service details, the appointment form,
@@ -185,7 +185,7 @@ final class SiteController
                 'website' => $this->urls->base(),
             ]);
         }
-        $title = $page['meta_title'] !== '' ? $page['meta_title'] : $page['title'] . ' | ' . $this->app->settings()->string('site.name', 'BM-Matic');
+        $title = $page['meta_title'] !== '' ? $page['meta_title'] : $page['title'] . ' | ' . $this->app->settings()->string('site.name', 'GATE Lebanon');
         $path = $this->urls->page($key, $lang);
         $jsonld = $key === 'home' ? [] : [$this->breadcrumbList($page['breadcrumbs'], $lang)];
         return $this->render($request, $lang, $template, $data, $presenter->head($lang, $title, $page['meta_description'], $path, $alternates, $bundles, $this->consent($request), $this->app->headers, $jsonld), $key, $alternates, $status);
@@ -214,7 +214,7 @@ final class SiteController
             ['label' => $page['nav_label'], 'href' => $this->urls->page('services', $lang)],
             ['label' => $service['title']],
         ];
-        $title = $service['meta_title'] !== '' ? $service['meta_title'] : $service['title'] . ' | ' . $this->app->settings()->string('site.name', 'BM-Matic');
+        $title = $service['meta_title'] !== '' ? $service['meta_title'] : $service['title'] . ' | ' . $this->app->settings()->string('site.name', 'GATE Lebanon');
         $path = $this->urls->service($serviceId, $lang);
         $serviceLd = [
             '@context' => 'https://schema.org', '@type' => 'Service', 'name' => $service['title'], 'description' => $service['summary'],
@@ -297,7 +297,7 @@ final class SiteController
         $appointments = new AppointmentRepository($this->app->db(), $this->app->clock);
         $id = $appointments->create($values, $lang, $this->app->crypto()->hmac('ip|' . $request->ip()), $request->userAgent());
 
-        $siteName = $settings->string('site.name', 'BM-Matic');
+        $siteName = $settings->string('site.name', 'GATE Lebanon');
         $queue = new MailQueue($this->app->db(), $this->app->clock);
         $businessTo = $settings->string('mail.to_email');
         if (filter_var($businessTo, FILTER_VALIDATE_EMAIL) === false) {

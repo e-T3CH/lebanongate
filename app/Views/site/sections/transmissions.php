@@ -2,7 +2,7 @@
 /**
  * Home section "transmissions": caption and transmission chips (as drawn on desktop; not part of the mobile layout).
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{label: string} $section
  * @var array<string, mixed> $home
  */

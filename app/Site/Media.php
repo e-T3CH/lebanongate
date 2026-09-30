@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Site;
+namespace Gate\Site;
 
-use BMMatic\Core\Paths;
+use Gate\Core\Paths;
 
 /**
  * Responsive images: WebP variants of a public image at the requested widths, generated once with GD into

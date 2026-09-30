@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Security;
+namespace Gate\Security;
 
 /**
  * Synchronizer-token CSRF protection. One token per session, rotated on login/logout.

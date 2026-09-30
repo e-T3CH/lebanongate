@@ -2,46 +2,46 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Core;
+namespace Gate\Core;
 
-use BMMatic\Admin\Permissions;
-use BMMatic\DesignCheck\DesignCheckController;
-use BMMatic\Http\AdminRoutes;
-use BMMatic\Http\Controllers\Site\SiteController;
-use BMMatic\Http\Flash;
-use BMMatic\Http\HttpException;
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
-use BMMatic\Http\Router;
-use BMMatic\I18n\LanguageRules;
-use BMMatic\Mail\MailMessage;
-use BMMatic\Mail\MailQueue;
-use BMMatic\Ops\Health;
-use BMMatic\Ops\Scheduler;
-use BMMatic\Ops\SchemaUpdater;
-use BMMatic\Mail\MailWorker;
-use BMMatic\Mail\SmtpTransport;
-use BMMatic\I18n\LocaleResolver;
-use BMMatic\I18n\Translator;
-use BMMatic\I18n\UrlGenerator;
-use BMMatic\Install\InstallController;
-use BMMatic\Install\InstallState;
-use BMMatic\Repositories\LanguageRepository;
-use BMMatic\Repositories\UserRepository;
-use BMMatic\Security\Crypto;
-use BMMatic\Security\Csrf;
-use BMMatic\Security\IpAddress;
-use BMMatic\Security\LoginThrottle;
-use BMMatic\Security\NativeSession;
-use BMMatic\Security\PasswordHasher;
-use BMMatic\Security\RateLimiter;
-use BMMatic\Security\SecurityHeaders;
-use BMMatic\Security\Session;
-use BMMatic\Security\TwoFactor;
-use BMMatic\Services\AuditLog;
-use BMMatic\Services\AuthService;
-use BMMatic\Services\Settings;
-use BMMatic\Support\ErrorLog;
+use Gate\Admin\Permissions;
+use Gate\DesignCheck\DesignCheckController;
+use Gate\Http\AdminRoutes;
+use Gate\Http\Controllers\Site\SiteController;
+use Gate\Http\Flash;
+use Gate\Http\HttpException;
+use Gate\Http\Request;
+use Gate\Http\Response;
+use Gate\Http\Router;
+use Gate\I18n\LanguageRules;
+use Gate\Mail\MailMessage;
+use Gate\Mail\MailQueue;
+use Gate\Ops\Health;
+use Gate\Ops\Scheduler;
+use Gate\Ops\SchemaUpdater;
+use Gate\Mail\MailWorker;
+use Gate\Mail\SmtpTransport;
+use Gate\I18n\LocaleResolver;
+use Gate\I18n\Translator;
+use Gate\I18n\UrlGenerator;
+use Gate\Install\InstallController;
+use Gate\Install\InstallState;
+use Gate\Repositories\LanguageRepository;
+use Gate\Repositories\UserRepository;
+use Gate\Security\Crypto;
+use Gate\Security\Csrf;
+use Gate\Security\IpAddress;
+use Gate\Security\LoginThrottle;
+use Gate\Security\NativeSession;
+use Gate\Security\PasswordHasher;
+use Gate\Security\RateLimiter;
+use Gate\Security\SecurityHeaders;
+use Gate\Security\Session;
+use Gate\Security\TwoFactor;
+use Gate\Services\AuditLog;
+use Gate\Services\AuthService;
+use Gate\Services\Settings;
+use Gate\Support\ErrorLog;
 
 /**
  * Application kernel and service container. One instance per request.
@@ -151,7 +151,7 @@ final class App
     {
         if ($this->session === null) {
             $idle = $this->installedFlow ? $this->settings()->int('security.session_timeout', 30) : 30;
-            $this->session = new NativeSession($this->config->string('session.name', 'bm_session'), Paths::storage('sessions'), $this->request->isSecure(), $idle);
+            $this->session = new NativeSession($this->config->string('session.name', 'gate_session'), Paths::storage('sessions'), $this->request->isSecure(), $idle);
         }
         return $this->session;
     }

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Ops;
+namespace Gate\Ops;
 
-use BMMatic\Core\Database;
-use BMMatic\Core\Tables;
+use Gate\Core\Database;
+use Gate\Core\Tables;
 
 /**
  * A plain SQL dump written in PHP, so backups work on shared hosting where `mysqldump` is not available.
@@ -46,7 +46,7 @@ final class DatabaseDump
             throw new \RuntimeException('Cannot write the database dump to ' . $file);
         }
         $pdo = $this->db->pdo();
-        fwrite($out, "-- BM-Matic database dump, " . gmdate('Y-m-d H:i:s') . " UTC\n");
+        fwrite($out, "-- GATE Lebanon database dump, " . gmdate('Y-m-d H:i:s') . " UTC\n");
         fwrite($out, "SET NAMES utf8mb4;\nSET FOREIGN_KEY_CHECKS = 0;\nSET UNIQUE_CHECKS = 0;\nSET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';\n");
         $counts = [];
         foreach ($this->tables() as $table) {
@@ -100,9 +100,9 @@ final class DatabaseDump
             throw new \RuntimeException('Cannot read ' . $file);
         }
         $first = (string) fgets($in);
-        if (!str_starts_with($first, '-- BM-Matic database dump')) {
+        if (!str_starts_with($first, '-- GATE Lebanon database dump')) {
             fclose($in);
-            throw new \RuntimeException('This is not a BM-Matic database dump.');
+            throw new \RuntimeException('This is not a GATE Lebanon database dump.');
         }
         $pdo = $this->db->pdo();
         $pdo->exec('SET FOREIGN_KEY_CHECKS = 0');

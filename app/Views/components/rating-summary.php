@@ -3,7 +3,7 @@
  * Google rating summary: badge (value, stars, count, "Read all" link) or the compact mobile variant.
  * Parameters: Components::SPECS['rating-summary'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{value: string, count: string, rating: float|int, variant: string, linkHref: ?string, linkLabel: ?string} $p
  */
 ?>

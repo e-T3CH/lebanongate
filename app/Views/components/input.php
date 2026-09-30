@@ -8,11 +8,11 @@
  * writes its choice into the field in the same format, keeping any transparency.
  * Parameters: Components::SPECS['input'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{label: ?string, name: ?string, id: ?string, type: string, value: ?string, placeholder: ?string, autocomplete: ?string, inputmode: ?string, ariaLabel: ?string, error: ?string, hint: ?string, suffix: ?string, maxlength: ?int, required: bool, disabled: bool, readonly: bool, autofocus: bool, reveal: bool, color: bool, class: string, inputClass: string, attrs: array<string, string|int|bool|null>} $p
  */
 
-use BMMatic\Core\Props;
+use Gate\Core\Props;
 
 $id = $p['id'] ?? ($p['name'] !== null ? 'f-' . preg_replace('/[^A-Za-z0-9_-]/', '-', $p['name']) : null);
 $described = [];

@@ -2,7 +2,7 @@
 /**
  * Service detail: heading, description with an aside to book or call, other services and a call to action.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array<string, mixed> $page services page
  * @var array{title: string, summary: string, body: string} $service
  * @var list<array{label: string, href?: ?string}> $breadcrumbs

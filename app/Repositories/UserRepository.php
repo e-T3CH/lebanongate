@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Repositories;
+namespace Gate\Repositories;
 
-use BMMatic\Core\Clock;
-use BMMatic\Core\Database;
+use Gate\Core\Clock;
+use Gate\Core\Database;
 
 /**
  * @phpstan-type UserRow array{id: int, email: string, name: string, password_hash: string, role: string, is_active: bool,

@@ -4,11 +4,11 @@
  * url contains {page}. Nothing is rendered for a single page.
  * Parameters: Components::SPECS['pagination'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{page: int, pages: int, url: string, class: string} $p
  */
 
-use BMMatic\Core\Props;
+use Gate\Core\Props;
 
 $pages = max(1, $p['pages']);
 if ($pages < 2) {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Repositories;
+namespace Gate\Repositories;
 
-use BMMatic\Core\Clock;
-use BMMatic\Core\Database;
+use Gate\Core\Clock;
+use Gate\Core\Database;
 
 /**
  * Write access to the website content for the admin panel. Reading for the website stays in ContentRepository

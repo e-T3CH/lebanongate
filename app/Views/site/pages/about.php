@@ -2,7 +2,7 @@
 /**
  * About: heading, rich text, key figures, process steps, partners (when any are enabled), call to action.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array<string, mixed> $page
  * @var array<string, mixed> $home
  * @var array<string, mixed> $process

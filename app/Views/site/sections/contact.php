@@ -2,7 +2,7 @@
 /**
  * Home section "contact" (also the contact page): contact panel with details and map tile, appointment form.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{number: ?string, label: string, title: string, highlight?: string, intro: string, extra: array<string, mixed>} $section
  * @var array<string, mixed> $home
  */

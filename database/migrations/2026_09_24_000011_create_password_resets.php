@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use BMMatic\Core\Database;
-use BMMatic\Core\Migration;
+use Gate\Core\Database;
+use Gate\Core\Migration;
 
 /**
  * "Forgot your password?" (hosts without a command line, such as one.com, have no other way back in).

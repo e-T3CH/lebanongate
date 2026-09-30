@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Security;
+namespace Gate\Security;
 
 /** Session storage abstraction (native PHP sessions in production, an array in tests). */
 interface Session

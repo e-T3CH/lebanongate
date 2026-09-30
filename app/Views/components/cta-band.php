@@ -3,7 +3,7 @@
  * Call-to-action band: title, short text, primary button and optional secondary (ghost) button.
  * Parameters: Components::SPECS['cta-band'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{title: string, text: ?string, primaryLabel: string, primaryHref: string, secondaryLabel: ?string, secondaryHref: ?string} $p
  */
 ?>

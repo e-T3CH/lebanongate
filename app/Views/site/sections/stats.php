@@ -2,7 +2,7 @@
 /**
  * Home section "stats": key figures band.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{label: string} $section
  * @var array<string, mixed> $home
  */

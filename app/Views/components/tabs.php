@@ -3,11 +3,11 @@
  * Tabs: link tabs with an underline on the active one (aria-current="page"); optional count "All (128)".
  * Parameters: Components::SPECS['tabs'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{items: list<array{label: string, href: string, active?: bool, count?: int}>, label: string, variant: string, class: string} $p
  */
 
-use BMMatic\Core\Props;
+use Gate\Core\Props;
 
 $links = '';
 foreach ($p['items'] as $item) {

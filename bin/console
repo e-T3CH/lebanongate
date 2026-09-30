@@ -4,7 +4,7 @@
 declare(strict_types=1);
 
 /*
- * BM-Matic command line. Run `php bin/console` for the list of commands.
+ * GATE Lebanon command line. Run `php bin/console` for the list of commands.
  * Only the CLI SAPI is accepted; web requests get a 404 and nothing runs.
  */
 
@@ -16,4 +16,4 @@ if (PHP_SAPI !== 'cli') {
 require dirname(__DIR__) . '/vendor/autoload.php';
 
 /** @var list<string> $argv */
-exit((new BMMatic\Console\Kernel())->run($argv));
+exit((new Gate\Console\Kernel())->run($argv));

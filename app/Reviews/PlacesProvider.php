@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Reviews;
+namespace Gate\Reviews;
 
-use BMMatic\Services\Settings;
-use BMMatic\Support\HttpClient;
+use Gate\Services\Settings;
+use Gate\Support\HttpClient;
 
 /**
  * Google Places API (New): an API key and a Place ID, no OAuth. It returns the location's rating and total review

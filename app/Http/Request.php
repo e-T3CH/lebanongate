@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http;
+namespace Gate\Http;
 
-use BMMatic\Security\IpAddress;
+use Gate\Security\IpAddress;
 
 final class Request
 {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Repositories;
+namespace Gate\Repositories;
 
-use BMMatic\Core\Clock;
-use BMMatic\Core\Database;
-use BMMatic\Security\Crypto;
+use Gate\Core\Clock;
+use Gate\Core\Database;
+use Gate\Security\Crypto;
 
 /**
  * Password reset links. The token only exists in the email; the database keeps an HMAC of it. A link is valid for

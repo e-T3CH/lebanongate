@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Services;
+namespace Gate\Services;
 
-use BMMatic\Core\Database;
-use BMMatic\Repositories\AppointmentRepository;
+use Gate\Core\Database;
+use Gate\Repositories\AppointmentRepository;
 
 /**
  * Optional customer email per appointment status: one template per status per language, and a switch per status.

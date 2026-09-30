@@ -3,11 +3,11 @@
  * Status pill: neutral, new, confirmed, in diagnosis, quoted, danger; optional status dot or icon.
  * Parameters: Components::SPECS['status-pill'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{label: string, tone: string, dot: bool, icon: ?string, class: string, attrs: array<string, string|int|bool|null>} $p
  */
 
-use BMMatic\Core\Props;
+use Gate\Core\Props;
 
 $lead = $p['dot'] ? '<span class="pill__dot"></span>' : ($p['icon'] !== null ? $view->component('icon', ['icon' => $p['icon'], 'size' => '13']) . ' ' : '');
 ?>

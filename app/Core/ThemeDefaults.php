@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Core;
+namespace Gate\Core;
 
 /** Design colors (DESIGN-SPEC.md, mockups/src/css/tokens.css). Seeded as theme.<name> settings. */
 final class ThemeDefaults

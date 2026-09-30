@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var string $loginUrl
  * @var string $email
  */

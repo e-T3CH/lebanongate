@@ -2,7 +2,7 @@
 /**
  * Transmissions: heading, transmission type cards, call to action.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array<string, mixed> $page
  * @var list<array{label: string, description: string}> $types
  * @var array{title: string, text: string, bookHref: string, phoneHref: ?string} $cta

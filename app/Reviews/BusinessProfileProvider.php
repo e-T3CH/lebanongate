@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Reviews;
+namespace Gate\Reviews;
 
-use BMMatic\Services\Settings;
-use BMMatic\Support\HttpClient;
+use Gate\Services\Settings;
+use Gate\Support\HttpClient;
 
 /**
  * Google Business Profile API: the full review history of one location.

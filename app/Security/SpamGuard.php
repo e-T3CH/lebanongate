@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Security;
+namespace Gate\Security;
 
-use BMMatic\Core\Clock;
+use Gate\Core\Clock;
 
 /**
  * Spam protection for public forms, on top of the CSRF token:

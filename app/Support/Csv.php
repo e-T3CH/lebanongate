@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Support;
+namespace Gate\Support;
 
 /**
  * CSV cells that are safe to open in a spreadsheet. Text typed by a visitor ("=HYPERLINK(…)", "+cmd|…") would

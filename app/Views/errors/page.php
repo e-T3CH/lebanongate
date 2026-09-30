@@ -2,7 +2,7 @@
 /**
  * Generic error page (no details are ever shown to visitors).
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var int $status
  * @var string $key
  * @var string|null $reference error log reference (500/503)

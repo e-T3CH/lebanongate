@@ -3,7 +3,7 @@
  * Settings → Security log: what happened in the panel, filtered by event, user or date, with CSV export and the
  * retention setting.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var list<array{label: string, href: string, active: bool}> $tabs
  * @var list<array{when: string, event: string, label: string, user: string, ip: string, context: string}> $rows
  * @var list<string> $events

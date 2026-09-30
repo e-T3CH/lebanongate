@@ -3,7 +3,7 @@
  * Content → lists: transmission types, process steps, key figures and partners. One screen per list: the rows of the
  * chosen language with their order, visibility and one Save button.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var string $type
  * @var list<string> $fields
  * @var list<array{id: int, enabled: bool, values: array<string, string>}> $rows

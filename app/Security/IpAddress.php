@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Security;
+namespace Gate\Security;
 
 /** Client IP resolution (trusting X-Forwarded-For only from configured proxies) and allowlist matching. */
 final class IpAddress

@@ -2,7 +2,7 @@
 /**
  * Contact: the contact section with the page title as H1 (details, map tile, appointment form).
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array<string, mixed> $page
  * @var array<string, mixed> $home
  * @var array<string, mixed> $contactSection

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Site;
+namespace Gate\Site;
 
-use BMMatic\Core\Clock;
-use BMMatic\I18n\Translator;
-use BMMatic\Repositories\ContentRepository;
-use BMMatic\Repositories\LanguageRepository;
-use BMMatic\Repositories\ReviewRepository;
-use BMMatic\Reviews\ReviewPhotos;
-use BMMatic\Services\SectionOrder;
-use BMMatic\Services\Settings;
+use Gate\Core\Clock;
+use Gate\I18n\Translator;
+use Gate\Repositories\ContentRepository;
+use Gate\Repositories\LanguageRepository;
+use Gate\Repositories\ReviewRepository;
+use Gate\Reviews\ReviewPhotos;
+use Gate\Services\SectionOrder;
+use Gate\Services\Settings;
 
 /**
  * Builds the view data of public pages from the settings and the content tables: layout parts (header with top bar,
@@ -41,7 +41,7 @@ final class SitePresenter
      */
     public function layout(string $lang, string $activeKey, array $alternates, string $currentPath, Consent $consent, bool $showCookieSettings, ?array $toast): array
     {
-        $siteName = $this->settings->string('site.name', 'BM-Matic');
+        $siteName = $this->settings->string('site.name', 'GATE Lebanon');
         $sections = $this->content->sections('home', $lang);
         $topbarOn = false;
         foreach ($sections as $s) {
@@ -170,7 +170,7 @@ final class SitePresenter
      */
     public function head(string $lang, string $title, string $description, string $path, array $alternates, array $bundles, Consent $consent, SecurityHeadersAllow $allow, array $jsonld = [], bool $noindex = false): array
     {
-        $siteName = $this->settings->string('site.name', 'BM-Matic');
+        $siteName = $this->settings->string('site.name', 'GATE Lebanon');
         $canonical = $this->urls->absolute($path);
         $brand = new Brand($this->settings);
         $ogImage = $this->settings->string('seo.og_image');

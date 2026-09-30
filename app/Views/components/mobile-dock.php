@@ -3,11 +3,11 @@
  * Mobile quick-action dock (fixed at the bottom below 768px): call, WhatsApp, book (primary).
  * Parameters: Components::SPECS['mobile-dock'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{items: list<array{label: string, icon: string, href: string, primary?: bool}>, label: string} $p
  */
 
-use BMMatic\Core\Props;
+use Gate\Core\Props;
 
 ?>
 <nav class="dock m-dock<?= count($p['items']) === 2 ? ' dock--2' : '' ?>" aria-label="<?= e_attr($p['label']) ?>">

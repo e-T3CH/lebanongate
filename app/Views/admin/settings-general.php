@@ -2,7 +2,7 @@
 /**
  * Settings → General: company details, contact details and the website switches.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var list<array{label: string, href: string, active: bool}> $tabs
  * @var array<string, mixed> $values
  * @var array<string, string> $errors

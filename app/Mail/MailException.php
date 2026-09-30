@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Mail;
+namespace Gate\Mail;
 
 final class MailException extends \RuntimeException
 {

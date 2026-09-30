@@ -4,11 +4,11 @@
  * a CSRF token; a destructive one opens the confirm modal (never the browser dialog).
  * Parameters: Components::SPECS['row-actions'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{actions: list<array<string, mixed>>, class: string} $p
  */
 
-use BMMatic\Core\Props;
+use Gate\Core\Props;
 
 $forms = '';
 foreach ($p['actions'] as $action) {

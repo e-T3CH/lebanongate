@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Services;
+namespace Gate\Services;
 
-use BMMatic\Core\Clock;
-use BMMatic\Repositories\UserRepository;
-use BMMatic\Security\Csrf;
-use BMMatic\Security\IpAddress;
-use BMMatic\Security\LoginThrottle;
-use BMMatic\Security\PasswordHasher;
-use BMMatic\Security\RateLimiter;
-use BMMatic\Security\Session;
-use BMMatic\Security\TwoFactor;
+use Gate\Core\Clock;
+use Gate\Repositories\UserRepository;
+use Gate\Security\Csrf;
+use Gate\Security\IpAddress;
+use Gate\Security\LoginThrottle;
+use Gate\Security\PasswordHasher;
+use Gate\Security\RateLimiter;
+use Gate\Security\Session;
+use Gate\Security\TwoFactor;
 
 /**
  * Admin authentication: password check with login protection, optional TOTP second step, session lifecycle.

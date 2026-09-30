@@ -2,7 +2,7 @@
 /**
  * Appointments: the workflow list with status filters, a date range, search, sorting, pagination and CSV export.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{rows: list<array<string, mixed>>, total: int, page: int, pages: int} $result
  * @var list<array{id: int, when: string, who: string, car: string, box: string, label: string, tone: string, unread: bool}> $rows
  * @var array<string, mixed> $filters
@@ -12,7 +12,7 @@
  * @var string $adminPath
  */
 
-use BMMatic\Core\Html;
+use Gate\Core\Html;
 
 $filterValue = static fn (string $key): string => is_scalar($filters[$key] ?? null) ? (string) $filters[$key] : '';
 $tableRows = [];

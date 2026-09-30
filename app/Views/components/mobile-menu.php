@@ -5,11 +5,11 @@
  * burger links to a page that renders it open.
  * Parameters: Components::SPECS['mobile-menu'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{nav: list<array{label: string, href: string, children?: list<array{title: string, href: string}>}>, languages: list<array<string, mixed>>, logoSrc: string, logoAlt: string, closeHref: string, ctaLabel: ?string, ctaHref: ?string, socials: list<array{network: string, url: string}>, open: bool, hidden: bool, id: string} $p
  */
 
-use BMMatic\Core\Props;
+use Gate\Core\Props;
 
 $str = static fn (array $a, string $k): string => is_string($a[$k] ?? null) ? $a[$k] : '';
 ?>

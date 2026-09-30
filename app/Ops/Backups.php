@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Ops;
+namespace Gate\Ops;
 
-use BMMatic\Core\Clock;
-use BMMatic\Core\Config;
-use BMMatic\Core\Database;
-use BMMatic\Core\Paths;
-use BMMatic\Security\Crypto;
-use BMMatic\Services\Settings;
+use Gate\Core\Clock;
+use Gate\Core\Config;
+use Gate\Core\Database;
+use Gate\Core\Paths;
+use Gate\Security\Crypto;
+use Gate\Services\Settings;
 
 /**
- * Backups: one file per run, bmmatic-backup-YYYYMMDD-HHMMSS.tar.gz, holding
+ * Backups: one file per run, gate-backup-YYYYMMDD-HHMMSS.tar.gz, holding
  *   manifest.json   what is inside, row counts, checksums and a fingerprint of the app key
  *   database.sql    the dump (DatabaseDump)
  *   uploads/…       every uploaded file (the media library)
@@ -28,7 +28,7 @@ use BMMatic\Services\Settings;
  */
 final class Backups
 {
-    public const PREFIX = 'bmmatic-backup-';
+    public const PREFIX = 'gate-backup-';
     public const FORMAT = 1;
     private const KEEP_AT_LEAST = 3;
 
@@ -126,7 +126,7 @@ final class Backups
             $data = null;
         }
         if (!is_array($data) || ($data['format'] ?? null) !== self::FORMAT) {
-            throw new \RuntimeException('This file is not a BM-Matic backup (no readable manifest).');
+            throw new \RuntimeException('This file is not a GATE Lebanon backup (no readable manifest).');
         }
         return $data;
     }

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Reviews;
+namespace Gate\Reviews;
 
-use BMMatic\Services\Settings;
-use BMMatic\Support\Http;
-use BMMatic\Support\HttpClient;
+use Gate\Services\Settings;
+use Gate\Support\Http;
+use Gate\Support\HttpClient;
 
 /**
  * Builds the provider that is currently selected (and the others, for the picker on the Connection card).

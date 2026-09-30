@@ -4,11 +4,11 @@
  * role=alert for errors after a submit, note for static hints.
  * Parameters: Components::SPECS['notice'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{title: string, text: ?string, icon: string, linkHref: ?string, linkLabel: ?string, role: string, class: string} $p
  */
 
-use BMMatic\Core\Props;
+use Gate\Core\Props;
 
 $col = '<span class="warn__title">' . e($p['title']) . '</span>'
     . ($p['text'] !== null ? '<span class="warn__text">' . e($p['text']) . '</span>' : '')

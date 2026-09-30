@@ -4,7 +4,7 @@
  * cookie banner and flash toast. All parts are components; the data comes from SitePresenter (or the design-check
  * fixtures for the approved screens).
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var string $content
  * @var array<string, mixed> $head partial('head') parameters
  * @var array{header: array<string, mixed>, drawer: array<string, mixed>, footer: array<string, mixed>, dock: array<string, mixed>|null, cookie: array<string, mixed>|null, toast: array{type: string, message: string}|null} $site

@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{host: string, port: int, name: string, user: string, pass: string} $db
  * @var string|null $error
  */

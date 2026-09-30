@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Admin;
+namespace Gate\Http\Controllers\Admin;
 
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
-use BMMatic\Repositories\AppointmentRepository;
+use Gate\Http\Request;
+use Gate\Http\Response;
+use Gate\Repositories\AppointmentRepository;
 
 /**
  * Messages: the same requests as the Appointments screen, seen as an inbox. Unread (`read_at IS NULL`) is
@@ -35,7 +35,7 @@ final class MessageController extends AdminController
             'unreadOnly' => ($filters['unread'] ?? false) === true,
             'unreadCount' => $repo->countUnread(),
             'query' => AppointmentController::queryString($filters),
-            'siteName' => $this->app->settings()->string('site.name', 'BM-Matic'),
+            'siteName' => $this->app->settings()->string('site.name', 'GATE Lebanon'),
         ]);
     }
 }

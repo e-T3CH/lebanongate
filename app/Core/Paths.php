@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Core;
+namespace Gate\Core;
 
 /** Absolute filesystem locations. The root can be overridden (tests use a temporary copy of storage/config). */
 final class Paths
@@ -18,14 +18,14 @@ final class Paths
         return self::join(self::$root, $path);
     }
 
-    /** storage/ (override with the BM_STORAGE_DIR environment variable, e.g. for tests or a staging copy) */
+    /** storage/ (override with the GATE_STORAGE_DIR environment variable, e.g. for tests or a staging copy) */
     public static function storage(string $path = ''): string
     {
-        return self::join(self::$storage ?? self::env('BM_STORAGE_DIR') ?? self::root('storage'), $path);
+        return self::join(self::$storage ?? self::env('GATE_STORAGE_DIR') ?? self::root('storage'), $path);
     }
 
     /**
-     * config/ (override with BM_CONFIG_DIR). Only the installer-written config.local.php lives in the override;
+     * config/ (override with GATE_CONFIG_DIR). Only the installer-written config.local.php lives in the override;
      * shipped files (app.php, admin-menu.php) are always read from the project config/ directory.
      */
     public static function config(string $path = ''): string
@@ -33,7 +33,7 @@ final class Paths
         if ($path !== '' && $path !== 'config.local.php') {
             return self::join(self::root('config'), $path);
         }
-        return self::join(self::$config ?? self::env('BM_CONFIG_DIR') ?? self::root('config'), $path);
+        return self::join(self::$config ?? self::env('GATE_CONFIG_DIR') ?? self::root('config'), $path);
     }
 
     private static function env(string $name): ?string

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Reviews;
+namespace Gate\Reviews;
 
-use BMMatic\Core\Clock;
-use BMMatic\Repositories\ReviewRepository;
-use BMMatic\Security\RateLimiter;
-use BMMatic\Services\Settings;
+use Gate\Core\Clock;
+use Gate\Repositories\ReviewRepository;
+use Gate\Security\RateLimiter;
+use Gate\Services\Settings;
 
 /**
  * One sync run: ask the active provider, store what changed, and write a line in the sync log.

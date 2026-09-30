@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Repositories;
+namespace Gate\Repositories;
 
-use BMMatic\Core\Clock;
-use BMMatic\Core\Database;
-use BMMatic\Security\Crypto;
+use Gate\Core\Clock;
+use Gate\Core\Database;
+use Gate\Security\Crypto;
 
 /**
  * Invitations to the admin panel and confirmations of an own email change. Both work the same way: a random token

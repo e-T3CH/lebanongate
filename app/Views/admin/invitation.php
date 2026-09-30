@@ -3,7 +3,7 @@
  * Accepting an invitation: the invited colleague chooses their own password. Same card as the sign-in screen.
  * An expired or unknown link shows a short explanation instead of the form (HTTP 410).
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array<string, mixed>|null $invitation
  * @var string $token
  * @var string $siteName

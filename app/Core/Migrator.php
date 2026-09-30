@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Core;
+namespace Gate\Core;
 
 /**
  * Runs database/migrations/*.php in filename order and records them in the `migrations` table.

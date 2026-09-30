@@ -4,11 +4,11 @@
  * With a label it is exposed as a progressbar; without one it is presentational next to visible text.
  * Parameters: Components::SPECS['progress'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{value: int, label: ?string, class: string} $p
  */
 
-use BMMatic\Core\Props;
+use Gate\Core\Props;
 
 $value = max(0, min(100, $p['value']));
 $a11y = $p['label'] !== null ? ' role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' . $value . '" aria-label="' . e_attr($p['label']) . '"' : '';

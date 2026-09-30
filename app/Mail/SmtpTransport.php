@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Mail;
+namespace Gate\Mail;
 
-use BMMatic\Services\Settings;
+use Gate\Services\Settings;
 use PHPMailer\PHPMailer\Exception as PHPMailerException;
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -30,7 +30,7 @@ final class SmtpTransport implements MailTransport
             'username' => $settings->string('mail.username'),
             'password' => $settings->string('mail.password'),
             'from_email' => $settings->string('mail.from_email'),
-            'from_name' => $settings->string('mail.from_name', 'BM-Matic'),
+            'from_name' => $settings->string('mail.from_name', 'GATE Lebanon'),
         ]);
     }
 

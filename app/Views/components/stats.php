@@ -3,7 +3,7 @@
  * Key figures band: numbered stats (value counts up on scroll through motion.js).
  * Parameters: Components::SPECS['stats'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{items: list<array{value: string, label: string}>, label: string} $p
  */
 ?>

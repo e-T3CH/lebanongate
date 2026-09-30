@@ -1,10 +1,10 @@
 <?php
 /**
  * Cookie consent banner: short explanation, link to the cookie policy, "Accept analytics" and "Only necessary" with
- * equal weight. A plain POST form (works without JavaScript); the choice is stored in the bm_consent cookie.
+ * equal weight. A plain POST form (works without JavaScript); the choice is stored in the gate_consent cookie.
  * Parameters: Components::SPECS['cookie-banner'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{action: string, returnTo: string, policyHref: string, open: bool} $p
  */
 ?>

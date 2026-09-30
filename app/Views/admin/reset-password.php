@@ -3,7 +3,7 @@
  * Choosing a new password from the link in the reset email. An expired, used or unknown link shows a short
  * explanation instead of the form (HTTP 410).
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var bool $valid
  * @var array<string, string> $errors
  * @var string $action

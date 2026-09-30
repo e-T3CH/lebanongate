@@ -6,7 +6,7 @@
  * runs directly (the server validates it as usual).
  * Parameters: Components::SPECS['confirm-modal'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{id: string, title: ?string, message: ?string, confirmLabel: ?string, cancelLabel: ?string, tone: string, open: bool} $p
  */
 

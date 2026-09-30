@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Services;
+namespace Gate\Services;
 
-use BMMatic\Core\Clock;
-use BMMatic\Core\Database;
-use BMMatic\Core\Paths;
+use Gate\Core\Clock;
+use Gate\Core\Database;
+use Gate\Core\Paths;
 
 /**
  * The media library: uploads into public/uploads, one row per file with alt text per language.

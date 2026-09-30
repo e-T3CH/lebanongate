@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var string|null $error
  * @var string|null $notice
  * @var string $email

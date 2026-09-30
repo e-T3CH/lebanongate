@@ -3,12 +3,12 @@
  * Setting row (admin): name and optional description on the left, a control (toggle, select, input) on the right.
  * Parameters: Components::SPECS['setting-row'].
  *
- * @var \BMMatic\Core\View $view
- * @var array{name: string, control: \BMMatic\Core\Html|string, description: ?string, wide: bool, class: string} $p
+ * @var \Gate\Core\View $view
+ * @var array{name: string, control: \Gate\Core\Html|string, description: ?string, wide: bool, class: string} $p
  */
 
-use BMMatic\Core\Html;
-use BMMatic\Core\Props;
+use Gate\Core\Html;
+use Gate\Core\Props;
 
 $name = '<span class="setting__name">' . e($p['name']) . '</span>';
 $left = $p['description'] !== null

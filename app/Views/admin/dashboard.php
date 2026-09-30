@@ -4,7 +4,7 @@
  * rating and reviews on the website (from the Google reviews module), recent requests, quick controls and the 2FA
  * warning.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var bool $twoFactorOn
  * @var string $siteName
  * @var string $adminPath

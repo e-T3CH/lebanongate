@@ -3,11 +3,11 @@
  * Chips: rounded labels (transmission types, blueprint legend).
  * Parameters: Components::SPECS['chips'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{items: list<string>, class: string} $p
  */
 
-use BMMatic\Core\Props;
+use Gate\Core\Props;
 
 $chips = '';
 foreach ($p['items'] as $item) {

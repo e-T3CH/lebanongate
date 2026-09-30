@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Reviews;
+namespace Gate\Reviews;
 
-use BMMatic\Services\Settings;
+use Gate\Services\Settings;
 
 /**
  * Manual import: a JSON or CSV file that the owner exports from Google (or keeps by hand), with a column mapper and

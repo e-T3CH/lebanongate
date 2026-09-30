@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Support;
+namespace Gate\Support;
 
 /** Minimal HTTP contract, so providers can be tested and pointed at a mock without touching the network. */
 interface HttpClient

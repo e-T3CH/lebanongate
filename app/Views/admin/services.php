@@ -2,7 +2,7 @@
 /**
  * Content → Services: order, visibility and the translation state per language, plus a card to add one.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var list<array{id: int, key: string, icon: string, title: string, enabled: bool, in_menu: bool, states: array<string, string>}> $services
  * @var list<string> $languages
  * @var bool $canEdit

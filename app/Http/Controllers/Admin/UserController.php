@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Admin;
+namespace Gate\Http\Controllers\Admin;
 
-use BMMatic\Admin\Permissions;
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
-use BMMatic\Mail\AdminMails;
-use BMMatic\Mail\MailQueue;
-use BMMatic\Mail\SmtpTransport;
-use BMMatic\Repositories\InvitationRepository;
-use BMMatic\Repositories\UserRepository;
-use BMMatic\Security\PasswordHasher;
-use BMMatic\Services\AuditLog;
+use Gate\Admin\Permissions;
+use Gate\Http\Request;
+use Gate\Http\Response;
+use Gate\Mail\AdminMails;
+use Gate\Mail\MailQueue;
+use Gate\Mail\SmtpTransport;
+use Gate\Repositories\InvitationRepository;
+use Gate\Repositories\UserRepository;
+use Gate\Security\PasswordHasher;
+use Gate\Services\AuditLog;
 
 /**
  * Users and roles: invite by email (token expires), edit name and role, activate or deactivate, reset 2FA.
@@ -215,7 +215,7 @@ final class UserController extends AdminController
         return $this->view('admin/invitation', [
             'invitation' => $invitation,
             'token' => (string) $request->param('token'),
-            'siteName' => $this->app->settings()->string('site.name', 'BM-Matic'),
+            'siteName' => $this->app->settings()->string('site.name', 'GATE Lebanon'),
             'adminPath' => $this->app->adminPath(),
             'errors' => $this->pullArray('invitation_errors'),
         ], null, $invitation === null ? 410 : 200);
@@ -267,9 +267,9 @@ final class UserController extends AdminController
         $message = AdminMails::invitation(
             $email,
             $name,
-            $settings->string('site.name', 'BM-Matic'),
+            $settings->string('site.name', 'GATE Lebanon'),
             $link,
-            is_string($inviter['name'] ?? null) ? $inviter['name'] : $settings->string('site.name', 'BM-Matic'),
+            is_string($inviter['name'] ?? null) ? $inviter['name'] : $settings->string('site.name', 'GATE Lebanon'),
             InvitationRepository::INVITE_TTL_HOURS,
             $this->app->translator()
         );

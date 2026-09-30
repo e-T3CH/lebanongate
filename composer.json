@@ -1,6 +1,6 @@
 {
-    "name": "bm-matic/website",
-    "description": "BM-Matic website and admin panel: host-agnostic PHP/MySQL product for shared hosting.",
+    "name": "e-5hop/gate-lebanon",
+    "description": "GATE Lebanon website and admin panel: host-agnostic PHP/MySQL product for shared hosting.",
     "type": "project",
     "license": "proprietary",
     "require": {
@@ -24,8 +24,8 @@
     },
     "autoload": {
         "psr-4": {
-            "BMMatic\\": "app/",
-            "BMMatic\\Database\\Seeders\\": "database/seeders/"
+            "Gate\\": "app/",
+            "Gate\\Database\\Seeders\\": "database/seeders/"
         },
         "files": [
             "app/helpers.php"
@@ -33,7 +33,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "BMMatic\\Tests\\": "tests/"
+            "Gate\\Tests\\": "tests/"
         }
     },
     "config": {

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Admin;
+namespace Gate\Admin;
 
-use BMMatic\Core\Paths;
-use BMMatic\Core\Props;
+use Gate\Core\Paths;
+use Gate\Core\Props;
 
 /**
  * Builds the admin sidebar from config/admin-menu.php for one user: role permissions, modules that exist,

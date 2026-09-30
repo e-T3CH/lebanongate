@@ -2,7 +2,7 @@
 /**
  * Services overview: page heading, all service cards, the process steps and a call to action.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array<string, mixed> $page
  * @var array<string, mixed> $home
  * @var array<string, mixed> $process process section texts

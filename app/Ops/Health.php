@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Ops;
+namespace Gate\Ops;
 
-use BMMatic\Core\App;
-use BMMatic\Core\Paths;
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
+use Gate\Core\App;
+use Gate\Core\Paths;
+use Gate\Http\Request;
+use Gate\Http\Response;
 
 /**
  * GET /health?token=… — a JSON status for an uptime monitor.

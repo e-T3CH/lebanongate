@@ -3,7 +3,7 @@
  * Settings → Email: SMTP settings, recipient of appointment requests, queue status, a test button, and the emails to
  * customers when a request changes status (one switch per status, the text per language; everything off by default).
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array<string, mixed> $values
  * @var array<string, string> $errors
  * @var bool $hasPassword
@@ -14,7 +14,7 @@
  */
 $v = static fn (string $k): string => is_scalar($values[$k] ?? null) ? (string) $values[$k] : '';
 $encryptions = array_map(static fn (string $e): array => ['value' => $e, 'label' => $view->t('admin.email.encryption_' . $e)], ['tls', 'ssl', 'none']);
-$testError = $view->shared('app') instanceof \BMMatic\Core\App ? $view->shared('app')->session()->pull('email_test_error') : null;
+$testError = $view->shared('app') instanceof \Gate\Core\App ? $view->shared('app')->session()->pull('email_test_error') : null;
 ?>
 <?= $view->component('tabs', ['label' => $view->t('admin.email.tabs_label'), 'items' => [
     ['label' => $view->t('admin.nav.security'), 'href' => $adminPath . '/security'],

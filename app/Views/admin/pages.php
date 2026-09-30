@@ -2,14 +2,14 @@
 /**
  * Content → Pages: the system pages with their translation state per language.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var list<array{id: int, key: string, title: string, enabled: bool, in_nav: bool, updated: string, states: array<string, string>}> $pages
  * @var list<string> $languages
  * @var bool $canEdit
  * @var string $adminPath
  */
 
-use BMMatic\Core\Html;
+use Gate\Core\Html;
 
 $rows = [];
 foreach ($pages as $page) {

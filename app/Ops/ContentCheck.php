@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Ops;
+namespace Gate\Ops;
 
-use BMMatic\Core\Database;
-use BMMatic\Repositories\LanguageRepository;
-use BMMatic\Services\MediaLibrary;
-use BMMatic\Services\Settings;
+use Gate\Core\Database;
+use Gate\Repositories\LanguageRepository;
+use Gate\Services\MediaLibrary;
+use Gate\Services\Settings;
 
 /**
  * `bin/console content:check`: everything that is not finished yet, so nothing half-done goes live.

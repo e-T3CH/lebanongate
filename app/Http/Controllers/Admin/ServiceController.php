@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Admin;
+namespace Gate\Http\Controllers\Admin;
 
-use BMMatic\Core\Paths;
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
-use BMMatic\Repositories\ContentAdminRepository;
-use BMMatic\Repositories\RedirectRepository;
-use BMMatic\Services\AuditLog;
+use Gate\Core\Paths;
+use Gate\Http\Request;
+use Gate\Http\Response;
+use Gate\Repositories\ContentAdminRepository;
+use Gate\Repositories\RedirectRepository;
+use Gate\Services\AuditLog;
 
 /**
  * Services: the list with order and visibility, and the detail screen with the icon (from the picker, which only

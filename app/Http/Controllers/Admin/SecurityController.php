@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Admin;
+namespace Gate\Http\Controllers\Admin;
 
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
-use BMMatic\Security\IpAddress;
-use BMMatic\Services\AuditLog;
+use Gate\Http\Request;
+use Gate\Http\Response;
+use Gate\Security\IpAddress;
+use Gate\Services\AuditLog;
 
 /**
  * Settings → Security: login protection, session timeout, admin path, IP allowlist, HTTPS, and the 2FA lifecycle
@@ -149,7 +149,7 @@ final class SecurityController extends AdminController
         if ($user === null || $secret === null || $user['totp_secret'] !== null) {
             return Response::redirect($this->app->adminPath('security'));
         }
-        $issuer = $this->app->settings()->string('site.name', 'BM-Matic');
+        $issuer = $this->app->settings()->string('site.name', 'GATE Lebanon');
         $error = $this->app->session()->pull('two_factor_error');
         return $this->adminView('admin/two-factor-setup', 'security', $this->t('admin.two_factor.setup_title'), $this->t('admin.security.subtitle'), [
             'qrSvg' => $this->app->twoFactor()->qrSvg($issuer, $user['email'], $secret),

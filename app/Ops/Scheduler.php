@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Ops;
+namespace Gate\Ops;
 
-use BMMatic\Core\Clock;
-use BMMatic\Core\Config;
-use BMMatic\Core\Database;
-use BMMatic\Http\Request;
-use BMMatic\Mail\MailQueue;
-use BMMatic\Mail\MailWorker;
-use BMMatic\Mail\SmtpTransport;
-use BMMatic\Repositories\ReviewRepository;
-use BMMatic\Reviews\ReviewPhotos;
-use BMMatic\Reviews\ReviewProviders;
-use BMMatic\Reviews\ReviewSync;
-use BMMatic\Security\RateLimiter;
-use BMMatic\Services\AuditLog;
-use BMMatic\Services\Settings;
+use Gate\Core\Clock;
+use Gate\Core\Config;
+use Gate\Core\Database;
+use Gate\Http\Request;
+use Gate\Mail\MailQueue;
+use Gate\Mail\MailWorker;
+use Gate\Mail\SmtpTransport;
+use Gate\Repositories\ReviewRepository;
+use Gate\Reviews\ReviewPhotos;
+use Gate\Reviews\ReviewProviders;
+use Gate\Reviews\ReviewSync;
+use Gate\Security\RateLimiter;
+use Gate\Services\AuditLog;
+use Gate\Services\Settings;
 
 /**
  * The scheduled work in one place: deliver waiting emails, import the Google reviews when due, and make the daily

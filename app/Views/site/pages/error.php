@@ -2,7 +2,7 @@
 /**
  * Public error page (404, 503 and other errors) in the site layout: status, message, links home and to contact.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var int $status
  * @var string $key site.errors.* key prefix
  * @var string $homeHref
@@ -17,4 +17,4 @@ if ($contactHref !== null) {
     $actions .= $view->component('button', ['label' => $view->t('site.cta.call'), 'variant' => 'ghost', 'href' => $phoneHref, 'icon' => 'fa-solid fa-phone', 'iconPosition' => 'start', 'iconClass' => 'ic-accent']);
 }
 ?>
-<?= $view->component('page-hero', ['label' => (string) $status, 'title' => $view->t('site.errors.' . $key . '_title'), 'lead' => $view->t('site.errors.' . $key . '_text') . (isset($reference) && is_string($reference) ? ' ' . $view->t('site.errors.reference', ['code' => $reference]) : ''), 'actions' => \BMMatic\Core\Html::trusted($actions), 'class' => 'error-page']) ?>
+<?= $view->component('page-hero', ['label' => (string) $status, 'title' => $view->t('site.errors.' . $key . '_title'), 'lead' => $view->t('site.errors.' . $key . '_text') . (isset($reference) && is_string($reference) ? ' ' . $view->t('site.errors.reference', ['code' => $reference]) : ''), 'actions' => \Gate\Core\Html::trusted($actions), 'class' => 'error-page']) ?>

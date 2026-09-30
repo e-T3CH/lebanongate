@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Site;
+namespace Gate\Site;
 
-use BMMatic\Services\Settings;
+use Gate\Services\Settings;
 
 /**
  * Structured data and crawler files: schema.org AutoRepair (a LocalBusiness type) JSON-LD from the settings,
@@ -25,7 +25,7 @@ final class Seo
             '@context' => 'https://schema.org',
             '@type' => ['AutoRepair', 'LocalBusiness'],
             '@id' => rtrim($baseUrl, '/') . '/#business',
-            'name' => $settings->string('site.name', 'BM-Matic'),
+            'name' => $settings->string('site.name', 'GATE Lebanon'),
             'url' => rtrim($baseUrl, '/') . '/' . $lang . '/',
             'image' => $logoUrl,
             'logo' => $logoUrl,

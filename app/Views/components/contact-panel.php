@@ -3,11 +3,11 @@
  * Contact panel (as drawn in the home contact section): label, heading, intro, contact lines with icons, map tile.
  * Parameters: Components::SPECS['contact-panel'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{title: string, label: ?string, number: ?string, intro: ?string, items: list<array{icon: string, text: string, href?: ?string}>, mapLabel: string, mapHref: ?string, headingLevel: string} $p
  */
 
-use BMMatic\Core\Props;
+use Gate\Core\Props;
 
 $lines = '';
 foreach ($p['items'] as $item) {

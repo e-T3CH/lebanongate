@@ -3,7 +3,7 @@
  * Process step: numbered dot with connector line (desktop row, vertical timeline below 768px), title, text.
  * Parameters: Components::SPECS['process-step'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{number: string, title: string, text: string} $p
  */
 ?>

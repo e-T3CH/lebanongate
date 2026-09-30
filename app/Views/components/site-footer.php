@@ -4,7 +4,7 @@
  * language links (also the no-JavaScript way to switch language).
  * Parameters: Components::SPECS['site-footer'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{logoSrc: string, logoAlt: string, about: string, columns: list<array{title: string, links: list<array{label: string, href: string}>}>, copyright: string, languages: list<array{name: string, href?: ?string, code?: string}>, socials: list<array{network: string, url: string}>} $p
  */
 

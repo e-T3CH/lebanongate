@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Admin;
+namespace Gate\Http\Controllers\Admin;
 
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
-use BMMatic\Services\AuditLog;
-use BMMatic\Services\MediaLibrary;
+use Gate\Http\Request;
+use Gate\Http\Response;
+use Gate\Services\AuditLog;
+use Gate\Services\MediaLibrary;
 
 /**
  * The media library: a grid of uploaded images with search, alt text per language (required before an image may be

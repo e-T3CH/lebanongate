@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Admin;
+namespace Gate\Http\Controllers\Admin;
 
-use BMMatic\Core\ThemeConfig;
-use BMMatic\Core\ThemeDefaults;
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
-use BMMatic\Services\AuditLog;
-use BMMatic\Services\MediaLibrary;
+use Gate\Core\ThemeConfig;
+use Gate\Core\ThemeDefaults;
+use Gate\Http\Request;
+use Gate\Http\Response;
+use Gate\Services\AuditLog;
+use Gate\Services\MediaLibrary;
 
 /**
  * Appearance: logo (light and dark), favicon, the colour tokens with a live contrast check, the radii and the motion

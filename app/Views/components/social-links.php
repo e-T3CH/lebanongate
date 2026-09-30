@@ -3,12 +3,12 @@
  * Social links: icon buttons for the networks that have a URL (the caller passes only enabled links).
  * Parameters: Components::SPECS['social-links'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{links: list<array{network: string, url: string}>, class: string} $p
  */
 
-use BMMatic\Core\Components;
-use BMMatic\Core\Props;
+use Gate\Core\Components;
+use Gate\Core\Props;
 
 $items = '';
 foreach ($p['links'] as $link) {

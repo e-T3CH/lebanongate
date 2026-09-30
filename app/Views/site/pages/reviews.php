@@ -2,7 +2,7 @@
 /**
  * Reviews: heading and the reviews section (Google rating, the approved review cards, or an empty state).
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array<string, mixed> $page
  * @var array<string, mixed> $home
  * @var array<string, mixed> $reviewsSection

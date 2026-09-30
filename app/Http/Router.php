@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http;
+namespace Gate\Http;
 
 /**
  * Minimal router: exact paths with {param} segments ([^/]+), GET/POST, named routes and flags

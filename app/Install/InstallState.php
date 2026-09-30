@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Install;
+namespace Gate\Install;
 
-use BMMatic\Core\Paths;
+use Gate\Core\Paths;
 
 /**
  * Installer lock and claim.

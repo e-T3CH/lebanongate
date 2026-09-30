@@ -3,7 +3,7 @@
  * Settings → Social media (approved screen admin-security.html, second card): one row per network with its URL and
  * where the link appears.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var list<array{label: string, href: string, active: bool}> $tabs
  * @var list<array{network: string, label: string, url: string, header: bool, footer: bool}> $networks
  * @var array<string, string> $errors

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Admin;
+namespace Gate\Http\Controllers\Admin;
 
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
-use BMMatic\Security\IpAddress;
-use BMMatic\Services\AuditLog;
-use BMMatic\Support\Csv;
+use Gate\Http\Request;
+use Gate\Http\Response;
+use Gate\Security\IpAddress;
+use Gate\Services\AuditLog;
+use Gate\Support\Csv;
 
 /**
  * Settings → Security log: what happened in the panel (sign-ins, changes, refusals), filtered by event, user and

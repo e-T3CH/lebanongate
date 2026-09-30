@@ -3,7 +3,7 @@
  * Content → Google reviews (approved screen admin-reviews.html) with live data: the connection and its limits,
  * what appears on the website, and the imported reviews with filters, per-review visibility and bulk actions.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var list<array<string, mixed>> $rows
  * @var array{rows: list<array<string, mixed>>, total: int, page: int, pages: int} $result
  * @var array{all: int, visible: int, hidden: int, deleted: int} $counts
@@ -20,7 +20,7 @@
  * @var string $adminPath
  */
 
-use BMMatic\Core\Html;
+use Gate\Core\Html;
 
 $str = static fn (string $key): string => is_scalar($values[$key] ?? null) ? (string) $values[$key] : '';
 $conn = static fn (string $key): string => is_scalar($connection[$key] ?? null) ? (string) $connection[$key] : '';
@@ -227,7 +227,7 @@ foreach ($rows as $row) {
     <?= $view->csrfField() ?>
     <span class="muted"><?= e($view->t('admin.reviews.import_preview', ['total' => (int) ($import['total'] ?? 0), 'duplicates' => (int) ($import['duplicates'] ?? 0)])) ?></span>
     <div class="fields-3">
-<?php foreach (\BMMatic\Reviews\ManualImportProvider::FIELDS as $field): ?>
+<?php foreach (\Gate\Reviews\ManualImportProvider::FIELDS as $field): ?>
       <?= $view->component('select', ['name' => 'map_' . $field, 'id' => 'map-' . str_replace('_', '-', $field), 'label' => $view->t('admin.reviews.field_' . $field), 'value' => is_string($import['mapping'][$field] ?? null) ? $import['mapping'][$field] : '', 'options' => array_merge(
           [['value' => '', 'label' => $view->t('admin.reviews.column_none')]],
           array_map(static fn (string $c): array => ['value' => $c, 'label' => $c], is_array($import['columns'] ?? null) ? $import['columns'] : [])

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Repositories;
+namespace Gate\Repositories;
 
-use BMMatic\Core\Clock;
-use BMMatic\Core\Database;
+use Gate\Core\Clock;
+use Gate\Core\Database;
 
 /**
  * 301/302 redirect map for old URLs (e.g. the previous website). Checked before a public 404 is shown; hits are

@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Admin;
+namespace Gate\Http\Controllers\Admin;
 
-use BMMatic\Http\Controllers\Controller;
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
-use BMMatic\Mail\AdminMails;
-use BMMatic\Mail\MailQueue;
-use BMMatic\Mail\SmtpTransport;
-use BMMatic\Repositories\PasswordResetRepository;
-use BMMatic\Repositories\UserRepository;
-use BMMatic\Security\LoginThrottle;
-use BMMatic\Security\PasswordHasher;
-use BMMatic\Services\AuditLog;
+use Gate\Http\Controllers\Controller;
+use Gate\Http\Request;
+use Gate\Http\Response;
+use Gate\Mail\AdminMails;
+use Gate\Mail\MailQueue;
+use Gate\Mail\SmtpTransport;
+use Gate\Repositories\PasswordResetRepository;
+use Gate\Repositories\UserRepository;
+use Gate\Security\LoginThrottle;
+use Gate\Security\PasswordHasher;
+use Gate\Services\AuditLog;
 
 /**
  * "Forgot your password?" — the way back in on hosting without a command line (one.com).
@@ -53,7 +53,7 @@ final class PasswordResetController extends Controller
         if ($send && $user !== null) {
             $token = $this->resets()->create($user['id']);
             $settings = $this->app->settings();
-            $siteName = $settings->string('site.name', 'BM-Matic');
+            $siteName = $settings->string('site.name', 'GATE Lebanon');
             $message = AdminMails::passwordReset($user['email'], $user['name'], $siteName, $this->app->baseUrl() . $this->app->adminPath('reset-password/' . $token), PasswordResetRepository::TTL_MINUTES, $this->app->translator());
             (new MailQueue($this->app->db(), $this->app->clock))->enqueue($message);
             $this->app->defer(fn () => $this->app->sendQueuedMail());

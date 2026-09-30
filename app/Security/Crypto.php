@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Security;
+namespace Gate\Security;
 
 /**
  * Encryption at rest (libsodium secretbox, XSalsa20-Poly1305) and keyed hashing, derived from the app key.
@@ -19,8 +19,8 @@ final class Crypto
         if ($raw === false || strlen($raw) !== 32) {
             throw new \InvalidArgumentException('app.key must be base64 of exactly 32 random bytes.');
         }
-        $this->encryptionKey = sodium_crypto_generichash('bm-matic:encryption', $raw, SODIUM_CRYPTO_SECRETBOX_KEYBYTES);
-        $this->hmacKey = sodium_crypto_generichash('bm-matic:hmac', $raw, 32);
+        $this->encryptionKey = sodium_crypto_generichash('gate-lebanon:encryption', $raw, SODIUM_CRYPTO_SECRETBOX_KEYBYTES);
+        $this->hmacKey = sodium_crypto_generichash('gate-lebanon:hmac', $raw, 32);
     }
 
     public static function generateKey(): string

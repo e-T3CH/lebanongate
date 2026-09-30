@@ -3,12 +3,12 @@
  * Card: public (.card, dark, hover lift) or admin (.acard, white). The content slot takes Html or escaped text.
  * Parameters: Components::SPECS['card'].
  *
- * @var \BMMatic\Core\View $view
- * @var array{content: \BMMatic\Core\Html|string, variant: string, tag: string, href: ?string, class: string, id: ?string, attrs: array<string, string|int|bool|null>} $p
+ * @var \Gate\Core\View $view
+ * @var array{content: \Gate\Core\Html|string, variant: string, tag: string, href: ?string, class: string, id: ?string, attrs: array<string, string|int|bool|null>} $p
  */
 
-use BMMatic\Core\Html;
-use BMMatic\Core\Props;
+use Gate\Core\Html;
+use Gate\Core\Props;
 
 $tag = $p['href'] !== null ? 'a' : $p['tag'];
 $class = Props::classes($p['variant'] === 'admin' ? 'acard' : 'card', $p['class']);

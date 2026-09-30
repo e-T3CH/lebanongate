@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Admin;
+namespace Gate\Http\Controllers\Admin;
 
-use BMMatic\Admin\AdminMenu;
-use BMMatic\Admin\Permissions;
-use BMMatic\Http\Controllers\Controller;
-use BMMatic\Http\Flash;
-use BMMatic\Http\Response;
-use BMMatic\Repositories\AppointmentRepository;
+use Gate\Admin\AdminMenu;
+use Gate\Admin\Permissions;
+use Gate\Http\Controllers\Controller;
+use Gate\Http\Flash;
+use Gate\Http\Response;
+use Gate\Repositories\AppointmentRepository;
 
 /** Shared data for admin screens (signed-in user, sidebar menu, admin paths, one-time toast). */
 abstract class AdminController extends Controller
@@ -33,7 +33,7 @@ abstract class AdminController extends Controller
             'pageTitle' => $title,
             'pageSubtitle' => $subtitle,
             'adminPath' => $this->app->adminPath(),
-            'siteName' => $this->app->settings()->string('site.name', 'BM-Matic'),
+            'siteName' => $this->app->settings()->string('site.name', 'GATE Lebanon'),
             'toast' => $this->pullToast(),
         ], 'admin');
     }

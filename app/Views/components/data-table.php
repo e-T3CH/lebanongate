@@ -5,12 +5,12 @@
  * A cell may be ['content' => Html|string, 'class' => 'extra classes'].
  * Parameters: Components::SPECS['data-table'].
  *
- * @var \BMMatic\Core\View $view
- * @var array{columns: list<array{key: string, label: string, hideLabel?: bool, class?: string}>, rows: list<array<string, mixed>>, caption: ?string, empty: \BMMatic\Core\Html|string|null, class: string} $p
+ * @var \Gate\Core\View $view
+ * @var array{columns: list<array{key: string, label: string, hideLabel?: bool, class?: string}>, rows: list<array<string, mixed>>, caption: ?string, empty: \Gate\Core\Html|string|null, class: string} $p
  */
 
-use BMMatic\Core\Html;
-use BMMatic\Core\Props;
+use Gate\Core\Html;
+use Gate\Core\Props;
 
 $columns = [];
 foreach ($p['columns'] as $c) {

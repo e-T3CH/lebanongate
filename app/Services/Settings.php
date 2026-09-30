@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Services;
+namespace Gate\Services;
 
-use BMMatic\Core\Clock;
-use BMMatic\Core\Database;
-use BMMatic\Security\Crypto;
+use Gate\Core\Clock;
+use Gate\Core\Database;
+use Gate\Security\Crypto;
 
 /**
  * Key/value settings stored in the `settings` table, loaded once per request.

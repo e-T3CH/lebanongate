@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Admin;
+namespace Gate\Http\Controllers\Admin;
 
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
-use BMMatic\Repositories\ContentAdminRepository;
-use BMMatic\Repositories\RedirectRepository;
-use BMMatic\Services\AuditLog;
-use BMMatic\Services\SectionOrder;
+use Gate\Http\Request;
+use Gate\Http\Response;
+use Gate\Repositories\ContentAdminRepository;
+use Gate\Repositories\RedirectRepository;
+use Gate\Services\AuditLog;
+use Gate\Services\SectionOrder;
 
 /**
  * Pages: the nine system pages with their texts, SEO fields and slug per language, a publish state per language and

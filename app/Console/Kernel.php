@@ -2,41 +2,41 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Console;
+namespace Gate\Console;
 
-use BMMatic\Admin\Permissions;
-use BMMatic\Core\App;
-use BMMatic\Core\Clock;
-use BMMatic\Core\Config;
-use BMMatic\Core\Database;
-use BMMatic\Core\Migrator;
-use BMMatic\Core\SystemClock;
-use BMMatic\Database\Seeders\DatabaseSeeder;
-use BMMatic\Http\AdminRoutes;
-use BMMatic\Http\Router;
-use BMMatic\Install\InstallState;
-use BMMatic\Install\Installer;
-use BMMatic\Mail\MailMessage;
-use BMMatic\Mail\MailQueue;
-use BMMatic\Mail\MailWorker;
-use BMMatic\Mail\SmtpTransport;
-use BMMatic\Ops\Backups;
-use BMMatic\Ops\ContentCheck;
-use BMMatic\Ops\Health;
-use BMMatic\Ops\Scheduler;
-use BMMatic\Repositories\LanguageRepository;
-use BMMatic\Repositories\RedirectRepository;
-use BMMatic\Repositories\ReviewRepository;
-use BMMatic\Reviews\ReviewPhotos;
-use BMMatic\Reviews\ReviewProviders;
-use BMMatic\Reviews\ReviewSync;
-use BMMatic\Security\ArraySession;
-use BMMatic\Security\Crypto;
-use BMMatic\Security\PasswordHasher;
-use BMMatic\Security\RateLimiter;
-use BMMatic\Services\AuditLog;
-use BMMatic\Services\MediaLibrary;
-use BMMatic\Services\Settings;
+use Gate\Admin\Permissions;
+use Gate\Core\App;
+use Gate\Core\Clock;
+use Gate\Core\Config;
+use Gate\Core\Database;
+use Gate\Core\Migrator;
+use Gate\Core\SystemClock;
+use Gate\Database\Seeders\DatabaseSeeder;
+use Gate\Http\AdminRoutes;
+use Gate\Http\Router;
+use Gate\Install\InstallState;
+use Gate\Install\Installer;
+use Gate\Mail\MailMessage;
+use Gate\Mail\MailQueue;
+use Gate\Mail\MailWorker;
+use Gate\Mail\SmtpTransport;
+use Gate\Ops\Backups;
+use Gate\Ops\ContentCheck;
+use Gate\Ops\Health;
+use Gate\Ops\Scheduler;
+use Gate\Repositories\LanguageRepository;
+use Gate\Repositories\RedirectRepository;
+use Gate\Repositories\ReviewRepository;
+use Gate\Reviews\ReviewPhotos;
+use Gate\Reviews\ReviewProviders;
+use Gate\Reviews\ReviewSync;
+use Gate\Security\ArraySession;
+use Gate\Security\Crypto;
+use Gate\Security\PasswordHasher;
+use Gate\Security\RateLimiter;
+use Gate\Services\AuditLog;
+use Gate\Services\MediaLibrary;
+use Gate\Services\Settings;
 
 /**
  * bin/console. Refuses to run outside the CLI SAPI. Returns an exit code.
@@ -44,7 +44,7 @@ use BMMatic\Services\Settings;
 final class Kernel
 {
     public const HELP = <<<'TXT'
-BM-Matic console
+GATE Lebanon console
 
   migrate                          Run pending migrations
   migrate:status                   List migrations
@@ -79,7 +79,7 @@ BM-Matic console
   routes:list                      The admin routes with the permission each needs (authorisation matrix, Markdown)
   analytics:set none | ga4 <G-XXXXXXX> | plausible <domain>
                                    Choose the analytics that load after a visitor consents (off by default)
-  build:release --layout=standard|split|webroot [--app-dir=bmmatic-app] [--web-dir=public_html] [--output=build] [--composer=path] [--keep]
+  build:release --layout=standard|split|webroot [--app-dir=gate-app] [--web-dir=public_html] [--output=build] [--composer=path] [--keep]
                                    Create a deployable zip (see README.md)
 TXT;
 
@@ -303,7 +303,7 @@ TXT;
         }
         [$config, $db] = $this->connect();
         $settings = new Settings($db, new Crypto($config->string('app.key')), $this->clock);
-        $site = $settings->string('site.name', 'BM-Matic');
+        $site = $settings->string('site.name', 'GATE Lebanon');
         SmtpTransport::fromSettings($settings)->send(new MailMessage($to, '', 'Test email from ' . $site, 'This test email confirms that the email settings of ' . $site . ' work.'));
         return $this->line('Test email sent to ' . $to . '.');
     }

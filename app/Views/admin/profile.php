@@ -3,7 +3,7 @@
  * My profile: name and email address (a change is confirmed from the new address) and the password
  * (current password required; changing it signs out the other sessions).
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{id: int, name: string, email: string, role: string} $profile
  * @var string|null $pendingEmail
  * @var array<string, string> $errors

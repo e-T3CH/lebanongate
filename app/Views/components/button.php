@@ -4,11 +4,11 @@
  * A link when href is set, otherwise a <button>. States: disabled, loading (spinner, aria-busy, not clickable).
  * Parameters: Components::SPECS['button'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{label: string, variant: string, href: ?string, type: string, icon: ?string, iconPosition: string, iconClass: string, iconSize: string, class: string, id: ?string, name: ?string, value: ?string, ariaLabel: ?string, disabled: bool, loading: bool, iconOnly: bool, attrs: array<string, string|int|bool|null>} $p
  */
 
-use BMMatic\Core\Props;
+use Gate\Core\Props;
 
 $variants = ['primary' => 'btn btn-p', 'ghost' => 'btn btn-g', 'admin-primary' => 'abtn abtn-p', 'admin-secondary' => 'abtn abtn-s', 'admin-danger' => 'abtn abtn-d'];
 $icon = $p['loading'] ? 'fa-solid fa-spinner' : $p['icon'];

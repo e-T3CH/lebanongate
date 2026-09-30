@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use BMMatic\Security\Escape;
+use Gate\Security\Escape;
 
 if (!function_exists('e')) {
     /** Escape for HTML text. */

@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Install;
+namespace Gate\Install;
 
-use BMMatic\Core\Clock;
-use BMMatic\Core\Database;
-use BMMatic\Core\Migrator;
-use BMMatic\Core\Paths;
-use BMMatic\Database\Seeders\DatabaseSeeder;
-use BMMatic\I18n\LanguageRules;
-use BMMatic\Repositories\LanguageRepository;
-use BMMatic\Repositories\UserRepository;
-use BMMatic\Security\Crypto;
-use BMMatic\Security\PasswordHasher;
-use BMMatic\Services\AuditLog;
-use BMMatic\Services\Settings;
+use Gate\Core\Clock;
+use Gate\Core\Database;
+use Gate\Core\Migrator;
+use Gate\Core\Paths;
+use Gate\Database\Seeders\DatabaseSeeder;
+use Gate\I18n\LanguageRules;
+use Gate\Repositories\LanguageRepository;
+use Gate\Repositories\UserRepository;
+use Gate\Security\Crypto;
+use Gate\Security\PasswordHasher;
+use Gate\Services\AuditLog;
+use Gate\Services\Settings;
 
 /**
  * Performs the installation (used by the /install wizard and `php bin/console install`):
@@ -61,12 +61,12 @@ final class Installer
      */
     private static function canMigrate(\PDO $pdo): bool
     {
-        $a = '`bm_install_probe_a`';
-        $b = '`bm_install_probe_b`';
+        $a = '`gate_install_probe_a`';
+        $b = '`gate_install_probe_b`';
         try {
             $pdo->exec("CREATE TABLE {$a} (`id` INT UNSIGNED NOT NULL PRIMARY KEY) ENGINE=InnoDB");
-            $pdo->exec("CREATE TABLE {$b} (`id` INT UNSIGNED NOT NULL PRIMARY KEY, `a_id` INT UNSIGNED NULL, CONSTRAINT `bm_install_probe_fk` FOREIGN KEY (`a_id`) REFERENCES {$a} (`id`)) ENGINE=InnoDB");
-            $pdo->exec("ALTER TABLE {$b} ADD COLUMN `note` VARCHAR(10) NULL, ADD INDEX `bm_install_probe_note` (`note`)");
+            $pdo->exec("CREATE TABLE {$b} (`id` INT UNSIGNED NOT NULL PRIMARY KEY, `a_id` INT UNSIGNED NULL, CONSTRAINT `gate_install_probe_fk` FOREIGN KEY (`a_id`) REFERENCES {$a} (`id`)) ENGINE=InnoDB");
+            $pdo->exec("ALTER TABLE {$b} ADD COLUMN `note` VARCHAR(10) NULL, ADD INDEX `gate_install_probe_note` (`note`)");
             $pdo->exec("INSERT INTO {$a} (`id`) VALUES (1)");
             $pdo->exec("DELETE FROM {$a}");
             $ok = true;
@@ -183,9 +183,9 @@ final class Installer
             'app' => ['env' => 'production', 'debug' => false, 'url' => $siteUrl, 'key' => $appKey],
             'db' => ['host' => $db['host'], 'port' => $db['port'], 'name' => $db['name'], 'user' => $db['user'], 'pass' => $db['pass'], 'charset' => 'utf8mb4'],
             // The uptime-monitor URL is /health?token=… (bin/console health:url prints it).
-            'ops' => ['health_token' => \BMMatic\Ops\Health::token()],
+            'ops' => ['health_token' => \Gate\Ops\Health::token()],
         ];
-        $php = "<?php\n\ndeclare(strict_types=1);\n\n// Written by the BM-Matic installer on " . gmdate('Y-m-d H:i') . " UTC. Keep this file private (chmod 440).\nreturn " . var_export($config, true) . ";\n";
+        $php = "<?php\n\ndeclare(strict_types=1);\n\n// Written by the GATE Lebanon installer on " . gmdate('Y-m-d H:i') . " UTC. Keep this file private (chmod 440).\nreturn " . var_export($config, true) . ";\n";
         $file = Paths::config('config.local.php');
         $tmp = $file . '.' . bin2hex(random_bytes(4)) . '.tmp';
         if (file_put_contents($tmp, $php, LOCK_EX) === false || !rename($tmp, $file)) {

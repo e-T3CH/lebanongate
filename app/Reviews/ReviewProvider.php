@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Reviews;
+namespace Gate\Reviews;
 
 /**
  * Where reviews come from. Three implementations sit behind this contract — the Google Business Profile API (the

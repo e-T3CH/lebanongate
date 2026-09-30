@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Reviews;
+namespace Gate\Reviews;
 
-use BMMatic\Core\Paths;
-use BMMatic\Support\Http;
-use BMMatic\Support\HttpClient;
+use Gate\Core\Paths;
+use Gate\Support\Http;
+use Gate\Support\HttpClient;
 
 /**
  * Reviewer photos are served by the site, never by Google.

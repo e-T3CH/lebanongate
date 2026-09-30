@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Site;
+namespace Gate\Site;
 
-use BMMatic\Core\Paths;
+use Gate\Core\Paths;
 
 /**
  * Rich text from the content tables (page and service bodies): sanitised with HTML Purifier to a small allowlist

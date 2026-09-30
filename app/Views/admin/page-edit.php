@@ -3,7 +3,7 @@
  * Content → Pages → one page: the texts and SEO fields of one language, the page settings, and on the home page the
  * order and visibility of its sections.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{id: int, key: string, template: string, is_enabled: bool, in_nav: bool, nav_order: int, in_sitemap: bool} $page
  * @var string $lang
  * @var array<string, string> $values

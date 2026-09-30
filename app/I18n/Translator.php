@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\I18n;
+namespace Gate\I18n;
 
-use BMMatic\Core\Database;
-use BMMatic\Core\Paths;
+use Gate\Core\Database;
+use Gate\Core\Paths;
 
 /**
  * UI strings. Lookup order: ui_translations (editable in admin) for the language, the lang/{code}/*.php file,

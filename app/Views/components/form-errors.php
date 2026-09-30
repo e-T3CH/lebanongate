@@ -4,11 +4,11 @@
  * Admin: warning card; public: dark alert box. With a title the messages are listed below it.
  * Parameters: Components::SPECS['form-errors'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{messages: list<string>, title: ?string, variant: string, icon: string, class: string} $p
  */
 
-use BMMatic\Core\Props;
+use Gate\Core\Props;
 
 $messages = array_values(array_filter($p['messages'], 'is_string'));
 if ($messages === [] && $p['title'] === null) {

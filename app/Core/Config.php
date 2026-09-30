@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Core;
+namespace Gate\Core;
 
 /** Read-only configuration: config/app.php merged with config/config.local.php (written by the installer). */
 final class Config
@@ -26,8 +26,8 @@ final class Config
             $local = require $localFile;
             $base = self::merge($base, $local);
         }
-        // Development override (e.g. `BM_APP_ENV=local php -S ...` for /design-check before installation).
-        $env = getenv('BM_APP_ENV');
+        // Development override (e.g. `GATE_APP_ENV=local php -S ...` for /design-check before installation).
+        $env = getenv('GATE_APP_ENV');
         if (is_string($env) && in_array($env, ['local', 'production'], true) && is_array($base['app'] ?? null)) {
             $base['app']['env'] = $env;
         }

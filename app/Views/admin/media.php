@@ -2,7 +2,7 @@
 /**
  * Content → Media: the uploaded images with their alt text per language, where they are used, replace and delete.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var list<array<string, mixed>> $items
  * @var list<string> $languages
  * @var string $search

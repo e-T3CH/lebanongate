@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use BMMatic\Core\Database;
-use BMMatic\Core\Migration;
+use Gate\Core\Database;
+use Gate\Core\Migration;
 
 /**
  * Accessibility corrections to the approved palette (owner decision after Phase 2, WCAG AA 4.5:1):

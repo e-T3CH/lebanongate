@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Site;
+namespace Gate\Site;
 
 /**
  * The appointment request form: fields as drawn (name, phone, car make & model, gearbox type, symptoms) plus email and

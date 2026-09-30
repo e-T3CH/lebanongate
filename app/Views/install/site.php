@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{site_name: string, site_url: string} $site
  * @var array<string, string> $errors
  */

@@ -2,7 +2,7 @@
 /**
  * Installer: centered wide card with the five steps as tabs and a language switch.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var string $content
  * @var list<string> $steps
  * @var string $step
@@ -17,7 +17,7 @@ $current = $view->locale();
     <div class="between">
       <div class="sb__brand auth__brand"><span class="sb__mark">BM</span><span class="sb__name"><span class="auth__title">BM-MATIC</span><span class="sb__sub"><?= e($view->t('install.caption')) ?></span></span></div>
       <nav class="auth__langs" aria-label="<?= e_attr($view->t('install.language_switch')) ?>">
-<?php foreach (\BMMatic\I18n\LanguageRules::SUPPORTED as $code): ?>
+<?php foreach (\Gate\I18n\LanguageRules::SUPPORTED as $code): ?>
         <a class="link-sm<?= $code === $current ? ' is-current' : '' ?>" href="?lang=<?= e_attr($code) ?>" lang="<?= e_attr($code) ?>"<?= $code === $current ? ' aria-current="true"' : '' ?>><?= e(strtoupper($code)) ?></a>
 <?php endforeach; ?>
       </nav>

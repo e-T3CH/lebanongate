@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Services;
+namespace Gate\Services;
 
-use BMMatic\Core\Clock;
-use BMMatic\Core\Database;
-use BMMatic\Security\IpAddress;
+use Gate\Core\Clock;
+use Gate\Core\Database;
+use Gate\Security\IpAddress;
 
 /**
  * Security audit trail: logins, failures, lockouts, 2FA changes, settings and user changes, installation.

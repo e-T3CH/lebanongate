@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Mail;
+namespace Gate\Mail;
 
 /** An outgoing email (plain text with an optional HTML alternative). */
 final class MailMessage

@@ -5,7 +5,7 @@
  * only the translated accessible label is inserted.
  * Parameters: Components::SPECS['blueprint'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{variant: string} $p
  */
 

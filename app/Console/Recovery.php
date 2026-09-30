@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Console;
+namespace Gate\Console;
 
-use BMMatic\Core\Clock;
-use BMMatic\Core\Database;
-use BMMatic\Install\Installer;
-use BMMatic\Repositories\UserRepository;
-use BMMatic\Security\LoginThrottle;
-use BMMatic\Security\PasswordHasher;
-use BMMatic\Security\RateLimiter;
-use BMMatic\Services\AuditLog;
-use BMMatic\Services\Settings;
+use Gate\Core\Clock;
+use Gate\Core\Database;
+use Gate\Install\Installer;
+use Gate\Repositories\UserRepository;
+use Gate\Security\LoginThrottle;
+use Gate\Security\PasswordHasher;
+use Gate\Security\RateLimiter;
+use Gate\Services\AuditLog;
+use Gate\Services\Settings;
 
 /**
  * Emergency recovery actions for the site owner (command line only, every action audit-logged with via=cli).

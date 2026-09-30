@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Ops;
+namespace Gate\Ops;
 
-use BMMatic\Core\Clock;
-use BMMatic\Core\Database;
-use BMMatic\Core\Migrator;
-use BMMatic\Core\Paths;
-use BMMatic\Database\Seeders\SettingsSeeder;
-use BMMatic\Database\Seeders\StatusEmailSeeder;
-use BMMatic\Database\Seeders\TranslationsSeeder;
-use BMMatic\Security\RateLimiter;
-use BMMatic\Services\AuditLog;
-use BMMatic\Services\Settings;
+use Gate\Core\Clock;
+use Gate\Core\Database;
+use Gate\Core\Migrator;
+use Gate\Core\Paths;
+use Gate\Database\Seeders\SettingsSeeder;
+use Gate\Database\Seeders\StatusEmailSeeder;
+use Gate\Database\Seeders\TranslationsSeeder;
+use Gate\Security\RateLimiter;
+use Gate\Services\AuditLog;
+use Gate\Services\Settings;
 
 /**
  * Automatic database updates: after new files are uploaded, the first request runs the new migrations and adds

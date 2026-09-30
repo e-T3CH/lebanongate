@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Security;
+namespace Gate\Security;
 
 /** Argon2id password hashing and the password policy. */
 final class PasswordHasher
@@ -15,7 +15,7 @@ final class PasswordHasher
 
     private const COMMON = [
         'password1234', 'password12345', '123456789012', 'qwertyuiop12', '1234567890ab', 'iloveyou1234', 'welcome12345',
-        'administrator', 'admin1234567', 'letmein12345', 'passw0rd1234', 'bmmatic12345', 'bm-matic1234', 'aalst1234567',
+        'administrator', 'admin1234567', 'letmein12345', 'passw0rd1234', 'gatelebanon1', 'gate-lebanon1', 'lebanon12345',
         'changeme1234', 'qwerty123456', 'azertyuiop12', 'wachtwoord12', 'motdepasse12', 'trustno11234',
     ];
 

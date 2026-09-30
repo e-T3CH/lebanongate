@@ -2,7 +2,7 @@
 /**
  * One appointment request: customer and vehicle details, the status flow and the internal notes.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{id: int, name: string, email: string, phone: string, car: string, gearbox: string, symptoms: string, lang: string, received: string, consent: string, status: string, unread: bool, mailto: string, telHref: string} $appointment
  * @var list<array{id: int, author: string, when: string, body: string}> $notes
  * @var list<string> $statuses

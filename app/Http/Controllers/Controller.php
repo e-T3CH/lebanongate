@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers;
+namespace Gate\Http\Controllers;
 
-use BMMatic\Core\App;
-use BMMatic\Http\Response;
+use Gate\Core\App;
+use Gate\Http\Response;
 
 abstract class Controller
 {

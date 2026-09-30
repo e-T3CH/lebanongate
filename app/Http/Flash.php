@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http;
+namespace Gate\Http;
 
-use BMMatic\Security\Session;
+use Gate\Security\Session;
 
 /**
  * One-time toast after a redirect (Post/Redirect/Get). The layouts render it with the toast component;

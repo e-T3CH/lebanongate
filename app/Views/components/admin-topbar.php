@@ -3,7 +3,7 @@
  * Admin top bar (a <header>, so the whole screen is inside a landmark): sidebar toggle (below 1024px), subtitle + page title, search, "View site", notifications, user.
  * Parameters: Components::SPECS['admin-topbar'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{title: string, subtitle: string, userName: ?string, userRole: ?string, viewSiteHref: ?string, search: bool, searchAction: ?string, notifications: ?int, userMenu: bool, sidebarId: string} $p
  */
 

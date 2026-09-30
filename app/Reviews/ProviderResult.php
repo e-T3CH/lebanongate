@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Reviews;
+namespace Gate\Reviews;
 
 /**
  * What a provider returns: the reviews it could fetch, the totals Google reports for the location (never

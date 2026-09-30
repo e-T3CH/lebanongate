@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use BMMatic\Core\Database;
-use BMMatic\Core\Migration;
+use Gate\Core\Database;
+use Gate\Core\Migration;
 
 /**
  * Public website content. Every content table has a *_translations table (one row per language).

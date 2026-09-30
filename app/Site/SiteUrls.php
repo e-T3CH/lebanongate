@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Site;
+namespace Gate\Site;
 
-use BMMatic\Repositories\ContentRepository;
+use Gate\Repositories\ContentRepository;
 
 /**
  * Public URLs with translated slugs: /{lang}/ (home), /{lang}/{page-slug}, /{lang}/{services-slug}/{service-slug}.

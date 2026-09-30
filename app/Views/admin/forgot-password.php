@@ -3,7 +3,7 @@
  * "Forgot your password?": asks for the email address and always gives the same answer afterwards, so the form
  * does not reveal which addresses have an account. Same card as the sign-in screen.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var bool $sent
  * @var string $action
  * @var string $loginHref

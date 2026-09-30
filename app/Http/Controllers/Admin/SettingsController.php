@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Admin;
+namespace Gate\Http\Controllers\Admin;
 
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
-use BMMatic\I18n\LanguageRules;
-use BMMatic\Repositories\ContentAdminRepository;
-use BMMatic\Services\AuditLog;
+use Gate\Http\Request;
+use Gate\Http\Response;
+use Gate\I18n\LanguageRules;
+use Gate\Repositories\ContentAdminRepository;
+use Gate\Services\AuditLog;
 
 /**
  * Settings → General, Languages and Social media (Security and Email have their own controllers, and every tab is
@@ -24,7 +24,7 @@ final class SettingsController extends AdminController
         $s = $this->app->settings();
         $old = $this->pullArray('settings_old');
         $values = $old !== [] ? $old : [
-            'site_name' => $s->string('site.name', 'BM-Matic'),
+            'site_name' => $s->string('site.name', 'GATE Lebanon'),
             'company_name' => $s->string('company.name'),
             'vat' => $s->string('company.vat'),
             'street' => $s->string('contact.street'),
@@ -61,7 +61,7 @@ final class SettingsController extends AdminController
         if ($values['site_name'] === '') {
             $errors['site_name'] = $this->t('validation.required');
         }
-        // Placeholders such as [info@bm-matic.be] stay allowed until the owner fills in the real details.
+        // Placeholders such as [info@gatelebanon.org] stay allowed until the owner fills in the real details.
         if ($values['email'] !== '' && !str_contains($values['email'], '[') && filter_var($values['email'], FILTER_VALIDATE_EMAIL) === false) {
             $errors['email'] = $this->t('validation.email');
         }

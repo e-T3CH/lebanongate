@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Core;
+namespace Gate\Core;
 
-use BMMatic\I18n\Translator;
-use BMMatic\Security\Csrf;
+use Gate\I18n\Translator;
+use Gate\Security\Csrf;
 
 /**
  * PHP templates in app/Views. Templates receive their data as variables plus $view (this object).
@@ -44,7 +44,7 @@ final class View
     {
         $permissions = $this->shared('permissions');
         $role = $this->shared('role');
-        return $permissions instanceof \BMMatic\Admin\Permissions && is_string($role) && $permissions->allows($role, $permission);
+        return $permissions instanceof \Gate\Admin\Permissions && is_string($role) && $permissions->allows($role, $permission);
     }
 
     /** @param array<string, mixed> $data */

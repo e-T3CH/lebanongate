@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Services;
+namespace Gate\Services;
 
 /**
  * Display order of page sections. Unlocked sections follow sort_order; locked sections keep their place:

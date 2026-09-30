@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Admin;
+namespace Gate\Http\Controllers\Admin;
 
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
-use BMMatic\Repositories\AppointmentRepository;
-use BMMatic\Repositories\ReviewRepository;
-use BMMatic\Services\AuditLog;
+use Gate\Http\Request;
+use Gate\Http\Response;
+use Gate\Repositories\AppointmentRepository;
+use Gate\Repositories\ReviewRepository;
+use Gate\Services\AuditLog;
 
 /**
  * The dashboard of the approved mock-up with live data: requests of the last seven days, unread messages, the Google
@@ -48,7 +48,7 @@ final class DashboardController extends AdminController
         }
         return $this->adminView('admin/dashboard', 'dashboard', $this->t('admin.dashboard.title'), $this->t('admin.dashboard.subtitle'), [
             'twoFactorOn' => $user !== null && $user['totp_secret'] !== null,
-            'siteName' => $settings->string('site.name', 'BM-Matic'),
+            'siteName' => $settings->string('site.name', 'GATE Lebanon'),
             'kpi' => [
                 'requests' => $repo->countSince(7),
                 'requests_delta' => $this->t('admin.dashboard.kpi_requests_delta'),

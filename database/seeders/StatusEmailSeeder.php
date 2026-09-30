@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Database\Seeders;
+namespace Gate\Database\Seeders;
 
-use BMMatic\Core\Database;
+use Gate\Core\Database;
 
 /**
  * Ready-to-use texts for the optional customer email per status (Settings → Email → Emails to customers), in the

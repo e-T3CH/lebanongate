@@ -5,11 +5,11 @@
  * Options navigate to data-href (the same page in that language) through ui.js.
  * Parameters: Components::SPECS['language-selector'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{languages: list<array{code: string, name: string, english: string, href?: ?string, current?: bool, default?: bool, enabled?: bool}>, variant: string, id: string, open: bool, class: string, attrs: array<string, string|int|bool|null>} $p
  */
 
-use BMMatic\Core\Props;
+use Gate\Core\Props;
 
 $languages = [];
 foreach ($p['languages'] as $l) {

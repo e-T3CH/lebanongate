@@ -6,11 +6,11 @@
  * Option types: plain label, language code + label, or stars (rating filter).
  * Parameters: Components::SPECS['select'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{name: string, options: list<array{value: string, label: string, code?: string, stars?: int, suffix?: string}>, label: ?string, ariaLabel: ?string, panelLabel: ?string, id: ?string, value: ?string, error: ?string, hint: ?string, size: string, panel: string, leadIcon: ?string, check: string, autosave: bool, toast: ?string, open: bool, required: bool, disabled: bool, class: string, attrs: array<string, string|int|bool|null>} $p
  */
 
-use BMMatic\Core\Props;
+use Gate\Core\Props;
 
 $options = [];
 foreach ($p['options'] as $o) {

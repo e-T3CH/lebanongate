@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Support;
+namespace Gate\Support;
 
-use BMMatic\Core\Paths;
+use Gate\Core\Paths;
 
 /**
  * The application error log: storage/logs/app-YYYY-MM-DD.log, one file per day, a new part when a day's file grows

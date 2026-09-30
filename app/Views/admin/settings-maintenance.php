@@ -4,7 +4,7 @@
  * address, the before-going-live content check and analytics. Everything the command line does, for hosts without
  * SSH. Built from the admin components of the approved settings screens (cards, setting rows, data table).
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var list<array{label: string, href: string, active: bool}> $tabs
  * @var string $schedulerUrl
  * @var string|null $lastRun
@@ -22,8 +22,8 @@
  * @var string $adminPath
  */
 
-use BMMatic\Core\Html;
-use BMMatic\Http\Controllers\Admin\MaintenanceController;
+use Gate\Core\Html;
+use Gate\Http\Controllers\Admin\MaintenanceController;
 
 $base = $adminPath . '/settings/maintenance';
 $reportLine = static function (array $report) use ($view): string {
@@ -159,7 +159,7 @@ $providers = [
       <div class="card-intro card-intro--flush"><h2 class="h3"><?= e($view->t('admin.maintenance.analytics_title')) ?></h2><span class="muted"><?= e($view->t('admin.maintenance.analytics_desc')) ?></span></div>
       <?= $view->component('select', ['name' => 'provider', 'id' => 'analytics-provider', 'label' => $view->t('admin.maintenance.analytics_provider'), 'options' => $providers, 'value' => $analytics['provider'], 'error' => $analyticsErrors['provider'] ?? null]) ?>
       <?= $view->component('input', ['name' => 'ga4_id', 'id' => 'analytics-ga4', 'label' => $view->t('admin.maintenance.analytics_ga4'), 'value' => $analytics['ga4_id'], 'placeholder' => 'G-XXXXXXXXXX', 'error' => $analyticsErrors['ga4_id'] ?? null]) ?>
-      <?= $view->component('input', ['name' => 'plausible_domain', 'id' => 'analytics-domain', 'label' => $view->t('admin.maintenance.analytics_domain'), 'value' => $analytics['plausible_domain'], 'placeholder' => 'bm-matic.be', 'error' => $analyticsErrors['plausible_domain'] ?? null]) ?>
+      <?= $view->component('input', ['name' => 'plausible_domain', 'id' => 'analytics-domain', 'label' => $view->t('admin.maintenance.analytics_domain'), 'value' => $analytics['plausible_domain'], 'placeholder' => 'gatelebanon.org', 'error' => $analyticsErrors['plausible_domain'] ?? null]) ?>
       <div class="actions"><?= $view->component('button', ['label' => $view->t('admin.actions.save'), 'variant' => 'admin-primary', 'type' => 'submit', 'icon' => 'fa-solid fa-check', 'iconPosition' => 'start']) ?></div>
     </form>
   </div>

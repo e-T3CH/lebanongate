@@ -2,28 +2,28 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http;
+namespace Gate\Http;
 
-use BMMatic\Core\App;
-use BMMatic\Http\Controllers\Admin\AppearanceController;
-use BMMatic\Http\Controllers\Admin\AppointmentController;
-use BMMatic\Http\Controllers\Admin\AuthController;
-use BMMatic\Http\Controllers\Admin\ContentListController;
-use BMMatic\Http\Controllers\Admin\DashboardController;
-use BMMatic\Http\Controllers\Admin\EmailSettingsController;
-use BMMatic\Http\Controllers\Admin\MaintenanceController;
-use BMMatic\Http\Controllers\Admin\MediaController;
-use BMMatic\Http\Controllers\Admin\MessageController;
-use BMMatic\Http\Controllers\Admin\PageController;
-use BMMatic\Http\Controllers\Admin\PasswordResetController;
-use BMMatic\Http\Controllers\Admin\ProfileController;
-use BMMatic\Http\Controllers\Admin\ReviewController;
-use BMMatic\Http\Controllers\Admin\SecurityController;
-use BMMatic\Http\Controllers\Admin\SecurityLogController;
-use BMMatic\Http\Controllers\Admin\ServiceController;
-use BMMatic\Http\Controllers\Admin\SettingsController;
-use BMMatic\Http\Controllers\Admin\TwoFactorChallengeController;
-use BMMatic\Http\Controllers\Admin\UserController;
+use Gate\Core\App;
+use Gate\Http\Controllers\Admin\AppearanceController;
+use Gate\Http\Controllers\Admin\AppointmentController;
+use Gate\Http\Controllers\Admin\AuthController;
+use Gate\Http\Controllers\Admin\ContentListController;
+use Gate\Http\Controllers\Admin\DashboardController;
+use Gate\Http\Controllers\Admin\EmailSettingsController;
+use Gate\Http\Controllers\Admin\MaintenanceController;
+use Gate\Http\Controllers\Admin\MediaController;
+use Gate\Http\Controllers\Admin\MessageController;
+use Gate\Http\Controllers\Admin\PageController;
+use Gate\Http\Controllers\Admin\PasswordResetController;
+use Gate\Http\Controllers\Admin\ProfileController;
+use Gate\Http\Controllers\Admin\ReviewController;
+use Gate\Http\Controllers\Admin\SecurityController;
+use Gate\Http\Controllers\Admin\SecurityLogController;
+use Gate\Http\Controllers\Admin\ServiceController;
+use Gate\Http\Controllers\Admin\SettingsController;
+use Gate\Http\Controllers\Admin\TwoFactorChallengeController;
+use Gate\Http\Controllers\Admin\UserController;
 
 /**
  * Every admin route in one place, with the permission it needs.

@@ -9,7 +9,7 @@
  *   ($bundles: home, cards, stats, reviews, forms, content; cookie and toast only when shown; motion-off for the "off" setting).
  * - SEO: description, canonical, hreflang, Open Graph, JSON-LD; analytics only after consent.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var string $title
  * @var string|null $bundle
  * @var list<string>|null $bundles
@@ -25,7 +25,7 @@
  * @var bool|null $harness loads the ?state= visual-check harness (design check only)
  */
 $motion = $view->shared('motion', 'standard');
-$motion = is_string($motion) && in_array($motion, \BMMatic\Core\ThemeConfig::MOTION_MODES, true) ? $motion : 'standard';
+$motion = is_string($motion) && in_array($motion, \Gate\Core\ThemeConfig::MOTION_MODES, true) ? $motion : 'standard';
 $themeCss = $view->shared('themeCss', '');
 $bundle = in_array($bundle ?? 'site', ['site', 'admin', 'design-check'], true) ? ($bundle ?? 'site') : 'site';
 $styles = $bundle === 'site'
@@ -92,11 +92,11 @@ $nonce = e_attr($view->nonce());
   <script src="<?= e_attr($view->asset('js/design-check.js')) ?>" defer></script>
 <?php endif; ?>
 <?php foreach ($jsonld ?? [] as $data): ?>
-  <script type="application/ld+json"><?= \BMMatic\Site\Seo::jsonLd($data) ?></script>
+  <script type="application/ld+json"><?= \Gate\Site\Seo::jsonLd($data) ?></script>
 <?php endforeach; ?>
 <?php if (!empty($analytics)): ?>
 <?php foreach ($analytics['scripts'] as $script): ?>
-  <script src="<?= e_url($script['src']) ?>"<?= \BMMatic\Core\Props::attrs($script['attrs']) ?> async></script>
+  <script src="<?= e_url($script['src']) ?>"<?= \Gate\Core\Props::attrs($script['attrs']) ?> async></script>
 <?php endforeach; ?>
 <?php if ($analytics['inline'] !== ''): ?>
   <script nonce="<?= $nonce ?>"><?= $analytics['inline'] /* built from validated IDs (Consent::analyticsTags) */ ?></script>

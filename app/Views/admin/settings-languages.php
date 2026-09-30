@@ -4,7 +4,7 @@
  * which one is the default, and how much of the interface is translated. The admin panel language is chosen apart from
  * those: every supported language is offered, also one the website does not show.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var list<array{label: string, href: string, active: bool}> $tabs
  * @var list<array{code: string, name: string, native: string, enabled: bool, default: bool, progress: int}> $languages
  * @var bool $detectBrowser
@@ -14,7 +14,7 @@
  * @var string $adminPath
  */
 
-use BMMatic\Core\Html;
+use Gate\Core\Html;
 
 $rows = [];
 foreach ($languages as $language) {
@@ -76,7 +76,7 @@ foreach ($languages as $language) {
           'id' => 'admin-language',
           'label' => $view->t('admin.settings.admin_language'),
           'value' => $adminLanguage,
-          'options' => array_map(static fn (array $l): array => ['value' => $l['code'], 'label' => $l['native'], 'code' => strtoupper($l['code'])], array_values(array_filter($languages, static fn (array $l): bool => in_array($l['code'], \BMMatic\I18n\LanguageRules::SUPPORTED, true)))),
+          'options' => array_map(static fn (array $l): array => ['value' => $l['code'], 'label' => $l['native'], 'code' => strtoupper($l['code'])], array_values(array_filter($languages, static fn (array $l): bool => in_array($l['code'], \Gate\I18n\LanguageRules::SUPPORTED, true)))),
       ]) ?>
 
     </div>

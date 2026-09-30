@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Admin;
+namespace Gate\Http\Controllers\Admin;
 
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
-use BMMatic\Repositories\ReviewRepository;
-use BMMatic\Reviews\ManualImportProvider;
-use BMMatic\Reviews\ReviewPhotos;
-use BMMatic\Reviews\ReviewProviders;
-use BMMatic\Reviews\ReviewSync;
-use BMMatic\Services\AuditLog;
+use Gate\Http\Request;
+use Gate\Http\Response;
+use Gate\Repositories\ReviewRepository;
+use Gate\Reviews\ManualImportProvider;
+use Gate\Reviews\ReviewPhotos;
+use Gate\Reviews\ReviewProviders;
+use Gate\Reviews\ReviewSync;
+use Gate\Services\AuditLog;
 
 /**
  * Content → Google reviews (the approved screen): the connection with its limits and state, what appears on the
@@ -288,7 +288,7 @@ final class ReviewController extends AdminController
     {
         $providers = new ReviewProviders($this->app->settings());
         $provider = $providers->get('business_profile');
-        if (!$provider instanceof \BMMatic\Reviews\BusinessProfileProvider) {
+        if (!$provider instanceof \Gate\Reviews\BusinessProfileProvider) {
             return $this->back($this->app->adminPath('reviews'));
         }
         $state = bin2hex(random_bytes(16));
@@ -315,7 +315,7 @@ final class ReviewController extends AdminController
         }
         $providers = new ReviewProviders($this->app->settings());
         $provider = $providers->get('business_profile');
-        if (!$provider instanceof \BMMatic\Reviews\BusinessProfileProvider) {
+        if (!$provider instanceof \Gate\Reviews\BusinessProfileProvider) {
             return Response::redirect($this->app->adminPath('reviews'), 303);
         }
         $result = $provider->exchangeCode($request->query('code'), $this->redirectUri());

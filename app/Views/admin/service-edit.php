@@ -2,7 +2,7 @@
 /**
  * Content → Services → one service: icon, visibility and the texts of one language.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{id: int, key: string, icon: string, is_enabled: bool, show_in_menu: bool, show_on_home: bool, sort_order: int} $service
  * @var string $lang
  * @var array<string, string> $values

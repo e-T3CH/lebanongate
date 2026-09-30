@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Core;
+namespace Gate\Core;
 
-use BMMatic\Services\Settings;
+use Gate\Services\Settings;
 
 /**
  * theme-config: turns the Appearance settings (colors, radii, motion) into CSS custom properties, printed in a

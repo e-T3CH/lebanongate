@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Site;
+namespace Gate\Site;
 
-use BMMatic\Core\Paths;
-use BMMatic\Services\Settings;
+use Gate\Core\Paths;
+use Gate\Services\Settings;
 
 /**
  * The logos and favicon chosen in Appearance, with the approved design's files as the fallback.

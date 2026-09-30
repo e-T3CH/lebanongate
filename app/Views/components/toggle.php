@@ -4,11 +4,11 @@
  * autosave marks admin toggles that save instantly and confirm with a toast (ui.js).
  * Parameters: Components::SPECS['toggle'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{label: ?string, name: ?string, id: ?string, checked: bool, disabled: bool, required: bool, value: string, uncheckedValue: ?string, autosave: bool, toast: ?string, class: string, inputClass: string, attrs: array<string, string|int|bool|null>} $p
  */
 
-use BMMatic\Core\Props;
+use Gate\Core\Props;
 
 $hidden = $p['name'] !== null && $p['uncheckedValue'] !== null ? '<input type="hidden" name="' . e_attr($p['name']) . '" value="' . e_attr($p['uncheckedValue']) . '">' : '';
 $attrs = ($p['inputClass'] !== '' ? ' class="' . e_attr($p['inputClass']) . '"' : '')

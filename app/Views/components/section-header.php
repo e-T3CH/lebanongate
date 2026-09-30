@@ -4,7 +4,7 @@
  * With wrap=false the parts are printed without the wrapper (inside a panel or the hero text column).
  * Parameters: Components::SPECS['section-header'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{label: string, title: string, number: ?string, highlight: ?string, intro: ?string, level: string, wrap: bool, class: string, introClass: string} $p
  */
 

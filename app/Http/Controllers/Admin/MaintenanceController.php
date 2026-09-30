@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Admin;
+namespace Gate\Http\Controllers\Admin;
 
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
-use BMMatic\Ops\Backups;
-use BMMatic\Ops\ContentCheck;
-use BMMatic\Ops\Scheduler;
-use BMMatic\Repositories\LanguageRepository;
-use BMMatic\Repositories\UserRepository;
-use BMMatic\Services\AuditLog;
-use BMMatic\Services\MediaLibrary;
+use Gate\Http\Request;
+use Gate\Http\Response;
+use Gate\Ops\Backups;
+use Gate\Ops\ContentCheck;
+use Gate\Ops\Scheduler;
+use Gate\Repositories\LanguageRepository;
+use Gate\Repositories\UserRepository;
+use Gate\Services\AuditLog;
+use Gate\Services\MediaLibrary;
 
 /**
  * Settings → Maintenance: everything that otherwise needs the command line, for hosts without SSH (one.com).
@@ -31,7 +31,7 @@ final class MaintenanceController extends AdminController
     /** Largest backup accepted through the browser (the host's upload limit may be lower). */
     private const MAX_UPLOAD_BYTES = 512 * 1048576;
 
-    public function __construct(\BMMatic\Core\App $app, private readonly SettingsController $settingsTabs)
+    public function __construct(\Gate\Core\App $app, private readonly SettingsController $settingsTabs)
     {
         parent::__construct($app);
     }

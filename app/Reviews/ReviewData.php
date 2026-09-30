@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Reviews;
+namespace Gate\Reviews;
 
 /**
  * One review as a provider hands it over, before it is stored. Values are normalised here (rating 1–5, dates as

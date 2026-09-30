@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Admin;
+namespace Gate\Http\Controllers\Admin;
 
-use BMMatic\Http\Controllers\Controller;
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
+use Gate\Http\Controllers\Controller;
+use Gate\Http\Request;
+use Gate\Http\Response;
 
 /** Second login step: authenticator code or one recovery code. */
 final class TwoFactorChallengeController extends Controller

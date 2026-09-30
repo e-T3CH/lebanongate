@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Security;
+namespace Gate\Security;
 
-use BMMatic\Core\Clock;
-use BMMatic\Core\Database;
+use Gate\Core\Clock;
+use Gate\Core\Database;
 
 /**
  * Fixed-window counters stored in MySQL (works on shared hosting without Redis/APCu).

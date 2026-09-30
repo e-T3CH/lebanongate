@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Security;
+namespace Gate\Security;
 
 /**
  * Login protection: failed attempts are counted per account and per IP inside a lockout window.

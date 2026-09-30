@@ -213,14 +213,14 @@ Done. From here on, MAINTENANCE.md describes the monthly routine.
 ## Appendix: other hosts
 
 **Hostinger (hPanel) and cPanel hosts** usually let you put files next to the web folder. Use the `split` zip
-there: its `public_html/` contents go into the existing `public_html`, and `bmmatic-app/` goes **next to** it (never
+there: its `public_html/` contents go into the existing `public_html`, and `gate-app/` goes **next to** it (never
 inside). Only the web files are then reachable at all, which is the safest layout.
 
 Hostinger's cron jobs (hPanel → **Advanced → Cron Jobs**) take the full path, for example:
 
 | Schedule | Command |
 | --- | --- |
-| Every 15 minutes | `/usr/bin/php /home/u123456789/domains/bm-matic.be/bmmatic-app/bin/console schedule:run` |
+| Every 15 minutes | `/usr/bin/php /home/u123456789/domains/bm-matic.be/gate-app/bin/console schedule:run` |
 
 `schedule:run` does the same as the scheduler address: emails, the review import when due, and the daily backup.
 (The separate commands `backup:run`, `reviews:sync --cron` and `mail:work` still work for hosts that prefer them.)

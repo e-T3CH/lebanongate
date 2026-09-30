@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Security;
+namespace Gate\Security;
 
 /**
  * Context-aware output escaping. Views use the global helpers e(), e_attr(), e_js(), e_url(), e_css()

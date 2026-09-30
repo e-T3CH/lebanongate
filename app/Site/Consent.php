@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Site;
+namespace Gate\Site;
 
 /**
- * Cookie consent: the visitor's choice is stored in the functional cookie `bm_consent` as
+ * Cookie consent: the visitor's choice is stored in the functional cookie `gate_consent` as
  * "v{version}.{a|n}.{unix time}" (a = analytics accepted, n = necessary only). A choice for an older consent version
  * counts as no choice, so the banner is shown again after the policy changes. Analytics scripts are only rendered when
  * the current choice accepts analytics and a provider is configured.
  */
 final class Consent
 {
-    public const COOKIE = 'bm_consent';
+    public const COOKIE = 'gate_consent';
     public const LIFETIME = 15552000; // 180 days
     public const PROVIDERS = ['none', 'ga4', 'plausible'];
 

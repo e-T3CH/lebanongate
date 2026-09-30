@@ -4,11 +4,11 @@
  * date "via Google", stars, review text.
  * Parameters: Components::SPECS['review-card'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{name: string, date: string, text: string, initial: string, photo: ?string, rating: float|int, starSize: string} $p
  */
 
-use BMMatic\Core\Html;
+use Gate\Core\Html;
 
 $avatar = $p['photo'] !== null
     ? '<img class="avatar avatar--photo" src="' . e_url($p['photo']) . '" alt="" width="42" height="42" loading="lazy" decoding="async">'

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Admin;
+namespace Gate\Admin;
 
-use BMMatic\Core\Paths;
+use Gate\Core\Paths;
 
 /**
  * Roles and permissions from config/permissions.php, asked in exactly one way:

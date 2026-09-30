@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Repositories;
+namespace Gate\Repositories;
 
-use BMMatic\Core\Clock;
-use BMMatic\Core\Database;
+use Gate\Core\Clock;
+use Gate\Core\Database;
 
 /**
  * Appointment requests from the public form. New requests start with status "new" and unread.

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Database\Seeders;
+namespace Gate\Database\Seeders;
 
-use BMMatic\Core\Clock;
-use BMMatic\Core\Database;
+use Gate\Core\Clock;
+use Gate\Core\Database;
 
 /**
  * Public website content: pages, home sections, services, transmission types, process steps and stats, in every

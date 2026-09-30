@@ -3,11 +3,11 @@
  * Underlined textarea with label, hint and error message.
  * Parameters: Components::SPECS['textarea'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{label: string, name: ?string, id: ?string, value: ?string, rows: int, placeholder: ?string, error: ?string, hint: ?string, maxlength: ?int, required: bool, disabled: bool, class: string, attrs: array<string, string|int|bool|null>} $p
  */
 
-use BMMatic\Core\Props;
+use Gate\Core\Props;
 
 $id = $p['id'] ?? ($p['name'] !== null ? 'f-' . preg_replace('/[^A-Za-z0-9_-]/', '-', $p['name']) : 'f-textarea');
 $described = array_values(array_filter([$p['hint'] !== null ? $id . '-hint' : null, $p['error'] !== null ? $id . '-error' : null]));

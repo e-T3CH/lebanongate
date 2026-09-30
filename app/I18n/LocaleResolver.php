@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\I18n;
+namespace Gate\I18n;
 
 /**
  * Chooses the visitor's language:
@@ -12,7 +12,7 @@ namespace BMMatic\I18n;
  */
 final class LocaleResolver
 {
-    public const COOKIE = 'bm_lang';
+    public const COOKIE = 'gate_lang';
 
     /**
      * @param list<string> $enabledCodes

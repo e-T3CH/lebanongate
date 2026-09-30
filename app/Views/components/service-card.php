@@ -3,11 +3,11 @@
  * Service card (public card): icon tile, number, title, text, "Learn more" (desktop) or arrow (mobile row).
  * Parameters: Components::SPECS['service-card'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{title: string, text: string, icon: string, href: string, number: ?string} $p
  */
 
-use BMMatic\Core\Html;
+use Gate\Core\Html;
 
 $arrow = (string) $view->component('icon', ['icon' => 'fa-solid fa-arrow-right', 'class' => 'ic-ne']);
 $content = "\n  " . '<span class="svc__top"><span class="icon-tile">' . $view->component('icon', ['icon' => $p['icon'], 'size' => '24']) . '</span>'

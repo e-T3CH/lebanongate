@@ -4,12 +4,12 @@
  * Same type scale and spacing as the approved section headers.
  * Parameters: Components::SPECS['page-hero'].
  *
- * @var \BMMatic\Core\View $view
- * @var array{title: string, label: ?string, highlight: ?string, lead: ?string, breadcrumbs: list<array{label: string, href?: ?string}>, actions: \BMMatic\Core\Html|string|null, class: string} $p
+ * @var \Gate\Core\View $view
+ * @var array{title: string, label: ?string, highlight: ?string, lead: ?string, breadcrumbs: list<array{label: string, href?: ?string}>, actions: \Gate\Core\Html|string|null, class: string} $p
  */
 
-use BMMatic\Core\Html;
-use BMMatic\Core\Props;
+use Gate\Core\Html;
+use Gate\Core\Props;
 
 ?>
 <section class="<?= e_attr(Props::classes('page-hero', $p['class'])) ?>">

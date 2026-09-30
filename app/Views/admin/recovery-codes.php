@@ -2,7 +2,7 @@
 /**
  * Recovery codes, shown once.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var list<string> $codes
  * @var string $adminPath
  */

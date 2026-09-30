@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Security;
+namespace Gate\Security;
 
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
-use BMMatic\Core\Clock;
+use Gate\Core\Clock;
 use PragmaRX\Google2FA\Google2FA;
 
 /**

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Core;
+namespace Gate\Core;
 
 /** A schema migration. Files in database/migrations return an instance of this interface. */
 interface Migration

@@ -5,11 +5,11 @@
  * Errors use role=alert, the others role=status.
  * Parameters: Components::SPECS['toast'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{message: string, type: string, class: string} $p
  */
 
-use BMMatic\Core\Props;
+use Gate\Core\Props;
 
 $icons = ['success' => 'fa-solid fa-check', 'error' => 'fa-solid fa-xmark', 'info' => 'fa-solid fa-info', 'warning' => 'fa-solid fa-exclamation'];
 $alert = $p['type'] === 'error';

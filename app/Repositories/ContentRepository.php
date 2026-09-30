@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Repositories;
+namespace Gate\Repositories;
 
-use BMMatic\Core\Database;
+use Gate\Core\Database;
 
 /**
  * Read access to the public website content (pages, sections, services, transmission types, process steps, stats,
@@ -107,7 +107,7 @@ final class ContentRepository
                     'settings' => is_array($settings) ? $settings : [],
                 ] + self::strings($t, ['label', 'title', 'highlight', 'intro']) + ['extra' => is_array($extra) ? $extra : []];
             }
-            return \BMMatic\Services\SectionOrder::sort($out);
+            return \Gate\Services\SectionOrder::sort($out);
         });
     }
 

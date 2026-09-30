@@ -2,7 +2,7 @@
 /**
  * System → Users: the team, the invite form and the open invitations.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var list<array{id: int, name: string, email: string, role: string, active: bool, two_factor: bool, last_login: string, is_you: bool}> $users
  * @var list<array{id: int, name: string, email: string, role: string, expires: string}> $invitations
  * @var int $inviteTtlHours
@@ -11,7 +11,7 @@
  * @var string $adminPath
  */
 
-use BMMatic\Core\Html;
+use Gate\Core\Html;
 
 $rows = [];
 foreach ($users as $user) {

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Install;
+namespace Gate\Install;
 
-use BMMatic\Core\App;
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
-use BMMatic\I18n\LanguageRules;
-use BMMatic\I18n\LocaleResolver;
-use BMMatic\Security\PasswordHasher;
+use Gate\Core\App;
+use Gate\Http\Request;
+use Gate\Http\Response;
+use Gate\I18n\LanguageRules;
+use Gate\I18n\LocaleResolver;
+use Gate\Security\PasswordHasher;
 
 /**
  * /install wizard: 1 requirements · 2 database · 3 site · 4 admin account · 5 languages → install → done.
@@ -30,7 +30,7 @@ final class InstallController
         if (in_array($q, LanguageRules::SUPPORTED, true)) {
             return $q;
         }
-        $cookie = $request->cookie('bm_install_lang');
+        $cookie = $request->cookie('gate_install_lang');
         if ($cookie !== null && in_array($cookie, LanguageRules::SUPPORTED, true)) {
             return $cookie;
         }
@@ -69,7 +69,7 @@ final class InstallController
             default => $this->languages($request),
         };
         if ($request->query('lang') !== '') {
-            $response->withCookie('bm_install_lang', $this->app->translator()->locale(), ['expires' => 0, 'path' => '/install', 'secure' => $request->isSecure(), 'httponly' => true, 'samesite' => 'Strict']);
+            $response->withCookie('gate_install_lang', $this->app->translator()->locale(), ['expires' => 0, 'path' => '/install', 'secure' => $request->isSecure(), 'httponly' => true, 'samesite' => 'Strict']);
         }
         return $response;
     }
@@ -119,7 +119,7 @@ final class InstallController
         $state = $this->state();
         $guessUrl = ($request->isSecure() ? 'https://' : 'http://') . preg_replace('/[^A-Za-z0-9.:\-\[\]]/', '', $request->server('HTTP_HOST') ?? 'localhost');
         /** @var array{site_name: string, site_url: string} $site */
-        $site = $state['data']['site'] ?? ['site_name' => 'BM-Matic', 'site_url' => $guessUrl];
+        $site = $state['data']['site'] ?? ['site_name' => 'GATE Lebanon', 'site_url' => $guessUrl];
         $errors = [];
         if ($request->method() === 'POST') {
             $site = ['site_name' => trim($request->input('site_name')), 'site_url' => rtrim(trim($request->input('site_url')), '/')];

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Mail;
+namespace Gate\Mail;
 
-use BMMatic\I18n\Translator;
+use Gate\I18n\Translator;
 
 /**
  * The two emails for an appointment request: a notification to the business (admin panel language, reply-to the

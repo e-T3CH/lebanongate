@@ -3,7 +3,7 @@
  * Messages: the inbox view of the same requests. Unread first, with the opening line of the symptoms; replying
  * opens the mail program of the user (the panel never sends a free-text email itself).
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{rows: list<array<string, mixed>>, total: int, page: int, pages: int} $result
  * @var list<array{id: int, when: string, who: string, car: string, excerpt: string, unread: bool, mailto: string}> $rows
  * @var bool $unreadOnly
@@ -13,7 +13,7 @@
  * @var string $adminPath
  */
 
-use BMMatic\Core\Html;
+use Gate\Core\Html;
 
 $tableRows = [];
 foreach ($rows as $row) {

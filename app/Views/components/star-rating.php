@@ -4,11 +4,11 @@
  * The rating is rounded to whole stars; the accessible label keeps one decimal.
  * Parameters: Components::SPECS['star-rating'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{rating: float|int, size: string, variant: string, wrap: bool, class: string} $p
  */
 
-use BMMatic\Core\Props;
+use Gate\Core\Props;
 
 $rating = max(0.0, min(5.0, (float) $p['rating']));
 $filled = (int) round($rating);

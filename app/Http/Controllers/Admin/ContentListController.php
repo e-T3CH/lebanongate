@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Admin;
+namespace Gate\Http\Controllers\Admin;
 
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
-use BMMatic\Repositories\ContentAdminRepository;
-use BMMatic\Services\AuditLog;
+use Gate\Http\Request;
+use Gate\Http\Response;
+use Gate\Repositories\ContentAdminRepository;
+use Gate\Services\AuditLog;
 
 /**
  * The short content lists that the home and content pages use: transmission types, process steps, key figures and

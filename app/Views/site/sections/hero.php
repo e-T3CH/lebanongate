@@ -3,7 +3,7 @@
  * Home section "hero": label, H1 with highlight, lead, CTAs, Google rating and the blueprint (desktop art column;
  * the mobile schematic band with its legend follows below 768px).
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{number: ?string, label: string, title: string, highlight: string, intro: string, extra: array<string, mixed>} $section
  * @var array<string, mixed> $home
  */

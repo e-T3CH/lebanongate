@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http;
+namespace Gate\Http;
 
 final class Response
 {

@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use BMMatic\Core\Database;
-use BMMatic\Core\Migration;
+use Gate\Core\Database;
+use Gate\Core\Migration;
 
 /**
  * Indexes for the list views (Phase 6 performance pass, measured with tools/perf-queries.php on 20,000 requests

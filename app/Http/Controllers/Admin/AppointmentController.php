@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace BMMatic\Http\Controllers\Admin;
+namespace Gate\Http\Controllers\Admin;
 
-use BMMatic\Http\Request;
-use BMMatic\Http\Response;
-use BMMatic\I18n\Translator;
-use BMMatic\Mail\AdminMails;
-use BMMatic\Mail\MailQueue;
-use BMMatic\Mail\SmtpTransport;
-use BMMatic\Repositories\AppointmentRepository;
-use BMMatic\Services\AuditLog;
-use BMMatic\Services\StatusEmails;
-use BMMatic\Support\Csv;
+use Gate\Http\Request;
+use Gate\Http\Response;
+use Gate\I18n\Translator;
+use Gate\Mail\AdminMails;
+use Gate\Mail\MailQueue;
+use Gate\Mail\SmtpTransport;
+use Gate\Repositories\AppointmentRepository;
+use Gate\Services\AuditLog;
+use Gate\Services\StatusEmails;
+use Gate\Support\Csv;
 
 /**
  * Appointment requests: the workflow list (filters, search, sorting, pagination, CSV export) and the detail screen
@@ -73,7 +73,7 @@ final class AppointmentController extends AdminController
                 'consent' => $this->app->formatDate((string) $appointment['consent_at']),
                 'status' => (string) $appointment['status'],
                 'unread' => $appointment['read_at'] === null,
-                'mailto' => self::mailto((string) $appointment['email'], $this->t('admin.messages.reply_subject', ['site' => $settings->string('site.name', 'BM-Matic')])),
+                'mailto' => self::mailto((string) $appointment['email'], $this->t('admin.messages.reply_subject', ['site' => $settings->string('site.name', 'GATE Lebanon')])),
                 'telHref' => 'tel:' . (string) preg_replace('/[^0-9+]/', '', (string) $appointment['phone']),
             ],
             'notes' => $notes,
@@ -214,7 +214,7 @@ final class AppointmentController extends AdminController
             return;
         }
         $t = new Translator($lang, $this->app->languages()->defaultCode(), $this->app->db());
-        $site = $settings->string('site.name', 'BM-Matic');
+        $site = $settings->string('site.name', 'GATE Lebanon');
         $message = AdminMails::statusUpdate(
             (string) $appointment['email'],
             (string) $appointment['name'],
@@ -303,7 +303,7 @@ final class AppointmentController extends AdminController
             },
             'unread' => $row['read_at'] === null,
             'excerpt' => mb_strimwidth(trim((string) preg_replace('/\s+/u', ' ', $symptoms)), 0, 70, '…'),
-            'mailto' => self::mailto((string) $row['email'], $this->t('admin.messages.reply_subject', ['site' => $this->app->settings()->string('site.name', 'BM-Matic')])),
+            'mailto' => self::mailto((string) $row['email'], $this->t('admin.messages.reply_subject', ['site' => $this->app->settings()->string('site.name', 'GATE Lebanon')])),
         ];
     }
 

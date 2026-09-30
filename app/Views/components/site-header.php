@@ -4,7 +4,7 @@
  * with children, language selector, CTA button and the burger that opens the mobile menu (< 768px).
  * Parameters: Components::SPECS['site-header'].
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array{nav: list<array{label: string, href: string, children?: list<array{title: string, sub?: string, href: string}>, current?: bool}>, languages: list<array<string, mixed>>, homeHref: string, logoSrc: string, logoAlt: string, siteName: string, ctaLabel: ?string, ctaHref: ?string, menuHref: string, topbar: ?array<string, mixed>, harness: bool} $p
  */
 

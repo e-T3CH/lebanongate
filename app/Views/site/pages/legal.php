@@ -2,7 +2,7 @@
 /**
  * Legal pages (privacy policy, cookie policy, terms): heading and rich text with the company details filled in.
  *
- * @var \BMMatic\Core\View $view
+ * @var \Gate\Core\View $view
  * @var array<string, mixed> $page
  * @var string $body rich text with placeholders already replaced
  */
