@@ -14,7 +14,7 @@ use Gate\Core\Paths;
 final class ReleaseBuilder
 {
     /** Copied from the project root into the application folder. */
-    private const APP_ITEMS = ['app', 'config/app.php', 'config/admin-menu.php', 'config/permissions.php', 'config/service-icons.php', 'config/.htaccess', 'database', 'lang', 'bin/console', 'deploy', 'composer.json', 'composer.lock', 'README.md', 'SECURITY.md', 'MAINTENANCE.md', 'USER-GUIDE.md', 'USER-GUIDE.nl.md', 'docs'];
+    private const APP_ITEMS = ['app', 'config/app.php', 'config/admin-menu.php', 'config/permissions.php', 'config/expertise-icons.php', 'config/.htaccess', 'database', 'lang', 'bin/console', 'deploy', 'composer.json', 'composer.lock', 'README.md', 'SECURITY.md', 'MAINTENANCE.md', 'USER-GUIDE.md', 'docs'];
     /** Folders that get their own deny-all .htaccess when the application folder can be web-reachable. */
     private const PRIVATE_DIRS = ['app', 'bin', 'config', 'database', 'deploy', 'docs', 'lang', 'storage', 'vendor'];
     private const DENY_ALL = "# Private: never web-accessible.\n<IfModule mod_authz_core.c>\n    Require all denied\n</IfModule>\n<IfModule !mod_authz_core.c>\n    Order allow,deny\n    Deny from all\n</IfModule>\n";
