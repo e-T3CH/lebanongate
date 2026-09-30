@@ -17,7 +17,7 @@ final class SecurityController extends AdminController
 {
     private const SETUP_KEY = 'two_factor_setup';
     private const CODES_KEY = 'two_factor_new_codes';
-    private const RESERVED_PATHS = ['en', 'fr', 'nl', 'install', 'assets', 'uploads', 'api', 'well-known'];
+    private const RESERVED_PATHS = ['en', 'ar', 'fr', 'install', 'assets', 'uploads', 'api', 'well-known'];
 
     public function index(Request $request): Response
     {

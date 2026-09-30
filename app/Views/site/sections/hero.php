@@ -1,50 +1,41 @@
 <?php
 /**
- * Home section "hero": label, H1 with highlight, lead, CTAs, Google rating and the blueprint (desktop art column;
- * the mobile schematic band with its legend follows below 768px).
+ * Home: hero with the field photo, the tagline, the headline (split into words by site.js for the rising motion)
+ * and two buttons.
  *
  * @var \Gate\Core\View $view
- * @var array{number: ?string, label: string, title: string, highlight: string, intro: string, extra: array<string, mixed>} $section
- * @var array<string, mixed> $home
+ * @var array<string, mixed> $s section: label, title, highlight, intro, media, primary, secondary
  */
-$extra = $section['extra'];
-$str = static fn (string $k): string => is_string($extra[$k] ?? null) ? $extra[$k] : '';
-$legend = array_values(array_filter(is_array($extra['legend'] ?? null) ? $extra['legend'] : [], 'is_string'));
-/** @var array{show: bool, value: string, count: string} $rating */
-$rating = $home['rating'];
+$media = $s['media'];
 ?>
 <section class="hero">
-  <div class="hero__text">
-    <?= $view->component('section-header', ['number' => $section['number'], 'label' => $section['label'], 'title' => $section['title'], 'highlight' => $section['highlight'] !== '' ? $section['highlight'] : null, 'level' => 'h1', 'wrap' => false, 'intro' => $section['intro'] !== '' ? $section['intro'] : null, 'introClass' => 'hero__lead']) ?>
-
-    <div class="hero__cta">
-      <?= $view->component('button', ['label' => $str('cta'), 'href' => (string) $home['bookHref'], 'icon' => 'fa-solid fa-arrow-right']) ?>
-
-<?php if (is_string($home['phoneHref'] ?? null)): ?>
-      <?= $view->component('button', ['label' => $str('call'), 'variant' => 'ghost', 'href' => $home['phoneHref'], 'icon' => 'fa-solid fa-phone', 'iconPosition' => 'start', 'iconClass' => 'ic-accent']) ?>
-
-<?php endif; ?>
-    </div>
-<?php if ($rating['show']): ?>
-    <div class="hero__rating">
-      <?= $view->component('star-rating', ['rating' => 5.0, 'size' => '16']) ?>
-
-      <span class="hero__rating-text"><strong><?= e($rating['value']) ?></strong> <?= e(str_replace(':count', $rating['count'], $str('rating'))) ?></span>
-    </div>
+  <div class="hero__bg" aria-hidden="true">
+<?php if (is_array($media)): ?>
+    <img src="<?= e_url($media['url']) ?>" alt="" width="<?= (int) $media['width'] ?>" height="<?= (int) $media['height'] ?>" fetchpriority="high">
+<?php else: ?>
+    <div class="ph ph--hero"><?= svg_icon('cedar', 'ph__icon') ?></div>
 <?php endif; ?>
   </div>
-  <div class="hero__art">
-    <div class="hero__caption"><?= e($str('caption')) ?></div>
-    <?= $view->component('blueprint', ['variant' => 'desktop']) ?>
-
+  <div class="wrap">
+    <div class="hero__content">
+<?php if ($s['label'] !== ''): ?>
+      <p class="eyebrow eyebrow--light hero__fade"><?= e($s['label']) ?></p>
+<?php endif; ?>
+      <h1 class="hero__title" data-split><?= e($s['title']) ?><?php if ($s['highlight'] !== ''): ?> <em><?= e($s['highlight']) ?></em><?php endif; ?></h1>
+<?php if ($s['intro'] !== ''): ?>
+      <p class="hero__text hero__fade hero__fade--2"><?= e($s['intro']) ?></p>
+<?php endif; ?>
+      <div class="hero__actions hero__fade hero__fade--3">
+<?php if (is_array($s['primary'])): ?>
+        <a class="btn btn--primary" href="<?= e_url($s['primary']['href']) ?>"><?= e($s['primary']['label']) ?> <?= svg_icon('arrow', 'ic ic--arrow') ?></a>
+<?php endif; ?>
+<?php if (is_array($s['secondary'])): ?>
+        <a class="btn btn--ghost" href="<?= e_url($s['secondary']['href']) ?>"><?= e($s['secondary']['label']) ?></a>
+<?php endif; ?>
+      </div>
+    </div>
   </div>
-</section>
-
-<section class="blueprint-m" aria-label="<?= e_attr($str('schematic')) ?>">
-  <?= $view->component('blueprint', ['variant' => 'mobile']) ?>
-
-<?php if ($legend !== []): ?>
-  <?= $view->component('chips', ['items' => $legend]) ?>
-
+<?php if (is_array($media) && $media['alt'] !== ''): ?>
+  <p class="hero__caption"><?= e($media['alt']) ?></p>
 <?php endif; ?>
 </section>

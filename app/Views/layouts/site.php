@@ -1,52 +1,37 @@
 <?php
 /**
- * Public site layout: skip link, header (with the optional top bar), mobile menu, main content, footer, mobile dock,
- * cookie banner and flash toast. All parts are components; the data comes from SitePresenter (or the design-check
- * fixtures for the approved screens).
+ * Public site layout: skip link, SVG sprite, top bar, header, main content, footer, back-to-top button, cookie
+ * banner and flash toast. Data comes from SitePresenter::layout(); head data from SitePresenter::head().
  *
  * @var \Gate\Core\View $view
  * @var string $content
- * @var array<string, mixed> $head partial('head') parameters
- * @var array{header: array<string, mixed>, drawer: array<string, mixed>, footer: array<string, mixed>, dock: array<string, mixed>|null, cookie: array<string, mixed>|null, toast: array{type: string, message: string}|null} $site
+ * @var array<string, mixed> $head
+ * @var array{lang: string, topbar: array<string, mixed>, header: array<string, mixed>, footer: array<string, mixed>, cookie: array<string, mixed>|null, toast: array{type: string, message: string}|null} $site
  */
 ?>
-<?php
-$bundles = is_array($head['bundles'] ?? null) ? $head['bundles'] : [];
-if ($site['cookie'] !== null) {
-    $bundles[] = 'cookie';
-}
-if ($site['toast'] !== null) {
-    $bundles[] = 'toast';
-}
-?>
-<?= $view->partial('head', ['bundle' => 'site', 'bundles' => $bundles] + $head) ?>
-<body class="site grid-bg dk">
+<?= $view->partial('head', ['bundle' => 'site'] + $head) ?>
+<body class="site">
 <a class="skip" href="#main"><?= e($view->t('site.skip')) ?></a>
-<div class="page">
-<?= $view->component('site-header', $site['header']) ?>
-
-<?= $view->component('mobile-menu', $site['drawer']) ?>
-
-
-<main class="page__main" id="main">
+<?= $view->render('site/parts/sprite') ?>
+<?= $view->render('site/parts/topbar', ['topbar' => $site['topbar']]) ?>
+<?= $view->render('site/parts/header', ['header' => $site['header']]) ?>
+<main id="main" tabindex="-1">
 <?= $content ?>
 </main>
-
-<?= $view->component('site-footer', $site['footer']) ?>
-
-<?php if ($site['dock'] !== null): ?>
-
-<?= $view->component('mobile-dock', $site['dock']) ?>
-
-<?php endif; ?>
-</div>
+<?= $view->render('site/parts/footer', ['footer' => $site['footer']]) ?>
+<button class="to-top" type="button" data-to-top aria-label="<?= e_attr($view->t('site.to_top')) ?>" hidden>
+  <svg class="to-top__ring" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22"/><circle class="to-top__progress" cx="24" cy="24" r="22" pathLength="100"/></svg>
+  <?= svg_icon('arrow-up', 'ic to-top__icon') ?>
+</button>
 <?php if ($site['cookie'] !== null): ?>
-<?= $view->component('cookie-banner', $site['cookie']) ?>
-
+<?= $view->render('site/parts/cookie', ['cookie' => $site['cookie']]) ?>
 <?php endif; ?>
 <?php if ($site['toast'] !== null): ?>
-<?= $view->component('toast', ['type' => $site['toast']['type'], 'message' => $site['toast']['message']]) ?>
-
+<div class="toast toast--<?= e_attr($site['toast']['type']) ?>" role="status" data-toast>
+  <?= svg_icon($site['toast']['type'] === 'error' ? 'alert' : ($site['toast']['type'] === 'success' ? 'check' : 'info'), 'ic toast__icon') ?>
+  <p><?= e($site['toast']['message']) ?></p>
+  <button type="button" class="toast__close" data-toast-close aria-label="<?= e_attr($view->t('site.close')) ?>"><?= svg_icon('close') ?></button>
+</div>
 <?php endif; ?>
 </body>
 </html>

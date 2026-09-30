@@ -17,7 +17,7 @@ use Gate\Http\Response;
  * answer as any page that does not exist.
  *
  * status "ok": everything fine (HTTP 200). "warn": the site works but something needs a look — an overdue
- * backup or review sync, stuck or failed emails, a scheduler that stopped running (HTTP 200). "fail": the
+ * backup, stuck or failed emails, a scheduler that stopped running (HTTP 200). "fail": the
  * database or storage is broken (HTTP 503).
  */
 final class Health
@@ -95,18 +95,6 @@ final class Health
                 ];
 
                 $settings = $app->settings();
-                $provider = $settings->string('reviews.provider', 'manual');
-                $interval = $settings->int('reviews.sync_interval_hours', 24);
-                $lastSync = $settings->string('reviews.last_sync_at');
-                $syncOverdue = $provider !== 'manual' && $interval > 0
-                    && ($lastSync === '' || strtotime($lastSync . ' UTC') < $now->getTimestamp() - 2 * $interval * 3600);
-                $checks['review_sync'] = [
-                    'status' => $settings->string('reviews.last_error') !== '' || $syncOverdue ? 'warn' : 'ok',
-                    'provider' => $provider,
-                    'last_sync' => $lastSync === '' ? null : $lastSync,
-                    'last_error' => $settings->string('reviews.last_error') === '' ? null : 'see the reviews screen',
-                ];
-
                 $lastBackup = $settings->string('backup.last_at');
                 $backupAge = $lastBackup === '' ? null : (int) floor(($now->getTimestamp() - (int) strtotime($lastBackup . ' UTC')) / 3600);
                 $checks['backup'] = [

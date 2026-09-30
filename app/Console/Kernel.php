@@ -26,10 +26,6 @@ use Gate\Ops\Health;
 use Gate\Ops\Scheduler;
 use Gate\Repositories\LanguageRepository;
 use Gate\Repositories\RedirectRepository;
-use Gate\Repositories\ReviewRepository;
-use Gate\Reviews\ReviewPhotos;
-use Gate\Reviews\ReviewProviders;
-use Gate\Reviews\ReviewSync;
 use Gate\Security\ArraySession;
 use Gate\Security\Crypto;
 use Gate\Security\PasswordHasher;
@@ -52,7 +48,7 @@ GATE Lebanon console
   seed                             Add missing settings, languages and UI strings
   install --db-name=... --db-user=... [--db-host=127.0.0.1 --db-port=3306 --db-pass=...]
           --site-name=... --site-url=... --admin-name=... --admin-email=... --admin-password-stdin
-          [--languages=en,fr,nl --default-language=nl --admin-path=...]
+          [--languages=en,ar,fr --default-language=en --admin-path=...]
                                    Non-interactive installation (same steps as /install)
   admin:path                       Print the admin sign-in URL
   admin:path --regenerate          Replace the admin path with a new random one (printed once)
@@ -63,15 +59,12 @@ GATE Lebanon console
   mail:work [--limit=20]           Send queued emails now (for a cron job; the site also sends after each request)
   mail:test <email>                Send a test email with the saved SMTP settings
   redirects:import <file.csv>      Import old URL redirects (CSV: from_path,to_path[,status])
-  forms:unlock <ip>                Clear the appointment form rate limit for one visitor IP address
-  reviews:sync [--dry-run] [--force] [--cron]
-                                   Import the Google reviews (for a cron job; --cron only runs when it is due)
-  reviews:api-base <url> | --clear  Point the Google calls at a test endpoint (development only)
+  forms:unlock <ip>                Clear the contact and newsletter form rate limits for one visitor IP address
   backup:run [--no-offsite]        Back up the database and the uploads (storage/backups; for a daily cron job)
   backup:list                      List the backups, newest first
   backup:restore <file> [--no-safety-backup]
                                    Replace the database and the uploads with a backup (asks for confirmation)
-  schedule:run                     All scheduled work in one go: emails, review sync when due, daily backup
+  schedule:run                     All scheduled work in one go: emails and the daily backup
                                    (one cron line every 15 minutes; without cron use the scheduler address)
   schedule:url [--regenerate]      Print the scheduler address for a web cron service such as cron-job.org
   content:check                    List unfinished content: [placeholders], missing translations, alt texts, SEO
@@ -129,8 +122,6 @@ TXT;
                 'mail:test' => $this->mailTest($args[0] ?? ''),
                 'redirects:import' => $this->redirectsImport($args[0] ?? ''),
                 'forms:unlock' => $this->formsUnlock($args[0] ?? ''),
-                'reviews:sync' => $this->reviewsSync(isset($options['dry-run']), isset($options['force']), isset($options['cron'])),
-                'reviews:api-base' => $this->reviewsApiBase($args[0] ?? '', isset($options['clear'])),
                 'backup:run' => $this->backupRun(!isset($options['no-offsite'])),
                 'backup:list' => $this->backupList(),
                 'backup:restore' => $this->backupRestore($args[0] ?? '', !isset($options['no-safety-backup'])),
@@ -336,43 +327,6 @@ TXT;
         return $this->line(sprintf('Imported %d redirects (%d rows skipped).', $count, $skipped));
     }
 
-    private function reviewsSync(bool $dryRun, bool $force, bool $cronMode): int
-    {
-        [$config, $db] = $this->connect();
-        $settings = new Settings($db, new Crypto($config->string('app.key')), $this->clock);
-        $reviews = new ReviewRepository($db, $this->clock);
-        $sync = new ReviewSync($reviews, $settings, new RateLimiter($db, $this->clock), $this->clock);
-        if ($cronMode && !$sync->isDue()) {
-            return $this->line('Not due yet (next: ' . ($sync->nextSyncAt() ?: 'automatic sync is off') . ').');
-        }
-        $providers = new ReviewProviders($settings);
-        $result = $sync->run($providers->active(), $dryRun, $force);
-        if ($result['status'] === 'ok' && !$dryRun && $settings->bool('reviews.show_photos')) {
-            // Fetch the photos of the reviews the website shows, so no visitor request ever reaches Google.
-            (new ReviewPhotos())->warm($reviews->visible(24, $settings->string('reviews.display_order', 'newest')));
-        }
-        $line = sprintf('%s — added %d, updated %d, marked as removed %d.', strtoupper($result['status']), $result['added'], $result['updated'], $result['removed']);
-        if ($result['message'] !== '') {
-            $line .= ' ' . $result['message'];
-        }
-        return $result['status'] === 'error' ? $this->error($line) : $this->line($line);
-    }
-
-    private function reviewsApiBase(string $url, bool $clear): int
-    {
-        [$config, $db] = $this->connect();
-        $settings = new Settings($db, new Crypto($config->string('app.key')), $this->clock);
-        if ($clear || $url === '') {
-            $settings->set('google.api_base', '');
-            return $this->line('Google calls go to the real endpoints again.');
-        }
-        if (preg_match('#^https?://[^\s]{6,200}$#', $url) !== 1) {
-            return $this->error('Usage: reviews:api-base <http(s) url> | --clear');
-        }
-        $settings->set('google.api_base', rtrim($url, '/'));
-        return $this->line('Google calls now go to ' . rtrim($url, '/') . ' (development only).');
-    }
-
     private function backups(): Backups
     {
         [$config, $db] = $this->connect();
@@ -411,7 +365,6 @@ TXT;
             return $this->line('Another run is busy; nothing done.');
         }
         $this->line('Email: ' . ($report['mail'] === null ? 'not set up' : sprintf('sent %d, failed %d', $report['mail']['sent'], $report['mail']['failed'])));
-        $this->line('Reviews: ' . $report['reviews']);
         $this->line('Backup: ' . $report['backup']);
         return $report['status'] === 'ok' ? 0 : 1;
     }
@@ -567,8 +520,11 @@ TXT;
             return $this->error('Usage: forms:unlock <ip>');
         }
         [, $db] = $this->connect();
-        (new RateLimiter($db, $this->clock))->clear('form:appointment:' . $ip);
-        return $this->line('Appointment form rate limit cleared for ' . $ip . '.');
+        $limiter = new RateLimiter($db, $this->clock);
+        foreach (['contact', 'newsletter'] as $form) {
+            $limiter->clear('form:' . $form . ':' . $ip);
+        }
+        return $this->line('Contact and newsletter form rate limits cleared for ' . $ip . '.');
     }
 
     private function recovery(): Recovery

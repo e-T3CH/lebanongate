@@ -10,12 +10,10 @@ use Gate\I18n\Translator;
 use Gate\Mail\MailMessage;
 use Gate\Mail\MailQueue;
 use Gate\Mail\SmtpTransport;
-use Gate\Repositories\AppointmentRepository;
 use Gate\Services\AuditLog;
-use Gate\Services\StatusEmails;
 
 /**
- * Settings → Email: SMTP server, sender, the address that receives appointment requests, and a test button that
+ * Settings → Email: SMTP server, sender, the address that receives contact messages, and a test button that
  * sends one message immediately and reports the result. The SMTP password is stored encrypted and never shown.
  */
 final class EmailSettingsController extends AdminController
@@ -44,61 +42,7 @@ final class EmailSettingsController extends AdminController
             'hasPassword' => $s->string('mail.password') !== '',
             'queue' => (new MailQueue($this->app->db(), $this->app->clock))->counts(),
             'testTo' => $user['email'] ?? '',
-            'customer' => $this->customerEmails($request->query('lang')),
         ]);
-    }
-
-    /**
-     * Emails to customers: a switch per status (off by default) and the text per language.
-     *
-     * @return array{lang: string, tabs: list<array{label: string, href: string, active: bool}>, rows: list<array{status: string, label: string, enabled: bool, subject: string, body: string}>}
-     */
-    private function customerEmails(string $requested): array
-    {
-        $languages = $this->app->languages();
-        $lang = in_array($requested, $languages->enabledCodes(), true) ? $requested : $languages->defaultCode();
-        $emails = new StatusEmails($this->app->db(), $this->app->settings());
-        $tabs = [];
-        foreach ($languages->enabledCodes() as $code) {
-            $tabs[] = ['label' => strtoupper($code), 'href' => $this->app->adminPath('settings/email') . '?lang=' . $code . '#customer-emails', 'active' => $code === $lang];
-        }
-        $rows = [];
-        foreach (AppointmentRepository::STATUSES as $status) {
-            $template = $emails->template($status, $lang);
-            $rows[] = [
-                'status' => $status,
-                'label' => $this->t('admin.statuses.' . $status),
-                'enabled' => $emails->isEnabled($status),
-                'subject' => $template['subject'] ?? '',
-                'body' => $template['body'] ?? '',
-            ];
-        }
-        return ['lang' => $lang, 'tabs' => $tabs, 'rows' => $rows];
-    }
-
-    /** Saves the switches and the texts of one language. */
-    public function saveCustomerEmails(Request $request): Response
-    {
-        $languages = $this->app->languages();
-        $lang = in_array($request->input('lang'), $languages->enabledCodes(), true) ? $request->input('lang') : $languages->defaultCode();
-        $emails = new StatusEmails($this->app->db(), $this->app->settings());
-        $missing = [];
-        foreach (AppointmentRepository::STATUSES as $status) {
-            $emails->setEnabled($status, $request->input('enabled_' . $status) === '1');
-            $emails->save($status, $lang, $request->input('subject_' . $status), str_replace("\r\n", "\n", $request->input('body_' . $status)));
-        }
-        // A status that is on but has no text in the default language would never send anything (it is the fallback).
-        foreach ($emails->enabledStatuses() as $status) {
-            $template = $emails->template($status, $languages->defaultCode());
-            if ($template === null || trim($template['subject']) === '' || trim($template['body']) === '') {
-                $missing[] = $this->t('admin.statuses.' . $status);
-            }
-        }
-        $this->app->audit()->record(AuditLog::SETTINGS_CHANGED, $this->app->auth()->user()['id'] ?? null, ['keys' => ['appointments.status_email.*'], 'lang' => $lang, 'enabled' => $emails->enabledStatuses()]);
-        $missing === []
-            ? $this->flashToast('admin.email.customer_saved')
-            : $this->flashToast('admin.email.customer_missing', 'error', ['statuses' => implode(', ', $missing), 'lang' => strtoupper($languages->defaultCode())]);
-        return $this->back($this->app->adminPath('settings/email') . '?lang=' . $lang . '#customer-emails');
     }
 
     public function save(Request $request): Response

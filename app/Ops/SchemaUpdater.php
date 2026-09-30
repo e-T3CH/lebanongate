@@ -9,7 +9,6 @@ use Gate\Core\Database;
 use Gate\Core\Migrator;
 use Gate\Core\Paths;
 use Gate\Database\Seeders\SettingsSeeder;
-use Gate\Database\Seeders\StatusEmailSeeder;
 use Gate\Database\Seeders\TranslationsSeeder;
 use Gate\Security\RateLimiter;
 use Gate\Services\AuditLog;
@@ -75,7 +74,6 @@ final class SchemaUpdater
             $this->settings->refresh();
             (new SettingsSeeder($this->settings))->run();
             (new TranslationsSeeder($this->db, $this->clock))->run();
-            (new StatusEmailSeeder($this->db))->run();
             $this->settings->set(self::SIGNATURE_SETTING, $signature, 'string');
             if ($ran !== []) {
                 $audit?->record(AuditLog::SYSTEM_UPDATED, null, ['migrations' => $ran]);

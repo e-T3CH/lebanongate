@@ -17,7 +17,7 @@
   <div class="sec-card__intro"><h2 class="h3"><?= e($view->t('admin.settings.social_title')) ?></h2><span class="muted"><?= e($view->t('admin.settings.social_desc')) ?></span></div>
 <?php foreach ($networks as $network): ?>
   <div class="social-row flex gap-20">
-    <?= $view->component('input', ['name' => 'url_' . $network['network'], 'label' => $network['label'], 'value' => $network['url'], 'error' => $errors['url_' . $network['network']] ?? null, 'placeholder' => $network['network'] === 'whatsapp' ? '+32 ...' : 'https://…']) ?>
+    <?= $view->component('input', ['name' => 'url_' . $network['network'], 'label' => $network['label'], 'value' => $network['url'], 'error' => $errors['url_' . $network['network']] ?? null, 'placeholder' => $network['network'] === 'whatsapp' ? '+961 …' : 'https://…']) ?>
 
     <div class="placement">
       <span class="placement__cap"><?= e($view->t('admin.settings.header')) ?></span>

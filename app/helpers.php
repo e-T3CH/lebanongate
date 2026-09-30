@@ -43,3 +43,15 @@ if (!function_exists('e_css')) {
         return Escape::cssValue($value);
     }
 }
+
+if (!function_exists('svg_icon')) {
+    /**
+     * An icon of the public site's SVG sprite (app/Views/site/parts/sprite.php), decorative (aria-hidden).
+     * Names are fixed identifiers from the templates, never user input.
+     */
+    function svg_icon(string $name, string $class = 'ic'): string
+    {
+        $name = preg_replace('/[^a-z0-9-]/', '', $name) ?? '';
+        return '<svg class="' . Escape::attr($class) . '" aria-hidden="true" focusable="false"><use href="#i-' . $name . '"/></svg>';
+    }
+}

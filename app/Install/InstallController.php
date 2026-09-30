@@ -27,14 +27,14 @@ final class InstallController
     public static function pickLocale(Request $request): string
     {
         $q = $request->query('lang');
-        if (in_array($q, LanguageRules::SUPPORTED, true)) {
+        if (in_array($q, LanguageRules::ADMIN, true)) {
             return $q;
         }
         $cookie = $request->cookie('gate_install_lang');
-        if ($cookie !== null && in_array($cookie, LanguageRules::SUPPORTED, true)) {
+        if ($cookie !== null && in_array($cookie, LanguageRules::ADMIN, true)) {
             return $cookie;
         }
-        return LocaleResolver::negotiate($request->header('Accept-Language') ?? '', LanguageRules::SUPPORTED) ?? 'en';
+        return LocaleResolver::negotiate($request->header('Accept-Language') ?? '', LanguageRules::ADMIN) ?? 'en';
     }
 
     public function dispatch(Request $request): Response
@@ -206,7 +206,7 @@ final class InstallController
     private function langQuery(Request $request): string
     {
         $q = $request->query('lang');
-        return in_array($q, LanguageRules::SUPPORTED, true) ? '?lang=' . $q : '';
+        return in_array($q, LanguageRules::ADMIN, true) ? '?lang=' . $q : '';
     }
 
     /** @param array<string, mixed> $data */

@@ -4,159 +4,145 @@ declare(strict_types=1);
 
 namespace Gate\Site;
 
+use Gate\Content\EntryTypes;
 use Gate\Core\Clock;
+use Gate\Core\Components;
+use Gate\I18n\LanguageRules;
 use Gate\I18n\Translator;
 use Gate\Repositories\ContentRepository;
+use Gate\Repositories\EntryRepository;
 use Gate\Repositories\LanguageRepository;
-use Gate\Repositories\ReviewRepository;
-use Gate\Reviews\ReviewPhotos;
-use Gate\Services\SectionOrder;
 use Gate\Services\Settings;
 
 /**
- * Builds the view data of public pages from the settings and the content tables: layout parts (header with top bar,
- * mobile menu, footer, dock, cookie banner), head data (meta, canonical, hreflang, Open Graph, JSON-LD, analytics) and
- * the shared content of the home sections.
+ * Builds the view data of public pages from the settings and the content: the layout (top bar, header with the
+ * navigation and the language menu, footer with the "Developed by" credit, cookie banner, toast), the head (meta,
+ * canonical, hreflang, Open Graph, JSON-LD, analytics) and the card data shared by lists and home sections.
+ *
+ * @phpstan-import-type Entry from EntryRepository
+ * @phpstan-import-type MediaItem from ContentRepository
+ * @phpstan-type Card array{id: int, type: string, title: string, summary: string, href: string, cover: MediaItem|null, date: string, badge: array{0: string, 1: string}, tag: string, status: string, statusLabel: string, region: string, meta: list<array{icon: string, text: string}>}
  */
 final class SitePresenter
 {
-    public const LOGO = Brand::LOGO;
-    private const OG_LOCALES = ['en' => 'en_GB', 'fr' => 'fr_BE', 'nl' => 'nl_BE'];
+    private const OG_LOCALES = ['en' => 'en_US', 'ar' => 'ar_LB', 'fr' => 'fr_FR'];
 
     public function __construct(
         private readonly ContentRepository $content,
+        private readonly EntryRepository $entries,
         private readonly SiteUrls $urls,
         private readonly Settings $settings,
         private readonly LanguageRepository $languages,
         private readonly Translator $t,
         private readonly Clock $clock,
-        private readonly ?ReviewRepository $reviews = null,
     ) {
     }
 
     /**
      * @param array<string, string> $alternates lang => path of the current page
      * @param array{type: string, message: string}|null $toast
+     * @param array{action: string, token: string} $newsletter
      * @return array<string, mixed>
      */
-    public function layout(string $lang, string $activeKey, array $alternates, string $currentPath, Consent $consent, bool $showCookieSettings, ?array $toast): array
+    public function layout(string $lang, string $activeKey, array $alternates, string $currentPath, Consent $consent, bool $showCookieSettings, ?array $toast, array $newsletter): array
     {
         $siteName = $this->settings->string('site.name', 'GATE Lebanon');
-        $sections = $this->content->sections('home', $lang);
-        $topbarOn = false;
-        foreach ($sections as $s) {
-            if ($s['type'] === 'topbar') {
-                $topbarOn = $s['is_enabled'];
-            }
-        }
-        $phone = $this->settings->string('contact.phone');
-        $services = array_values(array_filter($this->content->services($lang), static fn (array $s): bool => $s['show_in_menu']));
+        $brand = new Brand($this->settings);
+        $phone = $this->real('contact.phone');
+        $email = $this->real('contact.email');
+
         $nav = [];
         foreach ($this->content->pages($lang) as $page) {
-            if (!$page['in_nav']) {
+            if (!$page['in_nav'] || $page['parent_key'] !== '') {
                 continue;
             }
-            $item = ['label' => $page['nav_label'], 'href' => $this->urls->page($page['key'], $lang), 'current' => $page['key'] === $activeKey];
-            if ($page['key'] === 'services' && $services !== []) {
-                $item['children'] = array_map(fn (array $s): array => ['title' => $s['menu_title'] !== '' ? $s['menu_title'] : $s['title'], 'sub' => $s['menu_sub'], 'href' => $this->urls->service($s['id'], $lang)], $services);
+            $children = [];
+            foreach ($this->content->children($page['key'], $lang) as $child) {
+                if ($child['in_nav']) {
+                    $children[] = ['label' => $child['nav_label'], 'href' => $this->urls->page($child['key'], $lang), 'current' => $child['key'] === $activeKey];
+                }
             }
-            $nav[] = $item;
+            $isCurrent = $page['key'] === $activeKey || in_array($activeKey, array_column($this->content->children($page['key'], $lang), 'key'), true);
+            $nav[] = ['key' => $page['key'], 'label' => $page['nav_label'], 'href' => $this->urls->page($page['key'], $lang), 'current' => $isCurrent, 'children' => $children];
         }
+
         $languages = [];
-        $default = $this->languages->defaultCode();
         foreach ($this->languages->enabled() as $l) {
             $languages[] = [
-                'code' => $l['code'], 'name' => $l['native_name'], 'english' => $l['name'],
+                'code' => $l['code'], 'name' => $l['native_name'],
                 'href' => $alternates[$l['code']] ?? $this->urls->page('home', $l['code']),
-                'current' => $l['code'] === $lang, 'default' => $l['code'] === $default,
+                'current' => $l['code'] === $lang, 'dir' => LanguageRules::direction($l['code']),
             ];
         }
         $showSelector = count($languages) > 1 && $this->settings->bool('i18n.show_selector', true);
-        $socialsFor = function (string $placement): array {
-            $out = [];
-            foreach (['facebook' => 'facebook', 'instagram' => 'instagram', 'tiktok' => 'tiktok', 'whatsapp' => 'whatsapp', 'youtube' => 'youtube', 'google_business' => 'google'] as $key => $network) {
-                $url = $this->settings->string('social.' . $key . '.url');
-                if ($url === '' || !$this->settings->bool('social.' . $key . '.' . $placement)) {
-                    continue;
-                }
-                $out[] = ['network' => $network, 'url' => $network === 'whatsapp' ? self::whatsappUrl($url) : $url];
+        $current = null;
+        foreach ($languages as $l) {
+            if ($l['current']) {
+                $current = $l;
             }
-            return $out;
-        };
-        $bookHref = $this->bookHref($lang);
-        $legalLinks = [];
+        }
+
+        $quickLinks = [];
+        foreach (['about', 'expertise', 'projects', 'news', 'publications', 'gallery', 'partners'] as $key) {
+            $page = $this->content->page($key, $lang);
+            if ($page !== null) {
+                $quickLinks[] = ['label' => $page['nav_label'], 'href' => $this->urls->page($key, $lang)];
+            }
+        }
+        $legal = [];
         foreach (['privacy', 'cookies', 'terms'] as $key) {
             $page = $this->content->page($key, $lang);
             if ($page !== null) {
-                $legalLinks[] = ['label' => $page['nav_label'], 'href' => $this->urls->page($key, $lang)];
+                $legal[] = ['label' => $page['nav_label'], 'href' => $this->urls->page($key, $lang)];
             }
         }
-        $legalLinks[] = ['label' => $this->t->get('site.footer.cookie_settings'), 'href' => $currentPath . '?cookies=settings#cookie-consent'];
-        $companyLinks = [];
-        foreach (['about', 'reviews', 'contact'] as $key) {
-            $page = $this->content->page($key, $lang);
-            if ($page !== null) {
-                $companyLinks[] = ['label' => $page['nav_label'], 'href' => $this->urls->page($key, $lang)];
-            }
-        }
-        $footerLangs = [];
-        foreach ($languages as $l) {
-            $footerLangs[] = ['name' => $l['name'], 'href' => $l['href'], 'code' => $l['code']];
-        }
-        $siteLogo = (new Brand($this->settings))->siteLogo();
-        $cookiePolicy = $this->content->page('cookies', $lang) !== null ? $this->urls->page('cookies', $lang) : '/' . $lang . '/';
+        $legal[] = ['label' => $this->t->get('site.footer.cookie_settings'), 'href' => $currentPath . '?cookies=settings#cookie-consent'];
+        $contactPage = $this->content->page('contact', $lang);
+        $partnerHref = $contactPage !== null ? $this->urls->page('contact', $lang) : $this->urls->page('home', $lang);
 
         return [
-            'header' => [
-                'topbar' => $topbarOn ? [
-                    'address' => $this->addressLine(false),
-                    'hours' => $this->t->get('site.hours.weekdays', ['hours' => $this->settings->string('contact.hours_weekdays')]),
-                    'coords' => self::coordinates($this->settings->string('contact.latitude'), $this->settings->string('contact.longitude')),
-                    'phone' => $phone,
-                    'phoneHref' => self::telHref($phone) ?? '#contact',
-                ] : null,
-                'nav' => $nav,
+            'lang' => $lang,
+            'topbar' => [
+                'email' => $email,
+                'emailHref' => filter_var($email, FILTER_VALIDATE_EMAIL) !== false ? 'mailto:' . $email : null,
+                'phone' => $phone,
+                'phoneHref' => self::telHref($phone),
+                'address' => $this->address($lang),
+                'socials' => $this->socials('header'),
                 'languages' => $showSelector ? $languages : [],
-                'homeHref' => $this->urls->page('home', $lang),
-                'logoSrc' => $siteLogo,
-                'logoAlt' => $siteName,
-                'siteName' => $siteName,
-                'ctaLabel' => $this->t->get('site.header.cta'),
-                'ctaHref' => $bookHref,
-                'menuHref' => '#mnav',
+                'currentLanguage' => $current,
             ],
-            'drawer' => [
-                'nav' => $nav, 'languages' => $showSelector ? $languages : [], 'logoSrc' => $siteLogo, 'logoAlt' => $siteName,
-                'closeHref' => $currentPath, 'ctaLabel' => $this->t->get('site.header.cta'), 'ctaHref' => $bookHref,
-                'socials' => $socialsFor('header'), 'open' => false, 'hidden' => true,
+            'header' => [
+                'homeHref' => $this->urls->page('home', $lang),
+                'logo' => $brand->headerLogo(),
+                'siteName' => $siteName,
+                'nav' => $nav,
+                'cta' => ['label' => $this->t->get('site.header.cta'), 'href' => $partnerHref],
             ],
             'footer' => [
-                'logoSrc' => $siteLogo,
-                'logoAlt' => $siteName,
+                'logo' => $brand->footerLogo(),
+                'siteName' => $siteName,
+                'homeHref' => $this->urls->page('home', $lang),
                 'about' => $this->t->get('site.footer.about'),
-                'socials' => $socialsFor('footer'),
-                'columns' => [
-                    ['title' => $this->t->get('site.footer.services'), 'links' => array_map(fn (array $s): array => ['label' => $s['short_title'] !== '' ? $s['short_title'] : $s['title'], 'href' => $this->urls->service($s['id'], $lang)], $services)],
-                    ['title' => $this->t->get('site.footer.company'), 'links' => $companyLinks],
-                    ['title' => $this->t->get('site.footer.legal'), 'links' => $legalLinks],
-                ],
-                'copyright' => $this->t->get('site.footer.copyright', ['year' => $this->clock->now()->format('Y'), 'site' => $siteName, 'vat' => $this->settings->string('company.vat')]),
-                'languages' => count($languages) > 1 ? $footerLangs : [],
-            ],
-            'dock' => $this->settings->bool('site.mobile_dock', true) ? [
-                'label' => $this->t->get('site.dock.label'),
-                'items' => array_values(array_filter([
-                    self::telHref($phone) !== null ? ['label' => $this->t->get('site.dock.call'), 'icon' => 'fa-solid fa-phone', 'href' => (string) self::telHref($phone)] : null,
-                    $this->settings->string('social.whatsapp.url') !== '' ? ['label' => $this->t->get('site.dock.whatsapp'), 'icon' => 'fa-brands fa-whatsapp', 'href' => self::whatsappUrl($this->settings->string('social.whatsapp.url'))] : null,
-                    ['label' => $this->t->get('site.dock.book'), 'icon' => 'fa-regular fa-calendar', 'href' => $bookHref, 'primary' => true],
+                'socials' => $this->socials('footer'),
+                'links' => $quickLinks,
+                'contact' => array_values(array_filter([
+                    ['icon' => 'pin', 'text' => $this->address($lang), 'href' => self::mapsUrl($this->settings->string('contact.latitude'), $this->settings->string('contact.longitude'))],
+                    $phone !== '' ? ['icon' => 'phone', 'text' => $phone, 'href' => self::telHref($phone), 'ltr' => true] : null,
+                    $email !== '' ? ['icon' => 'mail', 'text' => $email, 'href' => filter_var($email, FILTER_VALIDATE_EMAIL) !== false ? 'mailto:' . $email : null, 'ltr' => true] : null,
+                    $this->real('contact.hours') !== '' ? ['icon' => 'clock', 'text' => $this->real('contact.hours'), 'href' => null] : null,
                 ])),
-            ] : null,
-            // Rendered (with its CSS) only while a choice is needed or the visitor opened "Cookie settings".
-            'cookie' => !$consent->hasChoice() || $showCookieSettings ? [
+                'newsletter' => $this->settings->bool('site.newsletter_enabled', true) ? $newsletter + ['return' => $currentPath] : null,
+                'legal' => $legal,
+                'copyright' => $this->t->get('site.footer.copyright', ['year' => $this->clock->now()->format('Y'), 'site' => $siteName]),
+                'credit' => ['label' => $this->t->get('site.footer.developed_by'), 'logo' => Brand::CREDIT_LOGO, 'url' => Brand::CREDIT_URL, 'name' => 'E-5HOP'],
+            ],
+            // Rendered while a choice is needed (only when analytics is set up: otherwise the site sets necessary
+            // cookies only and there is nothing to ask) or when the visitor opened "Cookie settings".
+            'cookie' => ($this->settings->string('analytics.provider', 'none') !== 'none' && !$consent->hasChoice()) || $showCookieSettings ? [
                 'action' => '/' . $lang . '/consent',
                 'returnTo' => $currentPath,
-                'policyHref' => $cookiePolicy,
-                'open' => true,
+                'policyHref' => $this->content->page('cookies', $lang) !== null ? $this->urls->page('cookies', $lang) : null,
             ] : null,
             'toast' => $toast,
         ];
@@ -164,16 +150,16 @@ final class SitePresenter
 
     /**
      * @param array<string, string> $alternates lang => path
-     * @param list<string> $bundles
      * @param list<array<string, mixed>> $jsonld extra JSON-LD blocks
+     * @param MediaItem|null $image share image of this page (else the default)
      * @return array<string, mixed>
      */
-    public function head(string $lang, string $title, string $description, string $path, array $alternates, array $bundles, Consent $consent, SecurityHeadersAllow $allow, array $jsonld = [], bool $noindex = false): array
+    public function head(string $lang, string $title, string $description, string $path, array $alternates, Consent $consent, SecurityHeadersAllow $allow, array $jsonld = [], bool $noindex = false, ?array $image = null, string $ogType = 'website'): array
     {
         $siteName = $this->settings->string('site.name', 'GATE Lebanon');
         $canonical = $this->urls->absolute($path);
         $brand = new Brand($this->settings);
-        $ogImage = $this->settings->string('seo.og_image');
+        $ogImage = $image !== null ? $image['url'] : $this->settings->string('seo.og_image');
         $ogImage = $ogImage !== '' ? $ogImage : $brand->logo();
         $locales = [];
         foreach (array_keys($alternates) as $code) {
@@ -193,178 +179,114 @@ final class SitePresenter
                 $analytics = ['scripts' => $tags['scripts'], 'inline' => $tags['inline']];
             }
         }
-        $logoUrl = $this->urls->absolute($brand->logo());
+        $description = mb_substr(trim((string) preg_replace('/\s+/u', ' ', $description)), 0, 300);
         return [
             'title' => $title,
             'description' => $description,
             'canonical' => $noindex ? null : $canonical,
-            'alternates' => $noindex ? [] : $this->urls->hreflang(array_map(fn (string $p): string => $p, $alternates)),
+            'alternates' => $noindex ? [] : $this->urls->hreflang($alternates),
             'noindex' => $noindex,
-            'bundles' => $bundles,
+            'dir' => LanguageRules::direction($lang),
             'og' => [
-                'type' => 'website', 'site_name' => $siteName, 'title' => $title, 'description' => $description, 'url' => $canonical,
-                'image' => str_starts_with($ogImage, 'http') ? $ogImage : $this->urls->absolute($ogImage), 'locale' => self::OG_LOCALES[$lang] ?? 'en_GB', 'alternate_locales' => $locales,
+                'type' => $ogType, 'site_name' => $siteName, 'title' => $title, 'description' => $description, 'url' => $canonical,
+                'image' => $this->urls->absolute($ogImage), 'locale' => self::OG_LOCALES[$lang] ?? 'en_US', 'alternate_locales' => $locales,
             ],
-            'jsonld' => array_merge([Seo::localBusiness($this->settings, $this->urls->base(), $lang, $logoUrl, $this->t->get('site.footer.about'))], $jsonld),
+            'jsonld' => array_merge([Seo::organization($this->settings, $this->urls->base(), $lang, $this->urls->absolute($brand->logo()), $this->t->get('site.footer.about'))], $jsonld),
             'analytics' => $analytics,
             'favicon' => $brand->favicon(),
         ];
     }
 
     /**
-     * Content shared by the home sections and the content pages.
+     * Card data of an entry for lists and home sections.
      *
-     * @param array<string, mixed> $form appointment-form props (action, token, values, errors, privacyHref)
-     * @return array<string, mixed>
+     * @param Entry $entry
+     * @return Card
      */
-    public function homeData(string $lang, array $form): array
+    public function card(array $entry, string $lang): array
     {
-        $phone = $this->settings->string('contact.phone');
-        $email = $this->settings->string('contact.email');
-        $services = [];
-        $n = 0;
-        foreach ($this->content->services($lang) as $s) {
-            if (!$s['show_on_home']) {
+        $area = $entry['expertise_id'] !== null ? $this->content->expertiseById($entry['expertise_id'], $lang) : null;
+        $meta = [];
+        if ($entry['type'] === 'project') {
+            if ($entry['region'] !== '') {
+                $meta[] = ['icon' => 'pin', 'text' => $this->t->get('site.regions.' . $entry['region'])];
+            }
+            if ($entry['beneficiaries'] !== null && $entry['beneficiaries'] > 0) {
+                $meta[] = ['icon' => 'users', 'text' => $this->t->get('site.entries.beneficiaries_short', ['n' => self::number($entry['beneficiaries'], $lang)])];
+            }
+            if ($entry['donors'] !== '') {
+                $meta[] = ['icon' => 'hands', 'text' => $entry['donors']];
+            }
+        } elseif ($entry['type'] === 'publication') {
+            $meta[] = ['icon' => 'calendar', 'text' => Dates::year($entry['published_on'])];
+        } elseif ($entry['type'] === 'album') {
+            $meta[] = ['icon' => 'image', 'text' => $this->t->get('site.entries.photos', ['n' => $this->entries->galleryCount($entry['id'])])];
+        }
+        $statusLabel = $entry['status'] !== '' && in_array($entry['status'], EntryTypes::statuses($entry['type']), true)
+            ? $this->t->get('site.' . ($entry['type'] === 'project' ? 'status' : 'kinds') . '.' . $entry['status'])
+            : '';
+        return [
+            'id' => $entry['id'],
+            'type' => $entry['type'],
+            'title' => $entry['title'],
+            'summary' => $entry['summary'],
+            'href' => $this->urls->entry($entry['type'], $entry['slug'], $lang),
+            'cover' => $entry['cover'],
+            'date' => Dates::long($entry['published_on'], $lang),
+            'badge' => Dates::badge($entry['published_on'], $lang),
+            'tag' => $area !== null ? $area['title'] : '',
+            'status' => $entry['status'],
+            'statusLabel' => $statusLabel,
+            'region' => $entry['region'],
+            'meta' => $meta,
+        ];
+    }
+
+    /** @return list<array{network: string, icon: string, url: string, label: string}> */
+    private function socials(string $placement): array
+    {
+        $out = [];
+        foreach (Components::SOCIAL_ICONS as $network => $icon) {
+            $url = $this->settings->string('social.' . $network . '.url');
+            if ($url === '' || str_contains($url, '[') || !$this->settings->bool('social.' . $network . '.' . $placement)) {
                 continue;
             }
-            $services[] = ['number' => sprintf('%02d', ++$n), 'icon' => $s['icon'], 'title' => $s['title'], 'text' => $s['summary'], 'href' => $this->urls->service($s['id'], $lang), 'id' => $s['id']];
+            $out[] = ['network' => $network, 'icon' => $icon, 'url' => $network === 'whatsapp' ? self::whatsappUrl($url) : $url, 'label' => $this->t->get('site.social.' . $network)];
         }
-        $steps = [];
-        foreach ($this->content->processSteps($lang) as $i => $step) {
-            $steps[] = ['number' => sprintf('%02d', $i + 1), 'title' => $step['title'], 'text' => $step['text']];
-        }
-        $googleUrl = $this->settings->string('google.reviews_url');
-        $hours = $this->t->get('site.hours.weekdays', ['hours' => $this->settings->string('contact.hours_weekdays')]);
-        $saturday = $this->settings->string('contact.hours_saturday');
-        if ($saturday !== '') {
-            $hours .= ' · ' . $this->t->get('site.hours.saturday', ['hours' => $saturday]);
-        }
-        $statsLabel = '';
-        foreach ($this->content->sections('home', $lang) as $section) {
-            if ($section['type'] === 'stats') {
-                $statsLabel = $section['label'];
+        return $out;
+    }
+
+    /** "Ashrafieh, Beirut, Lebanon" in the page language (the settings hold the English names). */
+    public function address(string $lang): string
+    {
+        $parts = [];
+        foreach (['street', 'area', 'city', 'country'] as $field) {
+            $value = $this->real('contact.' . $field);
+            if ($value === '') {
+                continue;
             }
+            $key = 'site.places.' . strtolower((string) preg_replace('/[^A-Za-z]+/', '_', $value));
+            $parts[] = $this->t->has($key, $lang) ? $this->t->get($key) : $value;
         }
-        return [
-            'bookHref' => $this->bookHref($lang),
-            'phoneHref' => self::telHref($phone),
-            'rating' => [
-                // Exactly what Google reports for the location: never recalculated from the reviews shown here.
-                'show' => $this->settings->bool('reviews.show_rating_badge', true) && self::isNumber($this->settings->string('reviews.rating')),
-                'value' => $this->settings->string('reviews.rating'),
-                'count' => $this->settings->string('reviews.count'),
-                'googleUrl' => preg_match('#^https://[^\s\[\]]+$#', $googleUrl) === 1 ? $googleUrl : null,
-            ],
-            'stats' => array_map(static fn (array $s): array => ['value' => $s['value'], 'label' => $s['label']], $this->content->stats($lang)),
-            'statsLabel' => $statsLabel,
-            'services' => $services,
-            'servicesHref' => $this->content->page('services', $lang) !== null ? $this->urls->page('services', $lang) : null,
-            'steps' => $steps,
-            'types' => array_map(static fn (array $t): string => $t['label'], $this->content->transmissionTypes($lang)),
-            'reviews' => $this->reviewCards($lang),
-            'contact' => [
-                'items' => array_values(array_filter([
-                    ['icon' => 'fa-solid fa-location-dot', 'text' => $this->addressLine(true)],
-                    $phone !== '' ? ['icon' => 'fa-solid fa-phone', 'text' => $phone, 'href' => self::telHref($phone)] : null,
-                    $email !== '' ? ['icon' => 'fa-regular fa-envelope', 'text' => $email, 'href' => filter_var($email, FILTER_VALIDATE_EMAIL) !== false ? 'mailto:' . $email : null] : null,
-                    ['icon' => 'fa-regular fa-clock', 'text' => $hours],
-                ])),
-                'mapHref' => self::mapsUrl($this->settings->string('contact.latitude'), $this->settings->string('contact.longitude')),
-                'form' => $form,
-            ],
-        ];
+        return implode($lang === 'ar' ? '، ' : ', ', $parts);
     }
 
-    /** @return array{title: string, text: string, bookHref: string, phoneHref: ?string} */
-    public function cta(string $lang): array
+    /** A setting without [placeholder] parts. */
+    private function real(string $key): string
     {
-        return ['title' => $this->t->get('site.cta.title'), 'text' => $this->t->get('site.cta.text'), 'bookHref' => $this->bookHref($lang), 'phoneHref' => self::telHref($this->settings->string('contact.phone'))];
+        $value = trim($this->settings->string($key));
+        return str_contains($value, '[') ? '' : $value;
     }
 
-    /** @return list<array<string, mixed>> SectionOrder::visible() sections of the home page */
-    public function homeSections(string $lang): array
+    public static function number(int $n, string $lang): string
     {
-        return SectionOrder::visible($this->content->sections('home', $lang));
-    }
-
-    /** @return array<string, mixed>|null a home section (for reuse on content pages) */
-    public function section(string $type, string $lang): ?array
-    {
-        foreach ($this->content->sections('home', $lang) as $section) {
-            if ($section['type'] === $type) {
-                return $section + ['number' => null];
-            }
-        }
-        return null;
-    }
-
-    public function bookHref(string $lang): string
-    {
-        foreach ($this->homeSections($lang) as $section) {
-            if ($section['type'] === 'contact') {
-                return $this->urls->page('home', $lang) . '#contact';
-            }
-        }
-        return $this->urls->page('contact', $lang, 'contact');
-    }
-
-    /**
-     * The visible reviews as the cards want them. Photos go through this site (ReviewPhotos), and only when the
-     * "Show reviewer profile photos" setting is on; otherwise the design's initials are used.
-     *
-     * @return list<array{initial: string, name: string, date: string, text: string, rating: float, photo: ?string}>
-     */
-    private function reviewCards(string $lang): array
-    {
-        if ($this->reviews === null) {
-            return [];
-        }
-        $showPhotos = $this->settings->bool('reviews.show_photos');
-        $order = $this->settings->string('reviews.display_order', 'newest');
-        $cards = [];
-        foreach ($this->reviews->visible($this->settings->int('reviews.max_on_home', 6), $order) as $review) {
-            $name = (string) $review['reviewer_name'];
-            $photo = (string) $review['reviewer_photo_url'];
-            $cards[] = [
-                'initial' => mb_strtoupper(mb_substr(trim($name), 0, 1)),
-                'name' => $name,
-                'date' => $this->reviewDate((string) $review['review_date'], $lang),
-                'text' => (string) ($review['text'] ?? ''),
-                'rating' => (float) $review['rating'],
-                // Only a photo this site already has: a visitor never waits for Google, and never sees a broken image.
-                'photo' => $showPhotos && $photo !== '' && ReviewPhotos::isCached((int) $review['id'], $photo)
-                    ? ReviewPhotos::path((int) $review['id'])
-                    : null,
-            ];
-        }
-        return $cards;
-    }
-
-    /** "12 Sep 2026" in the language of the page. */
-    private function reviewDate(string $value, string $lang): string
-    {
-        $time = strtotime($value);
-        if ($time === false) {
-            return '';
-        }
-        $months = [
-            'en' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            'fr' => ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'],
-            'nl' => ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'],
-        ];
-        return (int) date('j', $time) . ' ' . ($months[$lang] ?? $months['en'])[(int) date('n', $time) - 1] . ' ' . date('Y', $time);
-    }
-
-    /** A rating like "4.9" that Google actually reported (placeholders such as "[4.9]" are not shown). */
-    private static function isNumber(string $value): bool
-    {
-        return is_numeric(trim($value)) && (float) $value > 0;
+        return number_format($n, 0, '.', $lang === 'fr' ? ' ' : ',');
     }
 
     public static function telHref(string $phone): ?string
     {
         $digits = (string) preg_replace('/[^\d+]/', '', $phone);
-        return strlen(ltrim($digits, '+')) >= 8 ? 'tel:' . $digits : null;
+        return strlen(ltrim($digits, '+')) >= 7 ? 'tel:' . $digits : null;
     }
 
     public static function whatsappUrl(string $value): string
@@ -376,22 +298,8 @@ final class SitePresenter
         return strlen($digits) >= 8 ? 'https://wa.me/' . $digits : '#';
     }
 
-    public static function coordinates(string $lat, string $lng): string
-    {
-        if (!is_numeric($lat) || !is_numeric($lng)) {
-            return '';
-        }
-        return sprintf('%.4f° %s / %.4f° %s', abs((float) $lat), (float) $lat >= 0 ? 'N' : 'S', abs((float) $lng), (float) $lng >= 0 ? 'E' : 'W');
-    }
-
     public static function mapsUrl(string $lat, string $lng): ?string
     {
         return is_numeric($lat) && is_numeric($lng) ? 'https://www.google.com/maps/search/?api=1&query=' . rawurlencode($lat . ',' . $lng) : null;
-    }
-
-    private function addressLine(bool $withCountry): string
-    {
-        $line = trim($this->settings->string('contact.street') . ', ' . $this->settings->string('contact.postcode') . ' ' . $this->settings->string('contact.city'), ', ');
-        return $withCountry ? $line . ', ' . $this->t->get('site.country') : $line;
     }
 }

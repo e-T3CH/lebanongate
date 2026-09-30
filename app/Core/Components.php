@@ -38,43 +38,6 @@ final class Components
             'iconOnly' => ['bool', false],                      // draw only the icon; the label stays for screen readers
             'attrs' => ['attrs', []],
         ],
-        'card' => [
-            'content' => 'html',
-            'variant' => ['enum:public|admin', 'public'],
-            'tag' => ['enum:div|a|article|section|aside', 'div'],
-            'href' => ['?url', null],
-            'class' => ['classes', ''],
-            'id' => ['?id', null],
-            'attrs' => ['attrs', []],
-        ],
-        'section-label' => [
-            'text' => 'string',
-            'number' => ['?string', null],                      // "01" → "01 — Services"
-            'tag' => ['enum:div|span|p', 'div'],
-            'class' => ['classes', ''],
-        ],
-        'section-header' => [
-            'label' => 'string',
-            'title' => 'string',
-            'number' => ['?string', null],
-            'highlight' => ['?string', null],                   // appended in <em> (accent color)
-            'intro' => ['?string', null],
-            'level' => ['enum:h1|h2', 'h2'],
-            'wrap' => ['bool', true],                           // <div class="sec__head"> around label + heading
-            'class' => ['classes', 'sec__head'],
-            'introClass' => ['classes', 'sec__intro'],
-        ],
-        'social-links' => [
-            'links' => 'list',                                  // list<array{network: facebook|instagram|tiktok|whatsapp|youtube|google, url: string}>
-            'class' => ['classes', ''],
-        ],
-        'star-rating' => [
-            'rating' => 'float',                                // 0–5, rounded to whole stars
-            'size' => ['enum:14|15|16', '16'],
-            'variant' => ['enum:public|admin', 'public'],       // admin: empty stars in #D5DEE7
-            'wrap' => ['bool', true],                           // false: icons only (inside a labelled control)
-            'class' => ['classes', ''],
-        ],
         'status-pill' => [
             'label' => 'string',
             'tone' => ['enum:neutral|new|confirmed|diagnosis|quoted|danger', 'neutral'],
@@ -190,14 +153,6 @@ final class Components
             'class' => ['classes', ''],
             'attrs' => ['attrs', []],
         ],
-        'language-selector' => [
-            'languages' => 'list',                              // list<array{code: string, name: string, english: string, href?: ?string, current?: bool, default?: bool, enabled?: bool}>
-            'variant' => ['enum:desktop|mobile', 'desktop'],
-            'id' => ['id', 'langdd'],
-            'open' => ['bool', false],
-            'class' => ['classes', ''],
-            'attrs' => ['attrs', []],
-        ],
         'form-error' => [
             'message' => 'string',
             'id' => ['?id', null],
@@ -281,167 +236,16 @@ final class Components
             'tone' => ['enum:default|danger', 'default'],
             'open' => ['bool', false],
         ],
-
-        // ------------------------------------------------------------------------------------ public site parts
-        'site-header' => [
-            'nav' => 'list',                                    // list<array{label: string, href: string, children?: list<array{title: string, sub?: string, href: string}>}>
-            'languages' => 'list',
-            'homeHref' => 'url',
-            'logoSrc' => 'url',
-            'logoAlt' => 'string',
-            'siteName' => ['string', 'GATE Lebanon'],
-            'ctaLabel' => ['?string', null],
-            'ctaHref' => ['?url', null],
-            'menuHref' => ['url', '#mnav'],
-            'topbar' => ['?map', null],                         // array{address: string, hours: string, coords?: string, phone: string, phoneHref: string}
-            'harness' => ['bool', false],                       // data-state hooks for the ?state= visual-check harness
-        ],
-        'mobile-menu' => [
-            'nav' => 'list',
-            'languages' => 'list',
-            'logoSrc' => 'url',
-            'logoAlt' => 'string',
-            'closeHref' => 'url',
-            'ctaLabel' => ['?string', null],
-            'ctaHref' => ['?url', null],
-            'socials' => ['list', []],
-            'open' => ['bool', false],
-            'hidden' => ['bool', true],
-            'id' => ['id', 'mnav'],
-        ],
-        'site-footer' => [
-            'logoSrc' => 'url',
-            'logoAlt' => 'string',
-            'about' => 'string',
-            'columns' => 'list',                                // list<array{title: string, links: list<array{label: string, href: string}>}>
-            'copyright' => 'string',
-            'languages' => ['list', []],                        // list<array{name: string, href?: ?string}>
-            'socials' => ['list', []],
-        ],
-        'mobile-dock' => [
-            'items' => 'list',                                  // list<array{label: string, icon: string, href: string, primary?: bool}>
-            'label' => 'string',
-        ],
-        'service-card' => [
-            'title' => 'string',
-            'text' => 'string',
-            'icon' => 'icon',
-            'href' => 'url',
-            'number' => ['?string', null],
-        ],
-        'process-step' => [
-            'number' => 'string',
-            'title' => 'string',
-            'text' => 'string',
-        ],
-        'review-card' => [
-            'name' => 'string',
-            'date' => 'string',
-            'text' => 'string',
-            'initial' => 'string',                              // shown when there is no photo (the approved design)
-            'photo' => ['?url', null],                          // served by this site, never straight from Google
-            'rating' => ['float', 5.0],
-            'starSize' => ['enum:14|15|16', '15'],
-        ],
-        'rating-summary' => [
-            'value' => 'string',
-            'count' => 'string',
-            'rating' => ['float', 5.0],
-            'variant' => ['enum:badge|compact', 'badge'],
-            'linkHref' => ['?url', null],
-            'linkLabel' => ['?string', null],
-        ],
-        'stats' => [
-            'items' => 'list',                                  // list<array{value: string, label: string}>
-            'label' => 'string',
-        ],
-        'chips' => [
-            'items' => 'list',                                  // list<string>
-            'class' => ['classes', ''],
-        ],
-        'blueprint' => [
-            'variant' => ['enum:desktop|mobile', 'desktop'],
-        ],
-
-        // ------------------------------------------------------------------------------------ public site pages
-        'picture' => [
-            'src' => 'url',                                     // /assets/... or /uploads/... (png, jpg, webp)
-            'alt' => 'string',
-            'width' => 'int',                                   // displayed width (layout box, prevents shifts)
-            'height' => 'int',
-            'widths' => ['list', []],                           // list<int> WebP variant widths (1x, 2x)
-            'sizes' => ['?string', null],
-            'loading' => ['enum:lazy|eager', 'lazy'],
-            'priority' => ['bool', false],                      // fetchpriority=high for the LCP image
-            'class' => ['classes', ''],
-        ],
-        'page-hero' => [
-            'title' => 'string',
-            'label' => ['?string', null],
-            'highlight' => ['?string', null],
-            'lead' => ['?string', null],
-            'breadcrumbs' => ['list', []],                      // list<array{label: string, href?: ?string}>
-            'actions' => ['?html', null],
-            'class' => ['classes', ''],
-        ],
-        'breadcrumbs' => [
-            'items' => 'list',                                  // list<array{label: string, href?: ?string}>; the last is the current page
-        ],
-        'prose' => [
-            'html' => 'string',                                 // rich text; sanitised with HTML Purifier before output
-            'class' => ['classes', ''],
-        ],
-        'cta-band' => [
-            'title' => 'string',
-            'text' => ['?string', null],
-            'primaryLabel' => 'string',
-            'primaryHref' => 'url',
-            'secondaryLabel' => ['?string', null],
-            'secondaryHref' => ['?url', null],
-        ],
-        'type-card' => [
-            'title' => 'string',
-            'text' => ['?string', null],
-        ],
-        'contact-panel' => [
-            'title' => 'string',
-            'label' => ['?string', null],
-            'number' => ['?string', null],
-            'intro' => ['?string', null],
-            'items' => 'list',                                  // list<array{icon: string, text: string, href?: ?string}>
-            'mapLabel' => 'string',
-            'mapHref' => ['?url', null],
-            'headingLevel' => ['enum:h1|h2', 'h2'],
-        ],
-        'appointment-form' => [
-            'action' => 'url',
-            'title' => 'string',
-            'submitLabel' => 'string',
-            'token' => 'string',                                // SpamGuard time-trap token
-            'values' => ['map', []],                            // field => value (kept after a validation error)
-            'errors' => ['map', []],                            // field => translated message
-            'privacyHref' => ['?url', null],
-            'idPrefix' => ['id', 'h'],
-            'selectName' => ['id', 'gearbox_type'],
-            'origin' => ['enum:home|contact|service', 'contact'],   // where to return after submitting
-            'class' => ['classes', ''],
-        ],
-        'cookie-banner' => [
-            'action' => 'url',
-            'returnTo' => 'url',
-            'policyHref' => 'url',
-            'open' => ['bool', true],
-        ],
     ];
 
     /** Font Awesome icon per social network (brands where Font Awesome Free has the logo). */
     public const SOCIAL_ICONS = [
         'facebook' => 'fa-brands fa-facebook-f',
         'instagram' => 'fa-brands fa-instagram',
-        'tiktok' => 'fa-brands fa-tiktok',
-        'whatsapp' => 'fa-brands fa-whatsapp',
+        'linkedin' => 'fa-brands fa-linkedin-in',
+        'x' => 'fa-brands fa-x-twitter',
         'youtube' => 'fa-brands fa-youtube',
-        'google' => 'fa-solid fa-store',
+        'whatsapp' => 'fa-brands fa-whatsapp',
     ];
 
     /** @return list<string> */

@@ -11,10 +11,6 @@ use Gate\Http\Request;
 use Gate\Mail\MailQueue;
 use Gate\Mail\MailWorker;
 use Gate\Mail\SmtpTransport;
-use Gate\Repositories\ReviewRepository;
-use Gate\Reviews\ReviewPhotos;
-use Gate\Reviews\ReviewProviders;
-use Gate\Reviews\ReviewSync;
 use Gate\Security\RateLimiter;
 use Gate\Services\AuditLog;
 use Gate\Services\Settings;
@@ -85,29 +81,28 @@ final class Scheduler
      * Runs what is due. $forceBackup makes a backup even when the last one is recent ("Run now" does not; the
      * Maintenance screen has its own button for a backup).
      *
-     * @return array{status: string, mail: array{sent: int, failed: int}|null, reviews: string, backup: string}
+     * @return array{status: string, mail: array{sent: int, failed: int}|null, backup: string}
      */
     public function run(?AuditLog $audit = null, bool $forceBackup = false): array
     {
         $limiter = new RateLimiter($this->db, $this->clock);
         if ($limiter->hit(self::LOCK, 900) !== 1) {
-            return ['status' => 'busy', 'mail' => null, 'reviews' => 'skipped', 'backup' => 'skipped'];
+            return ['status' => 'busy', 'mail' => null, 'backup' => 'skipped'];
         }
         @set_time_limit(300);
         try {
             $report = [
                 'status' => 'ok',
                 'mail' => $this->mail(),
-                'reviews' => $this->reviews(),
                 'backup' => $this->backup($limiter, $forceBackup),
             ];
-            if (str_starts_with($report['reviews'], 'error') || str_starts_with($report['backup'], 'error') || ($report['mail']['failed'] ?? 0) > 0) {
+            if (str_starts_with($report['backup'], 'error') || ($report['mail']['failed'] ?? 0) > 0) {
                 $report['status'] = 'warn';
             }
             $now = $this->clock->now()->format('Y-m-d H:i:s');
             $this->settings->set(self::LAST_RUN_SETTING, $now, 'string');
             $this->settings->set(self::LAST_REPORT_SETTING, $report, 'json');
-            $audit?->record(AuditLog::SCHEDULER_RUN, null, ['reviews' => $report['reviews'], 'backup' => $report['backup'], 'mail_sent' => $report['mail']['sent'] ?? 0]);
+            $audit?->record(AuditLog::SCHEDULER_RUN, null, ['backup' => $report['backup'], 'mail_sent' => $report['mail']['sent'] ?? 0]);
             return $report;
         } finally {
             $limiter->clear(self::LOCK);
@@ -125,24 +120,6 @@ final class Scheduler
             return (new MailWorker(new MailQueue($this->db, $this->clock), $transport))->run(50, 60.0);
         } catch (\Throwable) {
             return ['sent' => 0, 'failed' => 1];
-        }
-    }
-
-    private function reviews(): string
-    {
-        $reviews = new ReviewRepository($this->db, $this->clock);
-        $sync = new ReviewSync($reviews, $this->settings, new RateLimiter($this->db, $this->clock), $this->clock);
-        if (!$sync->isDue()) {
-            return 'not due';
-        }
-        try {
-            $result = $sync->run((new ReviewProviders($this->settings))->active());
-            if ($result['status'] === 'ok' && $this->settings->bool('reviews.show_photos')) {
-                (new ReviewPhotos())->warm($reviews->visible(24, $this->settings->string('reviews.display_order', 'newest')));
-            }
-            return $result['status'] === 'error' ? 'error: ' . mb_substr($result['message'], 0, 200) : $result['status'];
-        } catch (\Throwable $e) {
-            return 'error: ' . mb_substr($e->getMessage(), 0, 200);
         }
     }
 

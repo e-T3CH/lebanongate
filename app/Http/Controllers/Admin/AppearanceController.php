@@ -19,17 +19,19 @@ final class AppearanceController extends AdminController
 {
     /** Colour tokens the screen offers, grouped; the rest of the palette follows from these. */
     private const COLOR_GROUPS = [
-        'brand' => ['c-primary', 'c-primary-hover', 'c-accent', 'c-accent-hover', 'c-star'],
-        'surfaces' => ['c-page', 'c-surface', 'c-card', 'c-footer', 'c-topbar'],
-        'text' => ['c-text-1', 'c-text-2', 'c-text-3', 'c-text-4', 'c-text-6'],
+        'brand' => ['c-brand', 'c-primary', 'c-primary-hover', 'c-accent', 'c-band'],
+        'surfaces' => ['c-page', 'c-surface', 'c-tint', 'c-line', 'c-footer'],
+        'text' => ['c-text-1', 'c-text-2', 'c-text-3', 'c-footer-text'],
     ];
     /** Pairs checked for contrast: text token on background token. */
     private const CONTRAST_PAIRS = [
         ['c-text-1', 'c-page'],
-        ['c-text-2', 'c-card'],
-        ['c-text-4', 'c-surface'],
-        ['c-text-6', 'c-surface'],
-        ['c-accent', 'c-page'],
+        ['c-text-2', 'c-page'],
+        ['c-text-3', 'c-surface'],
+        ['c-primary', 'c-page'],
+        ['c-page', 'c-primary'],
+        ['c-page', 'c-band'],
+        ['c-footer-text', 'c-footer'],
     ];
     private const RADII = ['r-btn', 'r-card', 'r-panel', 'r-pop', 'r-dd'];
 

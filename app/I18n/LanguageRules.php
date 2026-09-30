@@ -7,7 +7,24 @@ namespace Gate\I18n;
 /** Rules for the enabled/default language configuration. */
 final class LanguageRules
 {
-    public const SUPPORTED = ['en', 'fr', 'nl'];
+    /** Website languages (content and public interface), in display order. */
+    public const SUPPORTED = ['en', 'ar', 'fr'];
+
+    /** Languages of the admin panel and the installer (the ones with a full admin translation). */
+    public const ADMIN = ['en', 'fr'];
+
+    /** Languages written right to left: the page gets dir="rtl" and the mirrored layout. */
+    public const RTL = ['ar'];
+
+    public static function isRtl(string $code): bool
+    {
+        return in_array($code, self::RTL, true);
+    }
+
+    public static function direction(string $code): string
+    {
+        return self::isRtl($code) ? 'rtl' : 'ltr';
+    }
 
     /**
      * @param list<string> $knownCodes

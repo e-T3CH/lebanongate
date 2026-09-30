@@ -25,7 +25,6 @@ final class DatabaseSeeder
         $settings = (new SettingsSeeder($this->settings))->run($overrides);
         $translations = (new TranslationsSeeder($this->db, $this->clock))->run();
         $content = (new ContentSeeder($this->db, $this->clock))->run();
-        $content += (new StatusEmailSeeder($this->db))->run();
         return ['settings' => $settings, 'languages' => $languages, 'translations' => $translations, 'content' => $content];
     }
 }

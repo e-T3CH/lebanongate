@@ -9,7 +9,7 @@
 
 use Gate\Core\Html;
 
-$names = ['en' => ['English', 'English'], 'fr' => ['Français', 'French'], 'nl' => ['Nederlands', 'Dutch']];
+$names = ['en' => ['English', 'English'], 'ar' => ['العربية', 'Arabic'], 'fr' => ['Français', 'French']];
 $rows = [];
 foreach (\Gate\I18n\LanguageRules::SUPPORTED as $code) {
     $rows[] = [

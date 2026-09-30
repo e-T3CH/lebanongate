@@ -8,32 +8,41 @@ use Gate\Core\Paths;
 use Gate\Services\Settings;
 
 /**
- * The logos and favicon chosen in Appearance, with the approved design's files as the fallback.
+ * The logos and favicon chosen in Appearance. Until a logo is uploaded, the header and footer show the placeholder
+ * slot of the approved mockup (the cedar mark with the name), and structured data uses the cedar mark image.
  *
- * The website is dark from top to bottom (header, page, footer), so it shows the "logo for dark backgrounds" when one
- * is set, else the main logo. The main logo is what leaves the site: search results (JSON-LD) and link previews.
- * A choice only counts when it is an image of the media library that still exists.
+ * The header is light, so it shows the main logo; the footer is dark, so it shows the "logo for dark backgrounds"
+ * when one is set, else the main logo. A choice only counts when it is an image of the media library that exists.
  */
 final class Brand
 {
-    public const LOGO = '/assets/img/bmmatic-logo.png';
+    public const MARK = '/assets/img/gate-mark.png';
     public const FAVICON = '/assets/img/favicon-32.png';
     public const TOUCH_ICON = '/assets/img/apple-touch-icon.png';
+    /** The developer credit in the footer ("Developed by"): the logo version for dark backgrounds (asset path). */
+    public const CREDIT_LOGO = 'img/e5hop-logo-light.png';
+    public const CREDIT_URL = 'https://www.e-5hop.com';
 
     public function __construct(private readonly Settings $settings)
     {
     }
 
-    /** The logo shown on the website (all of it has a dark background). */
-    public function siteLogo(): string
+    /** The uploaded logo for the (light) header, or null for the placeholder. */
+    public function headerLogo(): ?string
     {
-        return $this->upload('appearance.logo_dark') ?? $this->logo();
+        return $this->upload('appearance.logo');
     }
 
-    /** The main logo: structured data and link previews. */
+    /** The uploaded logo for the (dark) footer, or null for the placeholder. */
+    public function footerLogo(): ?string
+    {
+        return $this->upload('appearance.logo_dark') ?? $this->upload('appearance.logo');
+    }
+
+    /** The main logo for structured data and link previews: the uploaded one, else the cedar mark. */
     public function logo(): string
     {
-        return $this->upload('appearance.logo') ?? self::LOGO;
+        return $this->upload('appearance.logo') ?? self::MARK;
     }
 
     /** @return array{icon: string, touch: string} */

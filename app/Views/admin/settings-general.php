@@ -1,12 +1,12 @@
 <?php
 /**
- * Settings → General: company details, contact details and the website switches.
+ * Settings → General: organisation details, contact details and the website switches.
  *
  * @var \Gate\Core\View $view
  * @var list<array{label: string, href: string, active: bool}> $tabs
  * @var array<string, mixed> $values
  * @var array<string, string> $errors
- * @var array{online_booking: bool, mobile_dock: bool, maintenance_mode: bool} $toggles
+ * @var array{newsletter_enabled: bool, maintenance_mode: bool} $toggles
  * @var string $adminPath
  */
 $v = static fn (string $key): string => is_scalar($values[$key] ?? null) ? (string) $values[$key] : '';
@@ -20,20 +20,19 @@ $field = static fn (string $name, array $extra = []): string => (string) $view->
     <div class="sec-card__intro"><h2 class="h3"><?= e($view->t('admin.settings.company_title')) ?></h2><span class="muted"><?= e($view->t('admin.settings.company_desc')) ?></span></div>
     <div class="fields-2 fields-2--sec">
       <?= $field('site_name', ['required' => true]) ?>
-      <?= $field('company_name') ?>
-      <?= $field('vat') ?>
+      <?= $field('legal_name') ?>
+      <?= $field('registration') ?>
+      <?= $field('founded') ?>
       <?= $field('street') ?>
-      <?= $field('postcode') ?>
+      <?= $field('area') ?>
       <?= $field('city') ?>
       <?= $field('country') ?>
     </div>
     <div class="sec-card__intro"><h2 class="h3"><?= e($view->t('admin.settings.contact_title')) ?></h2><span class="muted"><?= e($view->t('admin.settings.contact_desc')) ?></span></div>
     <div class="fields-2 fields-2--sec">
       <?= $field('phone', ['type' => 'tel']) ?>
-      <?= $field('whatsapp', ['type' => 'tel']) ?>
       <?= $field('email') ?>
-      <?= $field('hours_weekdays') ?>
-      <?= $field('hours_saturday') ?>
+      <?= $field('hours') ?>
       <?= $field('latitude') ?>
       <?= $field('longitude') ?>
     </div>
@@ -47,7 +46,7 @@ $field = static fn (string $name, array $extra = []): string => (string) $view->
   <div class="side-400">
     <div class="acard acard--list">
       <h2 class="h3 acard__title"><?= e($view->t('admin.settings.website_title')) ?></h2>
-<?php foreach (['online_booking', 'mobile_dock', 'maintenance_mode'] as $key): ?>
+<?php foreach (['newsletter_enabled', 'maintenance_mode'] as $key): ?>
       <?= $view->component('setting-row', [
           'name' => $view->t('admin.settings.' . $key),
           'description' => $view->t('admin.settings.' . $key . '_desc'),

@@ -1,49 +1,52 @@
 <?php
 /**
- * About: heading, rich text, key figures, process steps, partners (when any are enabled), call to action.
+ * About us: banner, the text, the three values, the child pages (who we are, mission & vision, profile) as cards,
+ * the impact counters and the call to action.
  *
  * @var \Gate\Core\View $view
  * @var array<string, mixed> $page
- * @var array<string, mixed> $home
- * @var array<string, mixed> $process
- * @var list<array{name: string, url: string, logo: string, description: string}> $partners
- * @var array{title: string, text: string, bookHref: string, phoneHref: ?string} $cta
+ * @var list<array{label: string, href?: string}> $breadcrumbs
+ * @var array<string, mixed>|null $hero
+ * @var string $body
+ * @var list<array{title: string, intro: string, href: string}> $children
+ * @var list<array{id: int, value: string, label: string}> $stats
+ * @var list<mixed> $values
+ * @var array<string, mixed> $cta
  */
-/** @var list<array{value: string, label: string}> $stats */
-$stats = $home['stats'];
 ?>
-<?= $view->component('page-hero', ['label' => (string) $page['label'], 'title' => (string) $page['title'], 'highlight' => (string) $page['highlight'], 'lead' => (string) $page['intro'], 'breadcrumbs' => $page['breadcrumbs']]) ?>
-
-<section class="sec" aria-label="<?= e_attr((string) $page['nav_label']) ?>">
-  <?= $view->component('prose', ['html' => (string) $page['body']]) ?>
-
-</section>
-<?php if ($stats !== []): ?>
-<?= $view->component('stats', ['items' => $stats, 'label' => (string) $home['statsLabel']]) ?>
-
-<?php endif; ?>
-<?= $view->render('site/sections/process', ['section' => $process, 'home' => $home]) ?>
-<?php if ($partners !== []): ?>
-<section class="sec">
-  <div class="sec__head"><h2><?= e($view->t('site.partners.title')) ?></h2></div>
-  <div class="partners">
-<?php foreach ($partners as $partner): ?>
-    <div class="card partner">
-<?php if ($partner['logo'] !== ''): ?>
-      <?= $view->component('picture', ['src' => $partner['logo'], 'alt' => $partner['name'], 'width' => 40, 'height' => 40, 'widths' => [40, 80], 'sizes' => '40px']) ?>
-
-<?php endif; ?>
-      <?= $partner['url'] !== '' ? '<a href="' . e_url($partner['url']) . '" rel="noopener">' . e($partner['name']) . '</a>' : '<strong>' . e($partner['name']) . '</strong>' ?>
-
-<?php if ($partner['description'] !== ''): ?>
-      <p class="type__text"><?= e($partner['description']) ?></p>
-<?php endif; ?>
-    </div>
+<?= $view->render('site/parts/page-hero', ['title' => $page['title'], 'intro' => $page['intro'], 'label' => $page['label'], 'breadcrumbs' => $breadcrumbs, 'image' => $hero]) ?>
+<section class="section">
+  <div class="wrap about-page">
+    <div class="prose reveal"><?= $body /* RichText::render(): sanitised */ ?></div>
+<?php if ($values !== []): ?>
+    <ul class="values values--card" data-stagger>
+<?php foreach ($values as $point): ?>
+<?php if (!is_array($point)) { continue; } ?>
+      <li class="reveal"><span class="values__icon"><?= svg_icon(is_string($point['icon'] ?? null) ? $point['icon'] : 'check') ?></span><div><h2 class="h4"><?= e((string) ($point['title'] ?? '')) ?></h2><p><?= e((string) ($point['text'] ?? '')) ?></p></div></li>
 <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
+  </div>
+</section>
+<?php if ($children !== []): ?>
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="grid grid--3" data-stagger>
+<?php foreach ($children as $child): ?>
+      <article class="xp-card reveal">
+        <span class="xp-card__icon"><?= svg_icon('cedar') ?></span>
+        <h2 class="xp-card__title"><a href="<?= e_url($child['href']) ?>"><?= e($child['title']) ?></a></h2>
+<?php if ($child['intro'] !== ''): ?>
+        <p><?= e($child['intro']) ?></p>
+<?php endif; ?>
+        <span class="link-more" aria-hidden="true"><?= e($view->t('site.read_more')) ?> <?= svg_icon('arrow', 'ic ic--arrow') ?></span>
+      </article>
+<?php endforeach; ?>
+    </div>
   </div>
 </section>
 <?php endif; ?>
-<section class="sec sec--last">
-  <?= $view->component('cta-band', ['title' => $cta['title'], 'text' => $cta['text'], 'primaryLabel' => $view->t('site.cta.book'), 'primaryHref' => $cta['bookHref'], 'secondaryLabel' => $cta['phoneHref'] !== null ? $view->t('site.cta.call') : null, 'secondaryHref' => $cta['phoneHref']]) ?>
-
-</section>
+<?php if ($stats !== []): ?>
+<?= $view->render('site/sections/stats', ['s' => ['label' => '', 'stats' => $stats]]) ?>
+<?php endif; ?>
+<?= $view->render('site/parts/cta', ['cta' => $cta]) ?>

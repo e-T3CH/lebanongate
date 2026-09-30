@@ -17,35 +17,38 @@ use Gate\Services\AuditLog;
 final class SettingsController extends AdminController
 {
     /** Social networks in the order of the approved screen. */
-    private const SOCIAL = ['facebook', 'instagram', 'tiktok', 'whatsapp', 'youtube', 'google_business'];
+    private const SOCIAL = ['facebook', 'instagram', 'linkedin', 'x', 'youtube', 'whatsapp'];
+
+    /** General settings fields => maximum length. */
+    private const GENERAL_FIELDS = [
+        'site_name' => 120, 'legal_name' => 160, 'registration' => 80, 'founded' => 10,
+        'street' => 160, 'area' => 80, 'city' => 80, 'country' => 80,
+        'phone' => 40, 'email' => 190, 'hours' => 120, 'latitude' => 20, 'longitude' => 20,
+    ];
+
+    /** Setting key of each general field. */
+    private const GENERAL_KEYS = [
+        'site_name' => 'site.name', 'legal_name' => 'org.legal_name', 'registration' => 'org.registration', 'founded' => 'org.founded',
+        'street' => 'contact.street', 'area' => 'contact.area', 'city' => 'contact.city', 'country' => 'contact.country',
+        'phone' => 'contact.phone', 'email' => 'contact.email', 'hours' => 'contact.hours', 'latitude' => 'contact.latitude', 'longitude' => 'contact.longitude',
+    ];
 
     public function general(Request $request): Response
     {
         $s = $this->app->settings();
         $old = $this->pullArray('settings_old');
-        $values = $old !== [] ? $old : [
-            'site_name' => $s->string('site.name', 'GATE Lebanon'),
-            'company_name' => $s->string('company.name'),
-            'vat' => $s->string('company.vat'),
-            'street' => $s->string('contact.street'),
-            'postcode' => $s->string('contact.postcode'),
-            'city' => $s->string('contact.city'),
-            'country' => $s->string('contact.country'),
-            'phone' => $s->string('contact.phone'),
-            'whatsapp' => $s->string('contact.whatsapp'),
-            'email' => $s->string('contact.email'),
-            'hours_weekdays' => $s->string('contact.hours_weekdays'),
-            'hours_saturday' => $s->string('contact.hours_saturday'),
-            'latitude' => $s->string('contact.latitude'),
-            'longitude' => $s->string('contact.longitude'),
-        ];
+        $values = $old;
+        if ($values === []) {
+            foreach (self::GENERAL_KEYS as $field => $key) {
+                $values[$field] = $s->string($key, $field === 'site_name' ? 'GATE Lebanon' : '');
+            }
+        }
         return $this->adminView('admin/settings-general', 'settings', $this->t('admin.settings.title'), $this->t('admin.settings.general_subtitle'), [
             'tabs' => $this->tabs('general'),
             'values' => $values,
             'errors' => $this->pullArray('settings_errors'),
             'toggles' => [
-                'online_booking' => $s->bool('site.online_booking', true),
-                'mobile_dock' => $s->bool('site.mobile_dock', true),
+                'newsletter_enabled' => $s->bool('site.newsletter_enabled', true),
                 'maintenance_mode' => $s->bool('site.maintenance_mode'),
             ],
         ]);
@@ -54,7 +57,7 @@ final class SettingsController extends AdminController
     public function saveGeneral(Request $request): Response
     {
         $values = [];
-        foreach (['site_name' => 120, 'company_name' => 160, 'vat' => 40, 'street' => 160, 'postcode' => 12, 'city' => 80, 'country' => 80, 'phone' => 40, 'whatsapp' => 40, 'email' => 190, 'hours_weekdays' => 80, 'hours_saturday' => 80, 'latitude' => 20, 'longitude' => 20] as $field => $max) {
+        foreach (self::GENERAL_FIELDS as $field => $max) {
             $values[$field] = mb_substr(trim((string) preg_replace('/\s+/u', ' ', $request->input($field))), 0, $max);
         }
         $errors = [];
@@ -76,16 +79,12 @@ final class SettingsController extends AdminController
             return $this->back($this->app->adminPath('settings/general'));
         }
         $s = $this->app->settings();
-        $s->set('site.name', $values['site_name']);
-        $s->set('company.name', $values['company_name']);
-        $s->set('company.vat', $values['vat']);
-        foreach (['street', 'postcode', 'city', 'country', 'phone', 'whatsapp', 'email', 'hours_weekdays', 'hours_saturday', 'latitude', 'longitude'] as $field) {
-            $s->set('contact.' . $field, $values[$field]);
+        foreach (self::GENERAL_KEYS as $field => $key) {
+            $s->set($key, $values[$field]);
         }
-        $s->set('site.online_booking', $request->input('online_booking') === '1', 'bool');
-        $s->set('site.mobile_dock', $request->input('mobile_dock') === '1', 'bool');
+        $s->set('site.newsletter_enabled', $request->input('newsletter_enabled') === '1', 'bool');
         $s->set('site.maintenance_mode', $request->input('maintenance_mode') === '1', 'bool');
-        $this->app->audit()->record(AuditLog::SETTINGS_CHANGED, $this->app->auth()->user()['id'] ?? null, ['keys' => ['site.*', 'contact.*', 'company.*']]);
+        $this->app->audit()->record(AuditLog::SETTINGS_CHANGED, $this->app->auth()->user()['id'] ?? null, ['keys' => ['site.*', 'contact.*', 'org.*']]);
         $this->flashToast('admin.toast.saved');
         return $this->back($this->app->adminPath('settings/general'));
     }
@@ -137,7 +136,7 @@ final class SettingsController extends AdminController
         $settings->set('i18n.selector_in_header', $request->input('selector_in_header') === '1', 'bool');
         $adminLanguage = $request->input('admin_language');
         // The panel is translated into every supported language, whichever languages the website offers.
-        if (in_array($adminLanguage, LanguageRules::SUPPORTED, true)) {
+        if (in_array($adminLanguage, LanguageRules::ADMIN, true)) {
             $settings->set('admin.language', $adminLanguage);
         }
         $this->app->audit()->record(AuditLog::SETTINGS_CHANGED, $this->app->auth()->user()['id'] ?? null, ['keys' => ['languages', 'i18n.*'], 'enabled' => $enabled, 'default' => $default]);

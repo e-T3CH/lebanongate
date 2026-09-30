@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Gate\Core;
 
 use Gate\Admin\Permissions;
-use Gate\DesignCheck\DesignCheckController;
 use Gate\Http\AdminRoutes;
 use Gate\Http\Controllers\Site\SiteController;
 use Gate\Http\Flash;
@@ -91,16 +90,7 @@ final class App
     {
         $this->request = $request;
         try {
-            $path = $request->path();
-            if ($path === '/design-check' || str_starts_with($path, '/design-check/')) {
-                // Component and screen gallery: local development only, a plain 404 everywhere else.
-                // Release zips do not contain app/DesignCheck (class_exists is false there).
-                if ($this->config->string('app.env') !== 'local' || !class_exists(DesignCheckController::class)) {
-                    throw new HttpException(404);
-                }
-                $this->noStore();
-                $response = (new DesignCheckController($this))->dispatch($request);
-            } elseif (self::isInstalled() && Health::authorized($this, $request)) {
+            if (self::isInstalled() && Health::authorized($this, $request)) {
                 // Before the database is touched: the health check must answer even when the database is down.
                 $response = Health::handle($this);
             } else {
@@ -254,7 +244,6 @@ final class App
         $months = [
             'en' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             'fr' => ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'],
-            'nl' => ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'],
         ];
         $month = ($months[$lang] ?? $months['en'])[(int) date('n', $time) - 1];
         $date = (int) date('j', $time) . ' ' . $month;
@@ -445,7 +434,7 @@ final class App
         }
 
         $adminLang = $settings->string('admin.language', 'en');
-        $this->translator = new Translator(in_array($adminLang, LanguageRules::SUPPORTED, true) ? $adminLang : 'en', 'en', $this->db);
+        $this->translator = new Translator(in_array($adminLang, LanguageRules::ADMIN, true) ? $adminLang : 'en', 'en', $this->db);
 
         if (Csrf::requiresCheck($request->method()) && !$this->csrf()->validate($request->input(Csrf::FIELD, $request->header(Csrf::HEADER) ?? ''))) {
             $this->audit()->record(AuditLog::CSRF_FAILED, null, ['path' => mb_substr($request->path(), 0, 120)]);

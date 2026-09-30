@@ -5,8 +5,9 @@
  * - The inline head script (CSP nonce) adds .js and, unless motion is off or reduced, .motion before CSS paints; it also
  *   quietens the promises of a page transition the browser skips (registered before the first paint).
  * - Theme tokens changed in the Appearance settings, in a nonce'd <style>: no inline style attributes anywhere.
- * - CSS: "admin" (admin panel, sign-in, installer), "design-check", or the public core plus per-page groups
- *   ($bundles: home, cards, stats, reviews, forms, content; cookie and toast only when shown; motion-off for the "off" setting).
+ * - CSS and JS: "admin" (admin panel, sign-in, installer: admin.css + app.js) or "site" (the public website:
+ *   site.css + site.js with the IBM Plex fonts; motion-off.css for the "off" setting).
+ * - <html dir>: "rtl" for Arabic pages.
  * - SEO: description, canonical, hreflang, Open Graph, JSON-LD; analytics only after consent.
  *
  * @var \Gate\Core\View $view
@@ -14,6 +15,7 @@
  * @var string|null $bundle
  * @var list<string>|null $bundles
  * @var bool|null $noindex
+ * @var string|null $robots e.g. "noindex, follow" for filtered list pages
  * @var string|null $canonical
  * @var list<array{hreflang: string, href: string}>|null $alternates
  * @var string|null $description
@@ -21,25 +23,26 @@
  * @var list<array<string, mixed>>|null $jsonld
  * @var array{scripts: list<array{src: string, attrs: array<string, string>}>, inline: string}|null $analytics
  * @var list<array{href: string, srcset: string, sizes: string}>|null $preloadImages
- * @var array{icon: string, touch: string}|null $favicon the Appearance favicon (defaults to the BM monogram)
- * @var bool|null $harness loads the ?state= visual-check harness (design check only)
+ * @var array{icon: string, touch: string}|null $favicon the Appearance favicon (defaults to the cedar mark)
+ * @var string|null $dir text direction of the page (ltr|rtl)
  */
 $motion = $view->shared('motion', 'standard');
 $motion = is_string($motion) && in_array($motion, \Gate\Core\ThemeConfig::MOTION_MODES, true) ? $motion : 'standard';
 $themeCss = $view->shared('themeCss', '');
-$bundle = in_array($bundle ?? 'site', ['site', 'admin', 'design-check'], true) ? ($bundle ?? 'site') : 'site';
-$styles = $bundle === 'site'
-    ? array_merge(['core'], array_values(array_intersect(['home', 'cards', 'stats', 'reviews', 'forms', 'content', 'cookie', 'toast'], $bundles ?? [])), $motion === 'off' ? ['motion-off'] : [])
-    : [$bundle];
+$bundle = in_array($bundle ?? 'site', ['site', 'admin'], true) ? ($bundle ?? 'site') : 'site';
+$styles = $bundle === 'site' ? array_merge(['site'], $motion === 'off' ? ['motion-off'] : []) : ['admin', 'icons'];
+$dir = ($dir ?? 'ltr') === 'rtl' ? 'rtl' : 'ltr';
 $nonce = e_attr($view->nonce());
 ?><!doctype html>
-<html lang="<?= e_attr($view->locale()) ?>" data-motion="<?= e_attr($motion) ?>">
+<html lang="<?= e_attr($view->locale()) ?>" dir="<?= e_attr($dir) ?>" data-motion="<?= e_attr($motion) ?>">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= e($title) ?></title>
 <?php if (!empty($noindex)): ?>
   <meta name="robots" content="noindex, nofollow">
+<?php elseif (!empty($robots)): ?>
+  <meta name="robots" content="<?= e_attr($robots) ?>">
 <?php endif; ?>
 <?php if (!empty($description)): ?>
   <meta name="description" content="<?= e_attr($description) ?>">
@@ -70,9 +73,12 @@ $nonce = e_attr($view->nonce());
   <link rel="icon" href="<?= e_attr($view->asset('img/favicon-32.png')) ?>">
 <?php endif; ?>
   <script nonce="<?= $nonce ?>">(function (d) { d.classList.add('js'); if (d.getAttribute('data-motion') !== 'off' && !matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) d.classList.add('motion'); addEventListener('pagereveal', function (e) { var t = e.viewTransition; if (t) [t.ready, t.finished].forEach(function (p) { p.catch(function () {}); }); }); })(document.documentElement);</script>
+<?php if ($bundle === 'admin'): ?>
   <link rel="preload" href="<?= e_attr($view->asset('fonts/Montserrat-VF.woff2')) ?>" as="font" type="font/woff2" crossorigin>
-<?php if ($bundle !== 'admin'): ?>
-  <link rel="preload" href="<?= e_attr($view->asset('fonts/Montserrat-Italic-VF.woff2')) ?>" as="font" type="font/woff2" crossorigin>
+<?php elseif ($dir === 'rtl'): ?>
+  <link rel="preload" href="<?= e_attr($view->asset('fonts/IBMPlexSansArabic-Regular.woff2')) ?>" as="font" type="font/woff2" crossorigin>
+<?php else: ?>
+  <link rel="preload" href="<?= e_attr($view->asset('fonts/IBMPlexSans-Regular.woff2')) ?>" as="font" type="font/woff2" crossorigin>
 <?php endif; ?>
 <?php foreach ($preloadImages ?? [] as $image): ?>
   <link rel="preload" as="image" href="<?= e_url($image['href']) ?>" imagesrcset="<?= e_attr($image['srcset']) ?>" imagesizes="<?= e_attr($image['sizes']) ?>" fetchpriority="high">
@@ -83,13 +89,12 @@ $nonce = e_attr($view->nonce());
 <?php if (is_string($themeCss) && $themeCss !== ''): ?>
   <style nonce="<?= $nonce ?>"><?= $themeCss /* ThemeConfig::css(): validated token values only */ ?></style>
 <?php endif; ?>
+<?php if ($bundle === 'admin'): ?>
   <script type="application/json" id="bm-i18n"><?= e_js(['saved' => $view->t('ui.toast.saved'), 'save_failed' => $view->t('ui.toast.save_failed'), 'visible' => $view->t('ui.review.visible'), 'hidden' => $view->t('ui.review.hidden'), 'language.current' => $view->t('ui.language.current', ['name' => ':name'])]) ?></script>
   <script src="<?= e_attr($view->asset('js/app.js')) ?>" defer></script>
-<?php if (!empty($harness)): ?>
-  <script src="<?= e_attr($view->asset('js/state.js')) ?>" defer></script>
-<?php endif; ?>
-<?php if ($bundle === 'design-check'): ?>
-  <script src="<?= e_attr($view->asset('js/design-check.js')) ?>" defer></script>
+  <script src="<?= e_attr($view->asset('js/admin-gate.js')) ?>" defer></script>
+<?php else: ?>
+  <script src="<?= e_attr($view->asset('js/site.js')) ?>" defer></script>
 <?php endif; ?>
 <?php foreach ($jsonld ?? [] as $data): ?>
   <script type="application/ld+json"><?= \Gate\Site\Seo::jsonLd($data) ?></script>

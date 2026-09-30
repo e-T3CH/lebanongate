@@ -1,20 +1,28 @@
 <?php
 /**
- * Public error page (404, 503 and other errors) in the site layout: status, message, links home and to contact.
+ * Error page (404, 403, 419, 503 maintenance, 500) inside the site layout.
  *
  * @var \Gate\Core\View $view
  * @var int $status
- * @var string $key site.errors.* key prefix
+ * @var string $key
  * @var string $homeHref
  * @var string|null $contactHref
- * @var string|null $phoneHref
- * @var string|null $reference error log reference (500/503), so a phone call finds the right log entry
+ * @var string|null $reference
  */
-$actions = (string) $view->component('button', ['label' => $view->t('site.errors.home'), 'href' => $homeHref, 'icon' => 'fa-solid fa-arrow-right']);
-if ($contactHref !== null) {
-    $actions .= $view->component('button', ['label' => $view->t('site.errors.contact'), 'variant' => 'ghost', 'href' => $contactHref]);
-} elseif ($phoneHref !== null) {
-    $actions .= $view->component('button', ['label' => $view->t('site.cta.call'), 'variant' => 'ghost', 'href' => $phoneHref, 'icon' => 'fa-solid fa-phone', 'iconPosition' => 'start', 'iconClass' => 'ic-accent']);
-}
 ?>
-<?= $view->component('page-hero', ['label' => (string) $status, 'title' => $view->t('site.errors.' . $key . '_title'), 'lead' => $view->t('site.errors.' . $key . '_text') . (isset($reference) && is_string($reference) ? ' ' . $view->t('site.errors.reference', ['code' => $reference]) : ''), 'actions' => \Gate\Core\Html::trusted($actions), 'class' => 'error-page']) ?>
+<section class="section error-page">
+  <div class="wrap narrow error-page__inner">
+    <p class="error-page__code" aria-hidden="true"><?= svg_icon('cedar', 'error-page__cedar') ?><span><?= (int) $status ?></span></p>
+    <h1 class="h2"><?= e($view->t('site.errors.' . $key . '_title')) ?></h1>
+    <p class="lead"><?= e($view->t('site.errors.' . $key . '_text')) ?></p>
+<?php if ($reference !== null): ?>
+    <p class="muted"><?= e($view->t('site.errors.reference', ['ref' => $reference])) ?></p>
+<?php endif; ?>
+    <div class="error-page__actions">
+      <a class="btn btn--primary" href="<?= e_url($homeHref) ?>"><?= e($view->t('site.errors.home')) ?></a>
+<?php if ($contactHref !== null): ?>
+      <a class="btn btn--outline" href="<?= e_url($contactHref) ?>"><?= e($view->t('site.errors.contact')) ?></a>
+<?php endif; ?>
+    </div>
+  </div>
+</section>

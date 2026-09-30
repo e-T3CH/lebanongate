@@ -11,8 +11,8 @@ final class LanguagesSeeder
     /** code => [name, native name, sort order] */
     private const LANGUAGES = [
         'en' => ['English', 'English', 1],
-        'fr' => ['French', 'Français', 2],
-        'nl' => ['Dutch', 'Nederlands', 3],
+        'ar' => ['Arabic', 'العربية', 2],
+        'fr' => ['French', 'Français', 3],
     ];
 
     public function __construct(private readonly Database $db)

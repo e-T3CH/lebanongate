@@ -1,7 +1,6 @@
 <?php
 /**
- * Settings → Email: SMTP settings, recipient of appointment requests, queue status, a test button, and the emails to
- * customers when a request changes status (one switch per status, the text per language; everything off by default).
+ * Settings → Email: SMTP settings, recipient of contact messages, queue status and a test button.
  *
  * @var \Gate\Core\View $view
  * @var array<string, mixed> $values
@@ -9,7 +8,6 @@
  * @var bool $hasPassword
  * @var array{pending: int, sent: int, failed: int} $queue
  * @var string $testTo
- * @var array{lang: string, tabs: list<array{label: string, href: string, active: bool}>, rows: list<array{status: string, label: string, enabled: bool, subject: string, body: string}>} $customer
  * @var string $adminPath
  */
 $v = static fn (string $k): string => is_scalar($values[$k] ?? null) ? (string) $values[$k] : '';
@@ -59,20 +57,4 @@ $testError = $view->shared('app') instanceof \Gate\Core\App ? $view->shared('app
   </div>
 </div>
 
-<form class="acard sec-card" id="customer-emails" method="post" action="<?= e_url($adminPath . '/settings/email/customers') ?>" novalidate>
-  <?= $view->csrfField() ?><input type="hidden" name="lang" value="<?= e_attr($customer['lang']) ?>">
-  <div class="sec-card__intro"><h2 class="h3"><?= e($view->t('admin.email.customer_title')) ?></h2><span class="muted"><?= e($view->t('admin.email.customer_desc')) ?></span><span class="muted"><?= e($view->t('admin.email.customer_placeholders')) ?></span></div>
-  <?= $view->component('tabs', ['label' => $view->t('admin.content.language'), 'items' => $customer['tabs']]) ?>
 
-<?php foreach ($customer['rows'] as $row): ?>
-  <div class="customer-email">
-    <?= $view->component('setting-row', ['name' => $row['label'], 'description' => $view->t('admin.email.customer_send'), 'control' => $view->component('toggle', ['name' => 'enabled_' . $row['status'], 'label' => $view->t('admin.email.customer_send') . ' — ' . $row['label'], 'checked' => $row['enabled']])]) ?>
-
-    <div class="fields-2 fields-2--sec">
-      <?= $view->component('input', ['name' => 'subject_' . $row['status'], 'label' => $view->t('admin.email.customer_subject'), 'value' => $row['subject'], 'maxlength' => 200]) ?>
-      <?= $view->component('textarea', ['name' => 'body_' . $row['status'], 'label' => $view->t('admin.email.customer_body'), 'value' => $row['body'], 'rows' => 7, 'maxlength' => 4000]) ?>
-    </div>
-  </div>
-<?php endforeach; ?>
-  <div class="actions"><?= $view->component('button', ['label' => $view->t('admin.actions.save'), 'variant' => 'admin-primary', 'type' => 'submit', 'icon' => 'fa-solid fa-check', 'iconPosition' => 'start']) ?></div>
-</form>
