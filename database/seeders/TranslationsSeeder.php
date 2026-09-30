@@ -1,0 +1,46 @@
+<?php
+
+declare(strict_types=1);
+
+namespace BMMatic\Database\Seeders;
+
+use BMMatic\Core\Clock;
+use BMMatic\Core\Database;
+use BMMatic\I18n\Translator;
+
+/**
+ * Copies the lang/{code}/*.php strings into ui_translations: new keys are added, and a key whose text changed in the
+ * files gets the new text, so wording fixed in a release reaches installed sites. Nothing in the panel edits these
+ * rows (page and service texts live in their own tables), so no owner edit is overwritten.
+ */
+final class TranslationsSeeder
+{
+    public function __construct(private readonly Database $db, private readonly Clock $clock)
+    {
+    }
+
+    /** @return int strings added or updated */
+    public function run(): int
+    {
+        $translator = new Translator('en', 'en', null);
+        $now = $this->clock->now()->format('Y-m-d H:i:s');
+        $changed = 0;
+        foreach ($this->db->select('languages', [], ['code']) as $lang) {
+            $code = (string) $lang['code'];
+            $existing = [];
+            foreach ($this->db->select('ui_translations', ['lang_code' => $code], ['key', 'value']) as $row) {
+                $existing[(string) $row['key']] = (string) $row['value'];
+            }
+            foreach ($translator->fileStrings($code) as $key => $value) {
+                if (!array_key_exists($key, $existing)) {
+                    $this->db->insert('ui_translations', ['lang_code' => $code, 'key' => $key, 'value' => $value, 'updated_at' => $now]);
+                    $changed++;
+                } elseif ($existing[$key] !== $value) {
+                    $this->db->update('ui_translations', ['value' => $value, 'updated_at' => $now], ['lang_code' => $code, 'key' => $key]);
+                    $changed++;
+                }
+            }
+        }
+        return $changed;
+    }
+}

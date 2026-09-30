@@ -1,0 +1,25 @@
+# The application folder as document root — the "webroot" layout for hosts where everything has to live inside the
+# web root (one.com and similar), and the fallback for the standard layout when the document root cannot point to
+# /public. Every request is routed into /public; every other folder and file is unreachable.
+# Where you can, set the document root to /public instead (or use the split layout) and this file is never used.
+
+Options -Indexes
+ServerSignature Off
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(app|bin|build|config|database|deploy|design|docs|lang|mockups|resources|storage|tests|tools|vendor)(/|$) - [F,L]
+    RewriteRule (^|/)\.(?!well-known/) - [F,L]
+    RewriteRule ^(composer\.(json|lock)|phpunit\.xml(\.dist)?|phpstan\.neon\.dist|.*\.md)$ - [F,L]
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# Without mod_rewrite the site cannot run, but private files must still never be served: the folders carry their
+# own deny files, and these top-level files are refused here.
+<FilesMatch "^(composer\.(json|lock)|.*\.(md|dist|neon|lock|log|sql|gz|tar|zip))$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</FilesMatch>

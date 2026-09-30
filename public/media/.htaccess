@@ -1,0 +1,7 @@
+# Generated WebP variants (Media helper). Images only, never scripts.
+Options -Indexes
+<FilesMatch "\.(php|phtml|phar|html?|js|svg)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</FilesMatch>
