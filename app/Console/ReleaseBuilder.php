@@ -19,7 +19,7 @@ final class ReleaseBuilder
     private const PRIVATE_DIRS = ['app', 'bin', 'config', 'database', 'deploy', 'docs', 'lang', 'storage', 'vendor'];
     private const DENY_ALL = "# Private: never web-accessible.\n<IfModule mod_authz_core.c>\n    Require all denied\n</IfModule>\n<IfModule !mod_authz_core.c>\n    Order allow,deny\n    Deny from all\n</IfModule>\n";
     /** Never allowed in a release (checked after staging). */
-    private const FORBIDDEN = ['tests', 'tools', 'node_modules', '.git', 'config/config.local.php', 'mockups', 'design', 'phpunit.xml', 'phpunit.xml.dist', 'phpstan.neon.dist', 'bin/dev-router.php', '.env', 'resources', 'app/DesignCheck', 'app/Views/design-check'];
+    private const FORBIDDEN = ['tests', 'tools', 'node_modules', '.git', 'config/config.local.php', 'mockups', 'design', 'phpunit.xml', 'phpunit.xml.dist', 'phpstan.neon.dist', 'bin/dev-router.php', '.env', 'resources', 'app/DesignCheck', 'app/Views/design-check', 'Website.docx', 'bm-matic-v3-final.zip'];
     /** Development-only parts of app/ and public/ (the /design-check gallery and the visual-check harness). */
     private const DEV_ONLY_APP = ['app/DesignCheck', 'app/Views/design-check'];
     private const DEV_ONLY_WEB = ['assets/js/state.js', 'assets/js/design-check.js', 'assets/css/design-check.css'];
@@ -44,9 +44,9 @@ final class ReleaseBuilder
         $composer = $this->findComposer($options['composer'] ?? '');
         $root = Paths::root();
 
-        foreach (['public/assets/css/core.css', 'public/assets/css/admin.css', 'public/assets/js/app.js', 'public/assets/manifest.json'] as $asset) {
+        foreach (['public/assets/css/site.css', 'public/assets/css/admin.css', 'public/assets/css/icons.css', 'public/assets/js/app.js', 'public/assets/js/site.js', 'public/assets/manifest.json'] as $asset) {
             if (!is_file($root . DIRECTORY_SEPARATOR . $asset)) {
-                throw new \RuntimeException('Built asset missing: ' . $asset . ' (run node build.mjs in tools/assets first).');
+                throw new \RuntimeException('Built asset missing: ' . $asset . ' (run python3 tools/assets/manifest.py first).');
             }
         }
 
@@ -112,7 +112,7 @@ final class ReleaseBuilder
                 throw new \RuntimeException('Release contains a development-only asset: ' . $item);
             }
         }
-        if (!is_file($webDir . '/assets/css/core.css') || !is_file($appDir . '/vendor/autoload.php')) {
+        if (!is_file($webDir . '/assets/css/site.css') || !is_file($appDir . '/vendor/autoload.php')) {
             throw new \RuntimeException('Release incomplete (assets or vendor missing).');
         }
 

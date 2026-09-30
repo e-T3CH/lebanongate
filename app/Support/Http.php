@@ -40,7 +40,7 @@ final class Http implements HttpClient
             CURLOPT_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
             CURLOPT_SSL_VERIFYPEER => true,
             CURLOPT_SSL_VERIFYHOST => 2,
-            CURLOPT_USERAGENT => 'BM-Matic/1.0 (+reviews sync)',
+            CURLOPT_USERAGENT => 'GATE-Lebanon-CMS/1.0',
         ]);
         if ($body !== null) {
             curl_setopt($handle, CURLOPT_POSTFIELDS, $body);

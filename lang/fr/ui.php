@@ -71,22 +71,16 @@ return [
     'header' => [
         'home' => 'Accueil :site',
         'main_nav' => 'Principal',
-        'topbar' => "Coordonnées de l'atelier",
+        'topbar' => 'Coordonnées',
         'open_menu' => 'Ouvrir le menu',
     ],
     'menu' => [
         'label' => 'Menu',
         'close' => 'Fermer le menu',
     ],
-    'service' => [
-        'more' => 'En savoir plus',
-    ],
     'review' => [
         'visible' => 'Visible',
         'hidden' => 'Masqué',
         'meta' => ':date · via Google',
-    ],
-    'blueprint' => [
-        'label' => 'Vue en coupe schématique d’une boîte de vitesses automatique',
     ],
 ];

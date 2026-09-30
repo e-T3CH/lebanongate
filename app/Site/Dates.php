@@ -43,7 +43,11 @@ final class Dates
         return (self::MONTHS[$lang] ?? self::MONTHS['en'])[$parts[1] - 1] . ' ' . $parts[0];
     }
 
-    /** Day and short month for the date badge on cards: ['15', 'Sep']. */
+    /**
+     * Day and short month for the date badge on cards: ['15', 'Sep'].
+     *
+     * @return array{string, string}
+     */
     public static function badge(string $date, string $lang): array
     {
         $parts = self::parts($date);

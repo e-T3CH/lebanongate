@@ -15,7 +15,7 @@ use Gate\Services\Settings;
  *  - [bracket] placeholders left in settings and content (the mock-up's sample values, the legal templates' notes);
  *  - translations that are missing or not published, per language (visitors would see the default language);
  *  - images in use without alt text in a language;
- *  - pages and services without an SEO title or description.
+ *  - pages, areas of expertise and entries (projects, news, publications, albums) without an SEO title or description.
  *
  * Findings are grouped: 'settings' for the site-wide ones, then one group per enabled language.
  */
@@ -23,8 +23,6 @@ final class ContentCheck
 {
     /** A [placeholder]: brackets around short text that is not JSON (no quotes or braces inside). */
     public const PLACEHOLDER = '/\[([^\[\]\n"{}<>]{1,120})\]/u';
-    /** Settings that are not the website's content (connection details handled on their own screens). */
-    private const SKIP_SETTINGS = ['google.location_id', 'google.place_id'];
 
     public function __construct(
         private readonly Database $db,
@@ -43,7 +41,8 @@ final class ContentCheck
             $out[$lang] = [];
         }
         $this->pages($codes, $out);
-        $this->services($codes, $out);
+        $this->expertise($codes, $out);
+        $this->entries($codes, $out);
         $this->sections($codes, $out);
         $this->lists($codes, $out);
         $this->altTexts($codes, $out);
@@ -63,13 +62,12 @@ final class ContentCheck
         $out = [];
         foreach ($this->db->all("SELECT `key`, `value`, `type` FROM {settings} WHERE `is_secret` = 0 AND `value` LIKE '%[%' ORDER BY `key`") as $row) {
             $key = (string) $row['key'];
-            if ($row['type'] === 'json' || in_array($key, self::SKIP_SETTINGS, true)) {
+            if ($row['type'] === 'json') {
                 continue;
             }
             $found = self::placeholders((string) $row['value']);
             if ($found !== []) {
-                $hint = in_array($key, ['reviews.rating', 'reviews.count'], true) ? ' (filled in by the first review sync; hidden until then)' : '';
-                $out[] = $key . ': placeholder ' . implode(' ', $found) . $hint;
+                $out[] = $key . ': placeholder ' . implode(' ', $found);
             }
         }
         return $out;
@@ -94,12 +92,26 @@ final class ContentCheck
      * @param list<string> $codes
      * @param array<string, list<string>> $out
      */
-    private function services(array $codes, array &$out): void
+    private function expertise(array $codes, array &$out): void
     {
-        foreach ($this->db->all('SELECT `id`, `key` FROM {services} WHERE `is_enabled` = 1 ORDER BY `sort_order`, `id`') as $service) {
-            $rows = $this->byLang($this->db->all('SELECT * FROM {service_translations} WHERE `service_id` = :id', ['id' => (int) $service['id']]));
+        foreach ($this->db->all('SELECT `id`, `key` FROM {expertise} WHERE `is_enabled` = 1 ORDER BY `sort_order`, `id`') as $area) {
+            $rows = $this->byLang($this->db->all('SELECT * FROM {expertise_translations} WHERE `expertise_id` = :id', ['id' => (int) $area['id']]));
             foreach ($codes as $lang) {
-                $this->translation('service "' . $service['key'] . '"', $rows[$lang] ?? null, ['title', 'summary', 'body', 'meta_title', 'meta_description', 'menu_title', 'menu_sub', 'short_title'], $out[$lang]);
+                $this->translation('expertise "' . $area['key'] . '"', $rows[$lang] ?? null, ['title', 'summary', 'body', 'meta_title', 'meta_description'], $out[$lang]);
+            }
+        }
+    }
+
+    /**
+     * @param list<string> $codes
+     * @param array<string, list<string>> $out
+     */
+    private function entries(array $codes, array &$out): void
+    {
+        foreach ($this->db->all('SELECT `id`, `type` FROM {entries} WHERE `is_enabled` = 1 ORDER BY `type`, `published_on` DESC, `id` DESC') as $entry) {
+            $rows = $this->byLang($this->db->all('SELECT * FROM {entry_translations} WHERE `entry_id` = :id', ['id' => (int) $entry['id']]));
+            foreach ($codes as $lang) {
+                $this->translation($entry['type'] . ' #' . $entry['id'], $rows[$lang] ?? null, ['title', 'summary', 'body', 'location', 'meta_title', 'meta_description'], $out[$lang]);
             }
         }
     }
@@ -169,8 +181,6 @@ final class ContentCheck
     private function lists(array $codes, array &$out): void
     {
         $lists = [
-            'transmission type' => ['transmission_types', 'transmission_type_translations', 'transmission_type_id', ['label', 'description'], 'label'],
-            'process step' => ['process_steps', 'process_step_translations', 'process_step_id', ['title', 'text'], 'title'],
             'key figure' => ['stats', 'stat_translations', 'stat_id', ['value', 'label'], 'label'],
         ];
         foreach ($lists as $label => [$table, $translations, $fk, $fields, $required]) {
@@ -207,9 +217,9 @@ final class ContentCheck
      */
     private function altTexts(array $codes, array &$out): void
     {
-        foreach ($this->db->all('SELECT `id`, `filename`, `original_name` FROM {media} ORDER BY `id`') as $media) {
+        foreach ($this->db->all("SELECT `id`, `filename`, `original_name` FROM {media} WHERE `kind` = 'image' ORDER BY `id`") as $media) {
             $url = MediaLibrary::url((string) $media['filename']);
-            $used = $this->media->usage($url, $this->settings);
+            $used = $this->media->usage((int) $media['id'], $url, $this->settings);
             // The favicon is decoration for the browser tab; everything else is seen on the page.
             if (array_diff($used, ['favicon']) === []) {
                 continue;

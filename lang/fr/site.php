@@ -226,6 +226,8 @@ return [
         'blocked' => 'Votre message n’a pas pu être envoyé. Patientez quelques secondes et réessayez.',
     ],
     'mail' => [
+        'test_subject' => 'E-mail de test de :site',
+        'test_body' => 'Cet e-mail de test confirme que les paramètres d’envoi de :site fonctionnent.',
         'org_subject' => 'Message du site n° :id de :name — :subject',
         'org_intro' => 'Un nouveau message a été envoyé via le formulaire de contact du site :site.',
         'org_admin' => 'Ouvrez-le dans l’administration : :url',

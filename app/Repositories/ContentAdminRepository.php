@@ -121,10 +121,26 @@ final class ContentAdminRepository
         return $this->db->first('page_sections', ['id' => $id]);
     }
 
-    /** @param array<string, string> $fields */
-    public function saveSectionTranslation(int $id, string $lang, array $fields): void
+    /**
+     * @param array<string, string> $fields
+     * @param array<string, mixed>|null $extra structured texts of the section (about points, map notes); null keeps them
+     */
+    public function saveSectionTranslation(int $id, string $lang, array $fields, ?array $extra = null): void
     {
-        $this->saveTranslation('page_section_translations', 'section_id', $id, $lang, $fields, self::SECTION_FIELDS, null);
+        if ($extra !== null) {
+            $fields['extra'] = json_encode($extra, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+        }
+        $this->saveTranslation('page_section_translations', 'section_id', $id, $lang, $fields, $extra !== null ? [...self::SECTION_FIELDS, 'extra'] : self::SECTION_FIELDS, null);
+    }
+
+    /**
+     * Images of a section (shared by all languages): the main image and, in the settings, further ones.
+     *
+     * @param array<string, mixed> $settings
+     */
+    public function saveSectionMedia(int $id, ?int $mediaId, array $settings): void
+    {
+        $this->db->update('page_sections', ['media_id' => $mediaId, 'settings' => $settings === [] ? null : json_encode($settings, JSON_THROW_ON_ERROR)], ['id' => $id]);
     }
 
     /**

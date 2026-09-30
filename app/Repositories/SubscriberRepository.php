@@ -115,6 +115,7 @@ final class SubscriberRepository
         return $this->db->first('subscribers', ['id' => $id]);
     }
 
+    /** @param array<string, mixed> $row */
     public static function state(array $row): string
     {
         if ($row['unsubscribed_at'] !== null) {

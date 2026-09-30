@@ -9,7 +9,8 @@ use Gate\Admin\Permissions;
 use Gate\Http\Controllers\Controller;
 use Gate\Http\Flash;
 use Gate\Http\Response;
-use Gate\Repositories\AppointmentRepository;
+use Gate\Repositories\MessageRepository;
+use Gate\Services\MediaLibrary;
 
 /** Shared data for admin screens (signed-in user, sidebar menu, admin paths, one-time toast). */
 abstract class AdminController extends Controller
@@ -46,14 +47,46 @@ abstract class AdminController extends Controller
     }
 
     /**
-     * Sidebar badges: new appointment requests and unread messages (the same records, counted two ways).
+     * Sidebar badges: unread messages in the inbox.
      *
      * @return array<string, int>
      */
     private function badges(): array
     {
-        $appointments = new AppointmentRepository($this->app->db(), $this->app->clock);
-        return ['appointments.new' => $appointments->countByStatus('new'), 'messages.unread' => $appointments->countUnread()];
+        return ['messages.unread' => (new MessageRepository($this->app->db(), $this->app->clock))->countUnread()];
+    }
+
+    /**
+     * Options for a media picker (a select of the library): images or PDF documents, newest first, with an empty
+     * choice first.
+     *
+     * @return list<array{value: string, label: string}>
+     */
+    protected function mediaOptions(string $kind, string $emptyLabel): array
+    {
+        $options = [['value' => '', 'label' => $emptyLabel]];
+        $urls = [];
+        foreach ((new MediaLibrary($this->app->db(), $this->app->clock))->all([], '', $kind) as $item) {
+            $size = $kind === 'image' && $item['width'] > 0 ? ' · ' . $item['width'] . '×' . $item['height'] : '';
+            $options[] = ['value' => (string) $item['id'], 'label' => $item['original_name'] . $size];
+            if ($kind === 'image') {
+                $urls[(string) $item['id']] = $item['url'];
+            }
+        }
+        // The layout prints these for admin-gate.js, which shows a thumbnail next to image pickers.
+        $shared = $this->app->view()->shared('mediaUrls', []);
+        $this->app->view()->share('mediaUrls', (is_array($shared) ? $shared : []) + $urls);
+        return $options;
+    }
+
+    /** A media id from a picker, when it exists and is of the expected kind; else null. */
+    protected function mediaId(string $value, string $kind): ?int
+    {
+        if (!ctype_digit($value) || (int) $value < 1) {
+            return null;
+        }
+        $row = $this->app->db()->first('media', ['id' => (int) $value], ['id', 'kind']);
+        return $row !== null && $row['kind'] === $kind ? (int) $row['id'] : null;
     }
 
     /** @param array<string, string|int|float> $params */

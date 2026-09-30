@@ -36,7 +36,7 @@ return [
         'ext_libxml' => 'Extension PHP : libxml',
         'ext_gd' => 'Extension PHP : GD (traitement d’images)',
         'ext_intl' => 'Extension PHP : intl',
-        'ext_curl' => 'Extension PHP : cURL (import des avis Google)',
+        'ext_curl' => 'Extension PHP : cURL (connexions sortantes)',
         'argon2id' => 'Hachage des mots de passe Argon2id',
         'writable_config' => 'Dossier accessible en écriture : :detail',
         'writable_storage' => 'Dossier accessible en écriture : :detail',

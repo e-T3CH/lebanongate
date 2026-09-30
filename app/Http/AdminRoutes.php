@@ -6,7 +6,6 @@ namespace Gate\Http;
 
 use Gate\Core\App;
 use Gate\Http\Controllers\Admin\AppearanceController;
-use Gate\Http\Controllers\Admin\AppointmentController;
 use Gate\Http\Controllers\Admin\AuthController;
 use Gate\Http\Controllers\Admin\ContentListController;
 use Gate\Http\Controllers\Admin\DashboardController;
@@ -17,10 +16,11 @@ use Gate\Http\Controllers\Admin\MessageController;
 use Gate\Http\Controllers\Admin\PageController;
 use Gate\Http\Controllers\Admin\PasswordResetController;
 use Gate\Http\Controllers\Admin\ProfileController;
-use Gate\Http\Controllers\Admin\ReviewController;
 use Gate\Http\Controllers\Admin\SecurityController;
 use Gate\Http\Controllers\Admin\SecurityLogController;
-use Gate\Http\Controllers\Admin\ServiceController;
+use Gate\Http\Controllers\Admin\ExpertiseController;
+use Gate\Http\Controllers\Admin\EntryController;
+use Gate\Http\Controllers\Admin\SubscriberController;
 use Gate\Http\Controllers\Admin\SettingsController;
 use Gate\Http\Controllers\Admin\TwoFactorChallengeController;
 use Gate\Http\Controllers\Admin\UserController;
@@ -43,16 +43,16 @@ final class AdminRoutes
         $email = new EmailSettingsController($app);
         $users = new UserController($app);
         $profile = new ProfileController($app);
-        $appointments = new AppointmentController($app);
         $messages = new MessageController($app);
+        $subscribers = new SubscriberController($app);
         $pages = new PageController($app);
-        $services = new ServiceController($app);
+        $expertise = new ExpertiseController($app);
+        $entries = new EntryController($app);
         $lists = new ContentListController($app);
         $media = new MediaController($app);
         $settings = new SettingsController($app);
         $appearance = new AppearanceController($app);
         $log = new SecurityLogController($app);
-        $reviews = new ReviewController($app);
         $resets = new PasswordResetController($app);
         $maintenance = new MaintenanceController($app, $settings);
 
@@ -75,46 +75,46 @@ final class AdminRoutes
         $router->get($prefix, $dashboard->index(...), 'admin.dashboard', ['auth', 'perm:dashboard.view']);
         $router->post($prefix . '/quick-toggle', $dashboard->quickToggle(...), 'admin.dashboard.toggle', ['auth', 'perm:settings.manage']);
 
-        // Appointments (workflow) and Messages (inbox): the same records, two views.
-        $router->get($prefix . '/appointments', $appointments->index(...), 'admin.appointments', ['auth', 'perm:appointments.view']);
-        $router->get($prefix . '/appointments/export', $appointments->export(...), 'admin.appointments.export', ['auth', 'perm:appointments.view']);
-        $router->get($prefix . '/appointments/{id}', $appointments->show(...), 'admin.appointments.show', ['auth', 'perm:appointments.view']);
-        $router->post($prefix . '/appointments/{id}/status', $appointments->changeStatus(...), 'admin.appointments.status', ['auth', 'perm:appointments.manage']);
-        $router->post($prefix . '/appointments/{id}/notes', $appointments->addNote(...), 'admin.appointments.notes', ['auth', 'perm:appointments.manage']);
-        $router->post($prefix . '/appointments/{id}/notes/{note}/delete', $appointments->deleteNote(...), 'admin.appointments.notes.delete', ['auth', 'perm:appointments.manage']);
-        $router->post($prefix . '/appointments/{id}/unread', $appointments->markUnread(...), 'admin.appointments.unread', ['auth', 'perm:appointments.manage']);
-        $router->get($prefix . '/messages', $messages->index(...), 'admin.messages', ['auth', 'perm:appointments.view']);
+        // Messages (contact form inbox) and newsletter subscribers
+        $router->get($prefix . '/messages', $messages->index(...), 'admin.messages', ['auth', 'perm:messages.view']);
+        $router->get($prefix . '/messages/export', $messages->export(...), 'admin.messages.export', ['auth', 'perm:messages.view']);
+        $router->get($prefix . '/messages/{id}', $messages->show(...), 'admin.messages.show', ['auth', 'perm:messages.view']);
+        $router->post($prefix . '/messages/{id}/notes', $messages->addNote(...), 'admin.messages.notes', ['auth', 'perm:messages.manage']);
+        $router->post($prefix . '/messages/{id}/notes/{note}/delete', $messages->deleteNote(...), 'admin.messages.notes.delete', ['auth', 'perm:messages.manage']);
+        $router->post($prefix . '/messages/{id}/unread', $messages->markUnread(...), 'admin.messages.unread', ['auth', 'perm:messages.manage']);
+        $router->post($prefix . '/messages/{id}/archive', $messages->archive(...), 'admin.messages.archive', ['auth', 'perm:messages.manage']);
+        $router->post($prefix . '/messages/{id}/delete', $messages->delete(...), 'admin.messages.delete', ['auth', 'perm:messages.manage']);
+        $router->get($prefix . '/subscribers', $subscribers->index(...), 'admin.subscribers', ['auth', 'perm:subscribers.manage']);
+        $router->get($prefix . '/subscribers/export', $subscribers->export(...), 'admin.subscribers.export', ['auth', 'perm:subscribers.manage']);
+        $router->post($prefix . '/subscribers/{id}/delete', $subscribers->delete(...), 'admin.subscribers.delete', ['auth', 'perm:subscribers.manage']);
 
-        // Content: pages with their sections, services and the short lists
+        // Content: pages with their sections, areas of expertise, the entries and the short lists
         $router->get($prefix . '/pages', $pages->index(...), 'admin.pages', ['auth', 'perm:content.view']);
         $router->get($prefix . '/pages/{id}', $pages->edit(...), 'admin.pages.edit', ['auth', 'perm:content.view']);
         $router->post($prefix . '/pages/{id}', $pages->save(...), 'admin.pages.save', ['auth', 'perm:content.edit']);
         $router->post($prefix . '/pages/{id}/sections', $pages->saveSections(...), 'admin.pages.sections', ['auth', 'perm:content.edit']);
         $router->get($prefix . '/pages/{id}/sections/{section}', $pages->editSection(...), 'admin.pages.section', ['auth', 'perm:content.view']);
         $router->post($prefix . '/pages/{id}/sections/{section}', $pages->saveSection(...), 'admin.pages.section.save', ['auth', 'perm:content.edit']);
-        $router->get($prefix . '/services', $services->index(...), 'admin.services', ['auth', 'perm:content.view']);
-        $router->post($prefix . '/services/new', $services->create(...), 'admin.services.create', ['auth', 'perm:content.edit']);
-        $router->post($prefix . '/services/order', $services->reorder(...), 'admin.services.order', ['auth', 'perm:content.edit']);
-        $router->get($prefix . '/services/{id}', $services->edit(...), 'admin.services.edit', ['auth', 'perm:content.view']);
-        $router->post($prefix . '/services/{id}', $services->save(...), 'admin.services.save', ['auth', 'perm:content.edit']);
-        $router->post($prefix . '/services/{id}/delete', $services->delete(...), 'admin.services.delete', ['auth', 'perm:content.edit']);
+        $router->get($prefix . '/expertise', $expertise->index(...), 'admin.expertise', ['auth', 'perm:content.view']);
+        $router->post($prefix . '/expertise/new', $expertise->create(...), 'admin.expertise.create', ['auth', 'perm:content.edit']);
+        $router->post($prefix . '/expertise/order', $expertise->reorder(...), 'admin.expertise.order', ['auth', 'perm:content.edit']);
+        $router->get($prefix . '/expertise/{id}', $expertise->edit(...), 'admin.expertise.edit', ['auth', 'perm:content.view']);
+        $router->post($prefix . '/expertise/{id}', $expertise->save(...), 'admin.expertise.save', ['auth', 'perm:content.edit']);
+        $router->post($prefix . '/expertise/{id}/delete', $expertise->delete(...), 'admin.expertise.delete', ['auth', 'perm:content.edit']);
+        foreach (EntryController::SEGMENTS as $type => $segment) {
+            $base = $prefix . '/' . $segment;
+            $router->get($base, fn (Request $r): Response => $entries->index($r, $type), 'admin.entries.' . $type, ['auth', 'perm:content.view']);
+            $router->post($base . '/new', fn (Request $r): Response => $entries->create($r, $type), 'admin.entries.' . $type . '.create', ['auth', 'perm:content.edit']);
+            $router->get($base . '/{id}', fn (Request $r): Response => $entries->edit($r, $type), 'admin.entries.' . $type . '.edit', ['auth', 'perm:content.view']);
+            $router->post($base . '/{id}', fn (Request $r): Response => $entries->save($r, $type), 'admin.entries.' . $type . '.save', ['auth', 'perm:content.edit']);
+            $router->post($base . '/{id}/gallery', fn (Request $r): Response => $entries->saveGallery($r, $type), 'admin.entries.' . $type . '.gallery', ['auth', 'perm:content.edit']);
+            $router->post($base . '/{id}/delete', fn (Request $r): Response => $entries->delete($r, $type), 'admin.entries.' . $type . '.delete', ['auth', 'perm:content.edit']);
+        }
         $router->get($prefix . '/content/{type}', $lists->index(...), 'admin.content.list', ['auth', 'perm:content.view']);
         $router->post($prefix . '/content/{type}', $lists->save(...), 'admin.content.list.save', ['auth', 'perm:content.edit']);
         $router->post($prefix . '/content/partners/partners', $lists->savePartners(...), 'admin.content.partners.save', ['auth', 'perm:content.edit']);
         $router->post($prefix . '/content/{type}/new', $lists->add(...), 'admin.content.list.add', ['auth', 'perm:content.edit']);
         $router->post($prefix . '/content/{type}/{id}/delete', $lists->delete(...), 'admin.content.list.delete', ['auth', 'perm:content.edit']);
-
-        // Google reviews
-        $router->get($prefix . '/reviews', $reviews->index(...), 'admin.reviews', ['auth', 'perm:reviews.manage']);
-        $router->post($prefix . '/reviews/connection', $reviews->saveConnection(...), 'admin.reviews.connection', ['auth', 'perm:reviews.manage']);
-        $router->post($prefix . '/reviews/display', $reviews->saveDisplay(...), 'admin.reviews.display', ['auth', 'perm:reviews.manage']);
-        $router->post($prefix . '/reviews/sync', $reviews->sync(...), 'admin.reviews.sync', ['auth', 'perm:reviews.manage']);
-        $router->post($prefix . '/reviews/bulk', $reviews->bulk(...), 'admin.reviews.bulk', ['auth', 'perm:reviews.manage']);
-        $router->post($prefix . '/reviews/import', $reviews->importPreview(...), 'admin.reviews.import', ['auth', 'perm:reviews.manage']);
-        $router->post($prefix . '/reviews/import/confirm', $reviews->importConfirm(...), 'admin.reviews.import.confirm', ['auth', 'perm:reviews.manage']);
-        $router->get($prefix . '/reviews/connect', $reviews->connect(...), 'admin.reviews.connect', ['auth', 'perm:reviews.manage']);
-        $router->get($prefix . '/reviews/callback', $reviews->callback(...), 'admin.reviews.callback', ['auth', 'perm:reviews.manage']);
-        $router->post($prefix . '/reviews/{id}/visibility', $reviews->setVisibility(...), 'admin.reviews.visibility', ['auth', 'perm:reviews.manage']);
 
         // Media library
         $router->get($prefix . '/media', $media->index(...), 'admin.media', ['auth', 'perm:media.view']);
@@ -169,6 +169,5 @@ final class AdminRoutes
         $router->post($prefix . '/settings/maintenance/backups/restore', $maintenance->restore(...), 'admin.maintenance.backup.restore', ['auth', 'perm:security.manage']);
         $router->get($prefix . '/settings/maintenance/backups/{file}', $maintenance->download(...), 'admin.maintenance.backup.download', ['auth', 'perm:security.manage']);
         $router->post($prefix . '/settings/maintenance/analytics', $maintenance->saveAnalytics(...), 'admin.maintenance.analytics', ['auth', 'perm:security.manage']);
-        $router->post($prefix . '/settings/email/customers', $email->saveCustomerEmails(...), 'admin.settings.email.customers', ['auth', 'perm:settings.manage']);
     }
 }

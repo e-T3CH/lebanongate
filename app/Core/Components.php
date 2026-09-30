@@ -170,7 +170,7 @@ final class Components
         'admin-sidebar' => [
             'menu' => 'list',                                   // AdminMenu::build() output
             'active' => ['string', ''],
-            'brandMark' => ['string', 'BM'],
+            'brandMark' => ['string', ''],                  // '' shows the GATE cedar mark
             'brandName' => ['string', 'GATE Lebanon'],
             'logoutAction' => ['?url', null],                   // POST form with CSRF token
             'open' => ['bool', false],

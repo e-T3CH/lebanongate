@@ -1,11 +1,12 @@
 <?php
 /**
- * Content → lists: transmission types, process steps, key figures and partners. One screen per list: the rows of the
- * chosen language with their order, visibility and one Save button.
+ * Content → lists: impact counters and partners & donors. One screen per list: the rows of the chosen language with
+ * their order, visibility and one Save button. Fields with options (partner kind, logo) are selects.
  *
  * @var \Gate\Core\View $view
  * @var string $type
  * @var list<string> $fields
+ * @var array<string, list<array{value: string, label: string}>> $options
  * @var list<array{id: int, enabled: bool, values: array<string, string>}> $rows
  * @var string $lang
  * @var list<array{label: string, href: string, active: bool}> $tabs
@@ -29,7 +30,11 @@ $label = static fn (string $field): string => $view->t('admin.lists.' . $field);
         <span class="sortable__handle" draggable="true"><?= $view->component('icon', ['icon' => 'fa-solid fa-layer-group', 'size' => '14']) ?></span>
         <div class="sortable__fields">
 <?php foreach ($fields as $field): ?>
-          <?= $view->component('input', ['name' => $field . '_' . $row['id'], 'label' => $label($field), 'value' => $row['values'][$field] ?? '', 'disabled' => !$canEdit]) ?>
+<?php if (isset($options[$field])): ?>
+          <?= $view->component('select', ['name' => $field . '_' . $row['id'], 'id' => $field . '-' . $row['id'], 'label' => $label($field), 'value' => $row['values'][$field] ?? '', 'options' => $options[$field], 'disabled' => !$canEdit] + ($field === 'logo' ? ['attrs' => ['data-media-preview' => 'image']] : [])) ?>
+<?php else: ?>
+          <?= $view->component('input', ['name' => $field . '_' . $row['id'], 'label' => $label($field), 'value' => $row['values'][$field] ?? '', 'disabled' => !$canEdit, 'attrs' => ['dir' => 'auto']]) ?>
+<?php endif; ?>
 
 <?php endforeach; ?>
         </div>
@@ -56,9 +61,11 @@ $label = static fn (string $field): string => $view->t('admin.lists.' . $field);
   <div class="side-400">
     <form class="acard panel-fields" method="post" action="<?= e_url($adminPath . '/content/' . $type . '/new') ?>" novalidate>
       <?= $view->csrfField() ?>
-      <div class="card-intro card-intro--flush"><h2 class="h3"><?= e($view->t('admin.content.add')) ?></h2><span class="muted"><?= e($view->t('admin.lists.subtitle')) ?></span></div>
+      <div class="card-intro card-intro--flush"><h2 class="h3"><?= e($view->t('admin.content.add')) ?></h2><span class="muted"><?= e($view->t('admin.lists.' . $type . '_subtitle')) ?></span></div>
 <?php if ($partners === true): ?>
       <?= $view->component('input', ['name' => 'name', 'label' => $view->t('admin.lists.name'), 'required' => true]) ?>
+
+      <?= $view->component('select', ['name' => 'kind', 'id' => 'new-kind', 'label' => $view->t('admin.lists.kind'), 'value' => 'partner', 'options' => $options['kind'] ?? []]) ?>
 
 <?php endif; ?>
       <div class="actions"><?= $view->component('button', ['label' => $view->t('admin.content.add'), 'variant' => 'admin-primary', 'type' => 'submit', 'icon' => 'fa-solid fa-check', 'iconPosition' => 'start']) ?></div>

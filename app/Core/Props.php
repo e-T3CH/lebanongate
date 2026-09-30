@@ -22,7 +22,7 @@ namespace Gate\Core;
  */
 final class Props
 {
-    private const ATTR_ALLOW = '/^(data-[a-z0-9-]+|aria-[a-z]+|role|tabindex|title|lang|hreflang|rel|target|autocomplete|inputmode|form|download)$/';
+    private const ATTR_ALLOW = '/^(data-[a-z0-9-]+|aria-[a-z]+|role|tabindex|title|lang|dir|hreflang|rel|target|autocomplete|inputmode|form|download)$/';
 
     /**
      * @param array<string, mixed> $props

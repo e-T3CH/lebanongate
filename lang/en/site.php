@@ -226,6 +226,8 @@ return [
         'blocked' => 'Your message could not be sent. Please wait a few seconds and try again.',
     ],
     'mail' => [
+        'test_subject' => 'Test email from :site',
+        'test_body' => 'This test email confirms that the email settings of :site work.',
         'org_subject' => 'Website message #:id from :name — :subject',
         'org_intro' => 'A new message was sent through the contact form of the :site website.',
         'org_admin' => 'Open it in the admin panel: :url',

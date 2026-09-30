@@ -16,13 +16,13 @@ return [
     // Permission => translation key of its description (admin.permissions.*)
     'permissions' => [
         'dashboard.view' => 'admin.permissions.dashboard_view',
-        'appointments.view' => 'admin.permissions.appointments_view',
-        'appointments.manage' => 'admin.permissions.appointments_manage',
+        'messages.view' => 'admin.permissions.messages_view',
+        'messages.manage' => 'admin.permissions.messages_manage',
+        'subscribers.manage' => 'admin.permissions.subscribers_manage',
         'content.view' => 'admin.permissions.content_view',
         'content.edit' => 'admin.permissions.content_edit',
         'media.view' => 'admin.permissions.media_view',
         'media.manage' => 'admin.permissions.media_manage',
-        'reviews.manage' => 'admin.permissions.reviews_manage',
         'appearance.manage' => 'admin.permissions.appearance_manage',
         'languages.manage' => 'admin.permissions.languages_manage',
         'users.manage' => 'admin.permissions.users_manage',
@@ -35,13 +35,13 @@ return [
         'admin' => ['*'],
         'editor' => [
             'dashboard.view',
-            'appointments.view',
-            'appointments.manage',
+            'messages.view',
+            'messages.manage',
+            'subscribers.manage',
             'content.view',
             'content.edit',
             'media.view',
             'media.manage',
-            'reviews.manage',
         ],
     ],
 ];

@@ -71,22 +71,16 @@ return [
     'header' => [
         'home' => ':site home',
         'main_nav' => 'Main',
-        'topbar' => 'Workshop details',
+        'topbar' => 'Contact details',
         'open_menu' => 'Open menu',
     ],
     'menu' => [
         'label' => 'Menu',
         'close' => 'Close menu',
     ],
-    'service' => [
-        'more' => 'Learn more',
-    ],
     'review' => [
         'visible' => 'Visible',
         'hidden' => 'Hidden',
         'meta' => ':date · via Google',
-    ],
-    'blueprint' => [
-        'label' => 'Schematic cutaway of an automatic transmission',
     ],
 ];

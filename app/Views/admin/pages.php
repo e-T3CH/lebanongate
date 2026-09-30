@@ -1,9 +1,9 @@
 <?php
 /**
- * Content → Pages: the system pages with their translation state per language.
+ * Content → Pages: the system pages (child pages under their parent) with their translation state per language.
  *
  * @var \Gate\Core\View $view
- * @var list<array{id: int, key: string, title: string, enabled: bool, in_nav: bool, updated: string, states: array<string, string>}> $pages
+ * @var list<array{id: int, key: string, child: bool, parent: string, title: string, enabled: bool, in_nav: bool, updated: string, states: array<string, string>}> $pages
  * @var list<string> $languages
  * @var bool $canEdit
  * @var string $adminPath
@@ -23,7 +23,7 @@ foreach ($pages as $page) {
         ]);
     }
     $rows[] = [
-        'title' => Html::trusted('<a class="link-sm" href="' . e_url($adminPath . '/pages/' . $page['id']) . '">' . e($page['title']) . '</a>'),
+        'title' => Html::trusted(($page['child'] ? '<span class="muted" aria-hidden="true">↳ </span>' : '') . '<a class="link-sm" href="' . e_url($adminPath . '/pages/' . $page['id']) . '">' . e($page['title']) . '</a>'),
         'key' => $page['key'],
         'states' => Html::trusted('<div class="pill-row">' . $states . '</div>'),
         'nav' => $page['in_nav'] ? $view->component('icon', ['icon' => 'fa-solid fa-check', 'size' => '14', 'class' => 'ic-accent']) : '—',
@@ -35,15 +35,12 @@ foreach ($pages as $page) {
 <div class="acard agrow col">
   <div class="card-head">
     <h2 class="h3"><?= e($view->t('admin.pages.card_title')) ?></h2>
-<?php if ($canEdit): ?>
-    <a class="link-sm" href="<?= e_url($adminPath . '/content/transmissions') ?>"><?= e($view->t('admin.lists.transmissions_title')) ?> <?= $view->component('icon', ['icon' => 'fa-solid fa-arrow-right', 'size' => '14', 'class' => 'ic-ne']) ?></a>
-<?php endif; ?>
   </div>
   <?= $view->component('data-table', [
       'caption' => $view->t('admin.pages.card_title'),
       'columns' => [
           ['key' => 'title', 'label' => $view->t('admin.pages.page'), 'class' => 't-strong'],
-          ['key' => 'key', 'label' => $view->t('admin.services.key'), 'class' => 't-muted'],
+          ['key' => 'key', 'label' => $view->t('admin.expertise.key'), 'class' => 't-muted'],
           ['key' => 'states', 'label' => $view->t('admin.pages.translations')],
           ['key' => 'nav', 'label' => $view->t('admin.pages.in_nav')],
           ['key' => 'status', 'label' => $view->t('admin.users.status')],
@@ -57,7 +54,7 @@ foreach ($pages as $page) {
 <div class="acard agrow col">
   <div class="card-head"><h2 class="h3"><?= e($view->t('admin.lists.subtitle')) ?></h2></div>
   <div class="card-rows row-actions">
-<?php foreach (['transmissions' => 'transmissions_title', 'steps' => 'steps_title', 'stats' => 'stats_title', 'partners' => 'partners_title'] as $type => $key): ?>
+<?php foreach (['stats' => 'stats_title', 'partners' => 'partners_title'] as $type => $key): ?>
     <?= $view->component('button', ['label' => $view->t('admin.lists.' . $key), 'variant' => 'admin-secondary', 'href' => $adminPath . '/content/' . $type, 'icon' => 'fa-solid fa-arrow-right', 'class' => 'btn-row']) ?>
 
 <?php endforeach; ?>

@@ -10,8 +10,8 @@ use Gate\Services\AuditLog;
 use Gate\Services\MediaLibrary;
 
 /**
- * The media library: a grid of uploaded images with search, alt text per language (required before an image may be
- * used), replace-file and delete with a usage check ("used on 3 pages").
+ * The media library: a grid of uploaded images and PDF documents with search and a kind filter, alt text (images) or
+ * a title (documents) per language, replace-file and delete with a usage check ("used on 3 pages").
  */
 final class MediaController extends ContentController
 {
@@ -20,15 +20,17 @@ final class MediaController extends ContentController
         $library = $this->library();
         $langs = $this->app->languages()->enabledCodes();
         $search = mb_substr(trim($request->query('q')), 0, 80);
+        $kind = $request->query('kind');
+        $kind = in_array($kind, MediaLibrary::KINDS, true) ? $kind : null;
         $settings = $this->app->settings();
         $items = [];
-        foreach ($library->all($langs, $search) as $item) {
-            $usage = $library->usage($item['url'], $settings);
+        foreach ($library->all($langs, $search, $kind) as $item) {
+            $usage = $library->usage($item['id'], $item['url'], $settings);
             $items[] = $item + [
                 'usage' => $this->usageLabels($usage),
                 'used' => $usage !== [],
                 'uploaded' => $this->app->formatDate($item['created_at'], false),
-                'size_kb' => number_format($item['size'] / 1024, 0, ',', ' ') . ' KB',
+                'size_kb' => $item['size'] >= 1024 * 1024 ? number_format($item['size'] / 1024 / 1024, 1, '.', ' ') . ' MB' : number_format($item['size'] / 1024, 0, '.', ' ') . ' KB',
                 'alt_missing' => array_values(array_filter($langs, static fn (string $l): bool => trim($item['alt'][$l] ?? '') === '')),
             ];
         }
@@ -36,8 +38,15 @@ final class MediaController extends ContentController
             'items' => $items,
             'languages' => $langs,
             'search' => $search,
+            'kind' => $kind ?? '',
+            'kinds' => [
+                ['label' => $this->t('admin.media.kind_all'), 'href' => $this->app->adminPath('media') . ($search !== '' ? '?q=' . rawurlencode($search) : ''), 'active' => $kind === null],
+                ['label' => $this->t('admin.media.kind_image'), 'href' => $this->app->adminPath('media?kind=image') . ($search !== '' ? '&q=' . rawurlencode($search) : ''), 'active' => $kind === 'image'],
+                ['label' => $this->t('admin.media.kind_document'), 'href' => $this->app->adminPath('media?kind=document') . ($search !== '' ? '&q=' . rawurlencode($search) : ''), 'active' => $kind === 'document'],
+            ],
             'canManage' => $this->can('media.manage'),
             'maxMb' => (int) round(MediaLibrary::MAX_BYTES / 1024 / 1024),
+            'maxPdfMb' => (int) round(MediaLibrary::MAX_DOCUMENT_BYTES / 1024 / 1024),
             'error' => $this->app->session()->pull('media_error'),
         ]);
     }

@@ -254,6 +254,7 @@ final class EntryRepository
             }
         }
         $covers = $this->content->media(array_map(static fn (array $r): ?int => $r['cover_media_id'] !== null ? (int) $r['cover_media_id'] : null, $rows), $lang);
+        $str = static fn (array $t, string $key): string => is_scalar($t[$key] ?? null) ? (string) $t[$key] : '';
         $out = [];
         foreach ($rows as $row) {
             $id = (int) $row['id'];
@@ -279,7 +280,15 @@ final class EntryRepository
                 'is_featured' => (int) $row['is_featured'] === 1,
                 'updated_at' => (string) $row['updated_at'],
                 'cover' => $cover !== null && $cover['kind'] === 'image' ? $cover : null,
-            ] + ContentRepository::strings($t, ['lang', 'slug', 'title', 'summary', 'body', 'location', 'meta_title', 'meta_description']);
+                'lang' => $str($t, 'lang'),
+                'slug' => $str($t, 'slug'),
+                'title' => $str($t, 'title'),
+                'summary' => $str($t, 'summary'),
+                'body' => $str($t, 'body'),
+                'location' => $str($t, 'location'),
+                'meta_title' => $str($t, 'meta_title'),
+                'meta_description' => $str($t, 'meta_description'),
+            ];
         }
         return $out;
     }

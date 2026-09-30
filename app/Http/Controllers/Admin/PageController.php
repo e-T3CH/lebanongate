@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Gate\Http\Controllers\Admin;
 
+use Gate\Content\EntryTypes;
 use Gate\Http\Request;
 use Gate\Http\Response;
 use Gate\Repositories\ContentAdminRepository;
@@ -12,8 +13,8 @@ use Gate\Services\AuditLog;
 use Gate\Services\SectionOrder;
 
 /**
- * Pages: the nine system pages with their texts, SEO fields and slug per language, a publish state per language and
- * — on the home page — the order and visibility of its sections.
+ * Pages: the system pages (About with its child pages) with their texts, SEO fields, page image and slug per language,
+ * a publish state per language and — on the home page — the order, visibility, texts and images of its sections.
  *
  * Changing a slug keeps the old address working: a 301 redirect to the new one is added automatically.
  */
@@ -24,7 +25,15 @@ final class PageController extends ContentController
         $content = $this->content();
         $languages = $this->app->languages()->enabledCodes();
         $rows = [];
-        foreach ($content->pages() as $page) {
+        $pages = $content->pages();
+        $keys = array_column($pages, 'key', 'id');
+        // Children right after their parent (the list mirrors the menu).
+        usort($pages, static function (array $a, array $b): int {
+            $ka = [$a['parent_id'] !== null ? (int) $a['parent_id'] : (int) $a['id'], $a['parent_id'] !== null ? 1 : 0, (int) $a['nav_order']];
+            $kb = [$b['parent_id'] !== null ? (int) $b['parent_id'] : (int) $b['id'], $b['parent_id'] !== null ? 1 : 0, (int) $b['nav_order']];
+            return $ka <=> $kb;
+        });
+        foreach ($pages as $page) {
             $translations = $content->pageTranslations((int) $page['id']);
             $states = [];
             foreach ($languages as $lang) {
@@ -34,6 +43,8 @@ final class PageController extends ContentController
             $rows[] = [
                 'id' => (int) $page['id'],
                 'key' => (string) $page['key'],
+                'child' => $page['parent_id'] !== null,
+                'parent' => $page['parent_id'] !== null ? (string) ($keys[(int) $page['parent_id']] ?? '') : '',
                 // The menu label reads better in a list than the page heading ("Automatic transmissions,").
                 'title' => (string) ($translations[$this->app->languages()->defaultCode()]['nav_label'] ?? '') !== ''
                     ? (string) $translations[$this->app->languages()->defaultCode()]['nav_label']
@@ -86,7 +97,10 @@ final class PageController extends ContentController
                 'in_nav' => (int) $page['in_nav'] === 1,
                 'nav_order' => (int) $page['nav_order'],
                 'in_sitemap' => (int) $page['in_sitemap'] === 1,
+                'hero' => $page['hero_media_id'] !== null ? (string) $page['hero_media_id'] : '',
+                'child' => $page['parent_id'] !== null,
             ],
+            'images' => $this->mediaOptions('image', $this->t('admin.media.none')),
             'lang' => $lang,
             'values' => $old !== [] ? $old : $this->translationValues($translation),
             'published' => $old !== [] ? ($old['is_published'] ?? '1') === '1' : (int) ($translation['is_published'] ?? 1) === 1,
@@ -94,7 +108,7 @@ final class PageController extends ContentController
             'errors' => $this->pullArray('page_errors'),
             'sections' => $sections,
             'canEdit' => $this->can('content.edit'),
-            'previewUrl' => $this->pagePath($lang, (string) ($translation['slug'] ?? '')),
+            'previewUrl' => $this->pagePath($lang, $this->parentSlug($page, $lang) . (string) ($translation['slug'] ?? '')),
         ]);
     }
 
@@ -123,9 +137,14 @@ final class PageController extends ContentController
         if ($values['title'] === '') {
             $errors['title'] = $this->t('validation.required');
         }
+        // An empty slug in another language takes the default language's slug (Arabic titles have no Latin letters).
+        if (!$isHome && $values['slug'] === '' && $lang !== $this->app->languages()->defaultCode()) {
+            $defaultSlug = $content->pageTranslations($id)[$this->app->languages()->defaultCode()]['slug'] ?? '';
+            $values['slug'] = is_string($defaultSlug) ? $defaultSlug : '';
+        }
         if (!$isHome && $values['slug'] === '') {
             $errors['slug'] = $this->t('validation.required');
-        } elseif (!$isHome && $content->slugTaken('page_translations', $lang, $values['slug'], $id, 'page_id')) {
+        } elseif (!$isHome && ($content->pageSlugTaken($lang, $values['slug'], $id) || $this->reservedSlug($page, $values['slug']))) {
             $errors['slug'] = $this->t('admin.pages.slug_taken');
         }
         if ($errors !== []) {
@@ -140,9 +159,11 @@ final class PageController extends ContentController
             'in_nav' => $request->input('in_nav') === '1',
             'nav_order' => max(0, min(999, (int) $request->input('nav_order'))),
             'in_sitemap' => $request->input('in_sitemap') === '1',
+            'hero_media_id' => $this->mediaId($request->input('hero'), 'image'),
         ]);
         if ($oldSlug !== null && $oldSlug !== '') {
-            $this->addRedirect($lang, $oldSlug, $values['slug']);
+            $parent = $this->parentSlug($page, $lang);
+            $this->addRedirect($lang, $parent . $oldSlug, $parent . $values['slug']);
         }
         $this->app->audit()->record(AuditLog::CONTENT_CHANGED, $this->app->auth()->user()['id'] ?? null, ['type' => 'page', 'id' => $id, 'lang' => $lang, 'published' => $published]);
         $this->flashToast('admin.content.saved');
@@ -178,8 +199,23 @@ final class PageController extends ContentController
         $lang = $this->editLang($request->query('lang'));
         $translations = $content->sectionTranslations((int) $section['id']);
         $translation = $translations[$lang] ?? [];
+        $extra = is_string($translation['extra'] ?? null) ? json_decode($translation['extra'], true) : null;
+        $settings = is_string($section['settings'] ?? null) ? json_decode($section['settings'], true) : null;
+        $regions = [['value' => '', 'label' => $this->t('admin.entries.none')]];
+        foreach (EntryTypes::REGIONS as $region) {
+            $regions[] = ['value' => $region, 'label' => $this->t('site.regions.' . $region)];
+        }
         return $this->adminView('admin/section-edit', 'pages', $this->t('admin.sections.' . $section['type']), $this->t('admin.pages.sections_subtitle'), [
-            'section' => ['id' => (int) $section['id'], 'type' => (string) $section['type'], 'page_id' => (int) $page['id'], 'locked' => (int) $section['is_locked'] === 1, 'enabled' => (int) $section['is_enabled'] === 1],
+            'section' => [
+                'id' => (int) $section['id'], 'type' => (string) $section['type'], 'page_id' => (int) $page['id'],
+                'locked' => (int) $section['is_locked'] === 1, 'enabled' => (int) $section['is_enabled'] === 1,
+                'media' => $section['media_id'] !== null ? (string) $section['media_id'] : '',
+                'media2' => is_array($settings) && is_int($settings['media2'] ?? null) ? (string) $settings['media2'] : '',
+            ],
+            'extra' => is_array($extra) ? $extra : [],
+            'images' => $this->mediaOptions('image', $this->t('admin.media.none')),
+            'regions' => $regions,
+            'icons' => ExpertiseController::icons(),
             'lang' => $lang,
             'values' => [
                 'label' => (string) ($translation['label'] ?? ''),
@@ -201,16 +237,83 @@ final class PageController extends ContentController
             return $this->app->errorResponse(404);
         }
         $lang = $this->editLang($request->input('lang'));
+        $type = (string) $section['type'];
         $content->saveSectionTranslation((int) $section['id'], $lang, [
             'label' => self::line($request->input('label'), 120),
             'title' => self::line($request->input('title')),
             'highlight' => self::line($request->input('highlight')),
             'intro' => self::text($request->input('intro')),
-        ]);
+        ], $this->sectionExtra($type, $request));
+        if (in_array($type, ['hero', 'about'], true)) {
+            $media2 = $type === 'about' ? $this->mediaId($request->input('media2'), 'image') : null;
+            $content->saveSectionMedia((int) $section['id'], $this->mediaId($request->input('media'), 'image'), $media2 !== null ? ['media2' => $media2] : []);
+        }
         $content->touchPage($pageId);
         $this->app->audit()->record(AuditLog::CONTENT_CHANGED, $this->app->auth()->user()['id'] ?? null, ['type' => 'section', 'id' => (int) $section['id'], 'lang' => $lang]);
         $this->flashToast('admin.content.saved');
         return $this->back($this->app->adminPath('pages/' . $pageId . '/sections/' . $section['id'] . '?lang=' . $lang));
+    }
+
+    /**
+     * The structured texts of a section from the form: the About points and badge, the map's main region and notes.
+     *
+     * @return array<string, mixed>|null null when the section has none (its stored extra stays as it is)
+     */
+    private function sectionExtra(string $type, Request $request): ?array
+    {
+        if ($type === 'about') {
+            $points = [];
+            for ($i = 0; $i < 3; $i++) {
+                $title = self::line($request->input('point_title_' . $i), 80);
+                if ($title === '') {
+                    continue;
+                }
+                $icon = $request->input('point_icon_' . $i);
+                $points[] = [
+                    'icon' => in_array($icon, ExpertiseController::icons(), true) || in_array($icon, ['target', 'users', 'check'], true) ? $icon : 'check',
+                    'title' => $title,
+                    'text' => self::line($request->input('point_text_' . $i), 200),
+                ];
+            }
+            return ['badge_value' => self::line($request->input('badge_value'), 20), 'badge_label' => self::line($request->input('badge_label'), 60), 'points' => $points];
+        }
+        if ($type === 'map') {
+            $notes = [];
+            foreach (EntryTypes::REGIONS as $region) {
+                $note = self::line($request->input('note_' . $region), 80);
+                if ($note !== '') {
+                    $notes[$region] = $note;
+                }
+            }
+            $main = $request->input('main');
+            return ['main' => in_array($main, EntryTypes::REGIONS, true) ? $main : '', 'notes' => $notes];
+        }
+        return null;
+    }
+
+    /**
+     * "about/" for a child of About (in this language), '' for a top-level page.
+     *
+     * @param array<string, mixed> $page
+     */
+    private function parentSlug(array $page, string $lang): string
+    {
+        if ($page['parent_id'] === null) {
+            return '';
+        }
+        $translations = $this->content()->pageTranslations((int) $page['parent_id']);
+        $slug = $translations[$lang]['slug'] ?? $translations[$this->app->languages()->defaultCode()]['slug'] ?? '';
+        return is_string($slug) && $slug !== '' ? $slug . '/' : '';
+    }
+
+    /**
+     * A top-level page may not take a slug the site uses for its own addresses.
+     *
+     * @param array<string, mixed> $page
+     */
+    private function reservedSlug(array $page, string $slug): bool
+    {
+        return $page['parent_id'] === null && in_array($slug, ['consent', 'newsletter'], true);
     }
 
     /**

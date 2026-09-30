@@ -30,7 +30,6 @@ $reportLine = static function (array $report) use ($view): string {
     $mail = $report['mail'] ?? null;
     $parts = [
         $view->t('admin.maintenance.report_mail') . ': ' . (is_array($mail) ? $view->t('admin.maintenance.report_mail_sent', ['sent' => (int) ($mail['sent'] ?? 0), 'failed' => (int) ($mail['failed'] ?? 0)]) : $view->t('admin.maintenance.report_mail_off')),
-        $view->t('admin.maintenance.report_reviews') . ': ' . (is_string($report['reviews'] ?? null) ? $report['reviews'] : '—'),
         $view->t('admin.maintenance.report_backup') . ': ' . (is_string($report['backup'] ?? null) ? $report['backup'] : '—'),
     ];
     return implode(' · ', $parts);

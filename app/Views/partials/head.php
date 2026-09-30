@@ -30,7 +30,7 @@ $motion = $view->shared('motion', 'standard');
 $motion = is_string($motion) && in_array($motion, \Gate\Core\ThemeConfig::MOTION_MODES, true) ? $motion : 'standard';
 $themeCss = $view->shared('themeCss', '');
 $bundle = in_array($bundle ?? 'site', ['site', 'admin'], true) ? ($bundle ?? 'site') : 'site';
-$styles = $bundle === 'site' ? array_merge(['site'], $motion === 'off' ? ['motion-off'] : []) : ['admin', 'icons'];
+$styles = $bundle === 'site' ? array_merge(['site'], $motion === 'off' ? ['motion-off'] : []) : ['admin', 'icons', 'admin-gate'];
 $dir = ($dir ?? 'ltr') === 'rtl' ? 'rtl' : 'ltr';
 $nonce = e_attr($view->nonce());
 ?><!doctype html>
@@ -73,9 +73,7 @@ $nonce = e_attr($view->nonce());
   <link rel="icon" href="<?= e_attr($view->asset('img/favicon-32.png')) ?>">
 <?php endif; ?>
   <script nonce="<?= $nonce ?>">(function (d) { d.classList.add('js'); if (d.getAttribute('data-motion') !== 'off' && !matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) d.classList.add('motion'); addEventListener('pagereveal', function (e) { var t = e.viewTransition; if (t) [t.ready, t.finished].forEach(function (p) { p.catch(function () {}); }); }); })(document.documentElement);</script>
-<?php if ($bundle === 'admin'): ?>
-  <link rel="preload" href="<?= e_attr($view->asset('fonts/Montserrat-VF.woff2')) ?>" as="font" type="font/woff2" crossorigin>
-<?php elseif ($dir === 'rtl'): ?>
+<?php if ($bundle !== 'admin' && $dir === 'rtl'): ?>
   <link rel="preload" href="<?= e_attr($view->asset('fonts/IBMPlexSansArabic-Regular.woff2')) ?>" as="font" type="font/woff2" crossorigin>
 <?php else: ?>
   <link rel="preload" href="<?= e_attr($view->asset('fonts/IBMPlexSans-Regular.woff2')) ?>" as="font" type="font/woff2" crossorigin>

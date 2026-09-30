@@ -12,7 +12,7 @@ use Gate\Core\Props;
 
 ?>
 <aside class="<?= e_attr(Props::classes('sb', $p['open'] ? 'open' : null)) ?>" id="<?= e_attr($p['id']) ?>" aria-label="<?= e_attr($view->t('admin.nav.label')) ?>">
-  <div class="sb__brand"><span class="sb__mark"><?= e($p['brandMark']) ?></span><span class="tx sb__name"><span class="sb__title"><?= e(mb_strtoupper($p['brandName'])) ?></span><span class="sb__sub"><?= e($view->t('admin.nav.panel')) ?></span></span></div>
+  <div class="sb__brand"><span class="sb__mark"><?php if ($p['brandMark'] === ''): ?><img src="<?= e_attr($view->asset('img/gate-mark.png')) ?>" alt="" width="40" height="40"><?php else: ?><?= e($p['brandMark']) ?><?php endif; ?></span><span class="tx sb__name"><span class="sb__title"><?= e(mb_strtoupper($p['brandName'])) ?></span><span class="sb__sub"><?= e($view->t('admin.nav.panel')) ?></span></span></div>
 <?php foreach ($p['menu'] as $section): ?>
   <div class="sec"><span class="tx"><?= e($view->t('admin.nav.section_' . $section['section'])) ?></span></div>
 <?php foreach ($section['items'] as $item): ?>

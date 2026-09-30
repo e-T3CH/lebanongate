@@ -10,15 +10,14 @@ use Gate\Repositories\ContentAdminRepository;
 use Gate\Services\AuditLog;
 
 /**
- * The short content lists that the home and content pages use: transmission types, process steps, key figures and
- * partners. They share one screen: the rows of the chosen language, with order, visibility and a Save button.
+ * The short content lists: the impact counters and the partners & donors. They share one screen: the rows of the
+ * chosen language, with order, visibility and a Save button. Partners have a kind (donor or partner), a link and a
+ * logo from the media library.
  */
 final class ContentListController extends ContentController
 {
     /** URL segment => table (partners are handled separately: they have a logo and a link). */
     private const TYPES = [
-        'transmissions' => 'transmission_types',
-        'steps' => 'process_steps',
         'stats' => 'stats',
     ];
 
@@ -45,9 +44,10 @@ final class ContentListController extends ContentController
             }
             $rows[] = ['id' => $id, 'enabled' => (int) $item['is_enabled'] === 1, 'values' => $values];
         }
-        return $this->adminView('admin/content-list', 'pages', $this->t('admin.lists.' . $type . '_title'), $this->t('admin.lists.subtitle'), [
+        return $this->adminView('admin/content-list', $type, $this->t('admin.lists.' . $type . '_title'), $this->t('admin.lists.' . $type . '_subtitle'), [
             'type' => $type,
             'fields' => $fields,
+            'options' => [],
             'rows' => $rows,
             'lang' => $lang,
             'tabs' => $this->languageTabs($this->app->adminPath('content/' . $type), $lang, [], false),
@@ -71,7 +71,7 @@ final class ContentListController extends ContentController
         foreach ($order as $id) {
             $values = [];
             foreach ($fields as $field) {
-                $values[$field] = self::line($request->input($field . '_' . $id), $field === 'description' || $field === 'text' ? 400 : 160);
+                $values[$field] = self::line($request->input($field . '_' . $id), 160);
             }
             $content->saveListTranslation($table, $id, $lang, $values);
         }
@@ -90,7 +90,7 @@ final class ContentListController extends ContentController
             if ($name === '') {
                 return $this->back($this->app->adminPath('content/partners'));
             }
-            $id = $content->createPartner($name);
+            $id = $content->createPartner($name, $request->input('kind'));
         } else {
             $table = self::TYPES[$type] ?? null;
             if ($table === null) {
@@ -136,15 +136,20 @@ final class ContentListController extends ContentController
                 'enabled' => (int) $partner['is_enabled'] === 1,
                 'values' => [
                     'name' => (string) $partner['name'],
+                    'kind' => (string) $partner['kind'],
                     'url' => (string) $partner['url'],
-                    'logo' => (string) $partner['logo'],
+                    'logo' => $partner['logo_media_id'] !== null ? (string) $partner['logo_media_id'] : '',
                     'description' => (string) ($translations[$id][$lang]['description'] ?? ''),
                 ],
             ];
         }
-        return $this->adminView('admin/content-list', 'pages', $this->t('admin.lists.partners_title'), $this->t('admin.lists.subtitle'), [
+        return $this->adminView('admin/content-list', 'partners', $this->t('admin.lists.partners_title'), $this->t('admin.lists.partners_subtitle'), [
             'type' => 'partners',
-            'fields' => ['name', 'url', 'logo', 'description'],
+            'fields' => ['name', 'kind', 'url', 'logo', 'description'],
+            'options' => [
+                'kind' => array_map(fn (string $k): array => ['value' => $k, 'label' => $this->t('admin.lists.kind_' . $k)], ContentAdminRepository::PARTNER_KINDS),
+                'logo' => $this->mediaOptions('image', $this->t('admin.media.none')),
+            ],
             'rows' => $rows,
             'lang' => $lang,
             'tabs' => $this->languageTabs($this->app->adminPath('content/partners'), $lang, [], false),
@@ -166,8 +171,9 @@ final class ContentListController extends ContentController
             $content->savePartner($id, [
                 'sort_order' => $sort,
                 'name' => self::line($request->input('name_' . $id), 160),
+                'kind' => $request->input('kind_' . $id),
                 'url' => preg_match('#^https?://[^\s]{4,300}$#', $url) === 1 ? $url : '',
-                'logo' => self::line($request->input('logo_' . $id), 300),
+                'logo_media_id' => $this->mediaId($request->input('logo_' . $id), 'image'),
                 'is_enabled' => in_array($id, $enabled, true),
             ]);
             $content->savePartnerTranslation($id, $lang, self::line($request->input('description_' . $id), 400));

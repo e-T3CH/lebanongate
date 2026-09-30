@@ -6,35 +6,39 @@ namespace Gate\Http\Controllers\Admin;
 
 use Gate\Http\Request;
 use Gate\Http\Response;
-use Gate\Repositories\AppointmentRepository;
-use Gate\Repositories\ReviewRepository;
+use Gate\Repositories\EntryAdminRepository;
+use Gate\Repositories\MessageRepository;
+use Gate\Repositories\SubscriberRepository;
 use Gate\Services\AuditLog;
 
 /**
- * The dashboard of the approved mock-up with live data: requests of the last seven days, unread messages, the Google
- * rating and the reviews on the website (from the Google reviews module), the newest requests and the quick controls.
+ * The dashboard: messages of the last seven days, unread messages, published projects and confirmed newsletter
+ * subscribers; the newest messages, shortcuts to add content and the quick controls.
  *
  * The quick controls save with a small POST (fetch when JavaScript is on, a normal submit otherwise).
  */
 final class DashboardController extends AdminController
 {
-    /** Quick control => setting key. Only these three can be switched from the dashboard. */
+    /** Quick control => setting key. Only these can be switched from the dashboard. */
     private const QUICK = [
-        'online_booking' => 'site.online_booking',
-        'reviews_section' => 'reviews.section_enabled',
+        'newsletter_enabled' => 'site.newsletter_enabled',
         'maintenance_mode' => 'site.maintenance_mode',
+    ];
+
+    private const SHORTCUT_ICONS = [
+        'project' => 'fa-solid fa-diagram-project',
+        'news' => 'fa-regular fa-newspaper',
+        'publication' => 'fa-regular fa-file-pdf',
+        'album' => 'fa-regular fa-images',
     ];
 
     public function index(Request $request): Response
     {
         $user = $this->app->auth()->user();
         $settings = $this->app->settings();
-        $repo = new AppointmentRepository($this->app->db(), $this->app->clock);
-        $unread = $repo->countUnread();
-        $rating = $settings->string('reviews.rating');
-        $count = $settings->string('reviews.count');
-        $reviews = new ReviewRepository($this->app->db(), $this->app->clock);
-        $reviewCounts = $reviews->counts() + ['visible_now' => $reviews->countVisible()];
+        $messages = new MessageRepository($this->app->db(), $this->app->clock);
+        $entries = new EntryAdminRepository($this->app->db(), $this->app->clock);
+        $subscribers = (new SubscriberRepository($this->app->db(), $this->app->crypto(), $this->app->clock))->counts();
         $quick = [];
         if ($this->can('settings.manage')) {
             foreach (self::QUICK as $key => $setting) {
@@ -46,26 +50,28 @@ final class DashboardController extends AdminController
                 ];
             }
         }
+        $shortcuts = [];
+        if ($this->can('content.edit')) {
+            foreach (EntryController::SEGMENTS as $type => $segment) {
+                $shortcuts[] = ['label' => $this->t('admin.entries.' . $type . '.add'), 'action' => $this->app->adminPath($segment . '/new'), 'icon' => self::SHORTCUT_ICONS[$type]];
+            }
+        }
+        $unread = $messages->countUnread();
         return $this->adminView('admin/dashboard', 'dashboard', $this->t('admin.dashboard.title'), $this->t('admin.dashboard.subtitle'), [
             'twoFactorOn' => $user !== null && $user['totp_secret'] !== null,
             'siteName' => $settings->string('site.name', 'GATE Lebanon'),
             'kpi' => [
-                'requests' => $repo->countSince(7),
-                'requests_delta' => $this->t('admin.dashboard.kpi_requests_delta'),
+                'messages' => $messages->countSince(7),
                 'unread' => $unread,
-                'unread_delta' => $this->t('admin.dashboard.kpi_unread_delta', ['count' => $repo->countByStatus('new')]),
-                // Google's own rating and count (stored by the review sync); a [placeholder] means none yet.
-                'rating' => is_numeric(trim($rating)) ? $rating : '—',
-                'rating_delta' => ctype_digit(trim($count)) ? $this->t('admin.dashboard.kpi_rating_delta', ['count' => $count]) : $this->t('admin.dashboard.kpi_rating_empty'),
-                'reviews_visible' => (string) $reviewCounts['visible_now'],
-                'reviews_delta' => match (true) {
-                    $reviewCounts['all'] === 0 => $this->t('admin.dashboard.kpi_reviews_empty'),
-                    $reviewCounts['hidden'] > 0 => $this->t('admin.dashboard.kpi_reviews_hidden', ['count' => $reviewCounts['hidden']]),
-                    default => $this->t('admin.dashboard.kpi_reviews_all'),
-                },
+                'projects' => $entries->count('project'),
+                'news' => $entries->count('news'),
+                'subscribers' => $subscribers['confirmed'],
+                'pending' => $subscribers['pending'],
             ],
-            'recent' => $this->recentRows($repo),
+            'recent' => $this->recentRows($messages),
             'quick' => $quick,
+            'shortcuts' => $shortcuts,
+            'canMessages' => $this->can('messages.view'),
         ]);
     }
 
@@ -94,26 +100,17 @@ final class DashboardController extends AdminController
         return $this->back($this->app->adminPath());
     }
 
-    /** @return list<array<string, string>> */
-    private function recentRows(AppointmentRepository $repo): array
+    /** @return list<array{id: int, when: string, who: string, subject: string, unread: bool}> */
+    private function recentRows(MessageRepository $repo): array
     {
         $rows = [];
-        foreach ($repo->recent(5) as $row) {
-            $created = (string) $row['created_at'];
+        foreach ($repo->recent(6) as $row) {
             $rows[] = [
-                'when' => $this->app->formatDate($created),
-                'who' => (string) $row['name'],
-                'car' => (string) $row['car'],
-                'box' => $this->t('site.form.types.' . (string) $row['gearbox_type']),
-                'label' => $this->t('admin.statuses.' . (string) $row['status']),
-                'tone' => match ((string) $row['status']) {
-                    'new' => 'new',
-                    'confirmed' => 'confirmed',
-                    'diagnosis' => 'diagnosis',
-                    'quoted' => 'quoted',
-                    'cancelled' => 'danger',
-                    default => 'neutral',
-                },
+                'id' => (int) $row['id'],
+                'when' => $this->app->formatDate((string) $row['created_at']),
+                'who' => (string) $row['name'] . ((string) $row['organisation'] !== '' ? ' · ' . (string) $row['organisation'] : ''),
+                'subject' => $this->t('site.form.subjects.' . (string) $row['subject']),
+                'unread' => $row['read_at'] === null,
             ];
         }
         return $rows;

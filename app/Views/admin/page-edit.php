@@ -4,7 +4,8 @@
  * order and visibility of its sections.
  *
  * @var \Gate\Core\View $view
- * @var array{id: int, key: string, template: string, is_enabled: bool, in_nav: bool, nav_order: int, in_sitemap: bool} $page
+ * @var array{id: int, key: string, template: string, is_enabled: bool, in_nav: bool, nav_order: int, in_sitemap: bool, hero: string, child: bool} $page
+ * @var list<array{value: string, label: string}> $images
  * @var string $lang
  * @var array<string, string> $values
  * @var bool $published
@@ -29,7 +30,7 @@ $value = static fn (string $key): string => $values[$key] ?? '';
 
     </div>
     <div class="fields-2 fields-2--sec">
-      <?= $view->component('input', ['name' => 'title', 'label' => $view->t('admin.pages.page_title'), 'value' => $value('title'), 'error' => $errors['title'] ?? null, 'required' => true, 'disabled' => !$canEdit]) ?>
+      <?= $view->component('input', ['name' => 'title', 'label' => $view->t('admin.pages.page_title'), 'value' => $value('title'), 'error' => $errors['title'] ?? null, 'required' => true, 'disabled' => !$canEdit, 'attrs' => ['dir' => 'auto']]) ?>
 
       <?= $view->component('input', ['name' => 'highlight', 'label' => $view->t('admin.pages.highlight'), 'value' => $value('highlight'), 'hint' => $view->t('admin.pages.highlight_hint'), 'disabled' => !$canEdit]) ?>
 
@@ -44,7 +45,7 @@ $value = static fn (string $key): string => $values[$key] ?? '';
     </div>
     <?= $view->component('textarea', ['name' => 'intro', 'id' => 'page-intro', 'label' => $view->t('admin.pages.intro'), 'value' => $value('intro'), 'rows' => 3, 'maxlength' => 2000, 'disabled' => !$canEdit]) ?>
 
-<?php if ($page['template'] === 'legal'): ?>
+<?php if (in_array($page['template'], ['text', 'about', 'partners'], true)): ?>
     <?= $view->component('textarea', ['name' => 'body', 'id' => 'page-body', 'label' => $view->t('admin.pages.body'), 'value' => $value('body'), 'rows' => 14, 'hint' => $view->t('admin.pages.body_hint'), 'disabled' => !$canEdit]) ?>
 
 <?php endif; ?>
@@ -65,6 +66,10 @@ $value = static fn (string $key): string => $values[$key] ?? '';
     <div class="fields-2 fields-2--sec">
       <?= $view->component('input', ['name' => 'nav_order', 'type' => 'number', 'label' => $view->t('admin.pages.nav_order'), 'value' => (string) $page['nav_order'], 'disabled' => !$canEdit]) ?>
 
+<?php if (!$isHome): ?>
+      <?= $view->component('select', ['name' => 'hero', 'id' => 'page-hero', 'label' => $view->t('admin.pages.hero'), 'value' => $page['hero'], 'options' => $images, 'hint' => $view->t('admin.pages.hero_hint'), 'disabled' => !$canEdit, 'attrs' => ['data-media-preview' => 'image']]) ?>
+
+<?php endif; ?>
     </div>
 <?php if ($canEdit): ?>
     <div class="actions">

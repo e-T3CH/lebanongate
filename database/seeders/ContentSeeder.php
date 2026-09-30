@@ -200,7 +200,7 @@ final class ContentSeeder
                 continue;
             }
             $id = $this->db->insert('entries', [
-                'type' => $type, 'expertise_id' => $expertiseIds[$area] ?? null, 'region' => $region, 'status' => $status,
+                'type' => $type, 'expertise_id' => $expertiseIds[$area], 'region' => $region, 'status' => $status,
                 'start_date' => $start, 'end_date' => $end, 'published_on' => $date, 'beneficiaries' => $beneficiaries,
                 'donors' => $donors, 'is_featured' => $featured, 'is_enabled' => 1, 'created_at' => $now, 'updated_at' => $now,
             ]);

@@ -31,5 +31,10 @@
 <?php endif; ?>
 <?= $view->component('confirm-modal') ?>
 
+<?php $mediaUrls = $view->shared('mediaUrls', []); ?>
+<?php if (is_array($mediaUrls) && $mediaUrls !== []): ?>
+<script type="application/json" id="media-urls"><?= e_js($mediaUrls) ?></script>
+<?php endif; ?>
+
 </body>
 </html>

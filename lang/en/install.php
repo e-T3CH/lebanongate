@@ -36,7 +36,7 @@ return [
         'ext_libxml' => 'PHP extension: libxml',
         'ext_gd' => 'PHP extension: GD (image processing)',
         'ext_intl' => 'PHP extension: intl',
-        'ext_curl' => 'PHP extension: cURL (Google reviews import)',
+        'ext_curl' => 'PHP extension: cURL (outgoing connections)',
         'argon2id' => 'Argon2id password hashing',
         'writable_config' => 'Writable folder: :detail',
         'writable_storage' => 'Writable folder: :detail',

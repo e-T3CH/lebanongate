@@ -315,6 +315,11 @@ final class MediaLibrary
                 $places[] = $label . ':' . $n;
             }
         }
+        // The About section's second photo is kept in the section settings.
+        $second = (int) $this->db->scalar("SELECT COUNT(*) FROM {page_sections} WHERE JSON_VALUE(`settings`, '$.media2') = :id", ['id' => $id]);
+        if ($second > 0) {
+            $places[] = 'sections:' . $second;
+        }
         $like = '%' . str_replace(['%', '_'], ['\\%', '\\_'], $url) . '%';
         // One placeholder per statement: a named parameter may only appear once.
         $texts = (int) $this->db->scalar("SELECT COUNT(DISTINCT `page_id`) FROM {page_translations} WHERE CONCAT_WS(' ', `body`, `intro`) LIKE :u", ['u' => $like])
