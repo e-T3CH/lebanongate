@@ -61,7 +61,7 @@ $isPdf = $str($item, 'kind') === 'document';
         <div class="media-item__body">
           <span class="media-item__name"><?= e($str($item, 'original_name')) ?></span>
 <?php if ($isPdf): ?>
-          <span class="muted">PDF · <?= e($view->t('admin.media.pages', ['count' => (int) $item['pages']])) ?> · <?= e($str($item, 'size_kb')) ?> · <?= e($str($item, 'uploaded')) ?></span>
+          <span class="muted">PDF · <?= e($view->t((int) $item['pages'] === 1 ? 'admin.media.page_one' : 'admin.media.pages', ['count' => (int) $item['pages']])) ?> · <?= e($str($item, 'size_kb')) ?> · <?= e($str($item, 'uploaded')) ?></span>
 <?php else: ?>
           <span class="muted"><?= (int) $item['width'] ?>×<?= (int) $item['height'] ?> · <?= e($str($item, 'size_kb')) ?> · <?= e($str($item, 'uploaded')) ?></span>
 <?php endif; ?>

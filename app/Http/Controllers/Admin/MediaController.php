@@ -30,7 +30,7 @@ final class MediaController extends ContentController
                 'usage' => $this->usageLabels($usage),
                 'used' => $usage !== [],
                 'uploaded' => $this->app->formatDate($item['created_at'], false),
-                'size_kb' => $item['size'] >= 1024 * 1024 ? number_format($item['size'] / 1024 / 1024, 1, '.', ' ') . ' MB' : number_format($item['size'] / 1024, 0, '.', ' ') . ' KB',
+                'size_kb' => $item['size'] >= 1024 * 1024 ? number_format($item['size'] / 1024 / 1024, 1, '.', ' ') . ' MB' : number_format(max(1, $item['size'] / 1024), 0, '.', ' ') . ' KB',
                 'alt_missing' => array_values(array_filter($langs, static fn (string $l): bool => trim($item['alt'][$l] ?? '') === '')),
             ];
         }

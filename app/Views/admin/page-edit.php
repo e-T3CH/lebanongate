@@ -80,8 +80,9 @@ $value = static fn (string $key): string => $values[$key] ?? '';
     </div>
 <?php endif; ?>
   </form>
+</div>
 <?php if ($sections !== []): ?>
-  <div class="side-400">
+  <div class="sections-wide">
     <form class="acard panel-fields" method="post" action="<?= e_url($adminPath . '/pages/' . $page['id'] . '/sections') ?>">
       <?= $view->csrfField() ?>
       <div class="card-intro card-intro--flush"><h2 class="h3"><?= e($view->t('admin.pages.sections_title')) ?></h2><span class="muted"><?= e($view->t('admin.pages.sections_desc')) ?></span></div>
@@ -114,4 +115,3 @@ $value = static fn (string $key): string => $values[$key] ?? '';
     </form>
   </div>
 <?php endif; ?>
-</div>
