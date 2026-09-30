@@ -15,7 +15,8 @@ use Gate\Services\Settings;
  *  - [bracket] placeholders left in settings and content (the mock-up's sample values, the legal templates' notes);
  *  - translations that are missing or not published, per language (visitors would see the default language);
  *  - images in use without alt text in a language;
- *  - pages, areas of expertise and entries (projects, news, publications, albums) without an SEO title or description.
+ *  - pages, areas of expertise and entries (projects, news, publications, albums) without any description for search
+ *    engines (no SEO description and no summary or intro to fall back to).
  *
  * Findings are grouped: 'settings' for the site-wide ones, then one group per enabled language.
  */
@@ -133,10 +134,11 @@ final class ContentCheck
         if (trim((string) ($row['title'] ?? '')) === '') {
             $findings[] = $what . ': title is empty';
         }
-        foreach (['meta_title' => 'SEO title', 'meta_description' => 'SEO description'] as $field => $label) {
-            if (array_key_exists($field, $row) && trim((string) $row[$field]) === '') {
-                $findings[] = $what . ': ' . $label . ' is empty';
-            }
+        // An empty SEO title falls back to the title, an empty SEO description to the summary or intro; only a
+        // description with nothing to fall back to is a finding.
+        if (array_key_exists('meta_description', $row) && trim((string) $row['meta_description']) === ''
+            && trim(strip_tags((string) ($row['summary'] ?? $row['intro'] ?? ''))) === '') {
+            $findings[] = $what . ': SEO description is empty (and there is no summary to use instead)';
         }
         $placeholders = [];
         foreach ($fields as $field) {

@@ -30,14 +30,14 @@
 /* Home page sections: a full-width card under the page form, one row per section. */
 .sections-wide{margin-top:20px}
 .sections-wide .sortable__item{flex-wrap:nowrap;gap:14px}
-.sections-wide .sortable__label{flex:1 1 auto;min-width:0;display:flex;align-items:baseline;gap:12px;font-weight:600}
-.sections-wide .sortable__sub{font-weight:400;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sections-wide .sortable__label{flex:1 1 auto;min-width:0;display:flex;align-items:baseline;gap:12px;font-weight:600;overflow:hidden}
+.sections-wide .sortable__sub{min-width:0;font-weight:400;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .sections-wide .sortable__moves{display:flex;gap:4px;flex-shrink:0}
 .sections-wide .sortable__item .link-sm{white-space:nowrap;flex-shrink:0;min-width:48px;text-align:end}
 /* Filters inside a card, dates on one line. */
 .acard>.filters-row{padding:20px 20px 0;margin-bottom:8px}
 .filters-row .actions{padding:0;margin:0}
-td.t-muted{white-space:nowrap}
+@media (min-width:900px){td.t-muted{white-space:nowrap}}
 /* Media: the replace form wraps instead of overflowing the card. */
 .media-item__actions form{flex-wrap:wrap}
 .media-item__actions .btn-row{white-space:nowrap}
@@ -61,3 +61,18 @@ td.t-muted{white-space:nowrap}
 .texts__reset{background:none;border:0;padding:0;cursor:pointer;font:inherit;font-size:13px;color:var(--a-primary);font-weight:600}
 .texts__reset:hover{text-decoration:underline}
 .texts__save{position:sticky;bottom:0;background:var(--a-card,#fff);padding:14px 0;margin-top:8px;border-top:1px solid var(--a-divider);z-index:2}
+/* Phones: long tab rows scroll sideways, file pickers and section rows fit the screen. */
+.tabs{max-width:100%;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs a{white-space:nowrap;flex-shrink:0}
+.file-field,.file-field input[type=file]{max-width:100%;min-width:0}
+@media (max-width:600px){
+  .sections-wide .sortable__item{flex-wrap:wrap}
+  .sections-wide .sortable__label{flex:1 1 100%;flex-direction:column;gap:2px}
+}
+@media (max-width:600px){
+  .media-item{flex-direction:column}
+  .media-item__thumb{width:100%;height:170px}
+  .media-item__body,.media-item__actions{width:100%;min-width:0}
+  .tbl td{overflow-wrap:anywhere;min-width:0}
+}
