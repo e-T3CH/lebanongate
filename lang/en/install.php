@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 return [
-    'document_title' => 'Install — BM-Matic',
+    'document_title' => 'Install — GATE Lebanon',
     'caption' => 'INSTALLATION',
     'language_switch' => 'Installer language',
     'next' => 'Continue',
@@ -60,7 +60,7 @@ return [
         'error_fields' => 'Fill in the host, database name and user (database name: letters, digits, _ $ -).',
         'error_connect' => 'Could not connect with these details. Check them and try again.',
         'error_version' => 'The database server is too old (MySQL 5.7+ or MariaDB 10.4+ is required).',
-        'error_not_empty' => 'This database already contains a BM-Matic installation. Use an empty database.',
+        'error_not_empty' => 'This database already contains a GATE Lebanon installation. Use an empty database.',
         'error_privileges' => 'This database user may not create tables with foreign keys. Give it SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER, INDEX, DROP and REFERENCES on this database (see the README).',
     ],
     'site' => [

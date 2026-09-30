@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 return [
     'login' => [
-        'document_title' => 'Sign in — BM-Matic admin',
+        'document_title' => 'Sign in — GATE Lebanon admin',
         'title' => 'Sign in',
-        'subtitle' => 'Admin panel for the BM-Matic website.',
+        'subtitle' => 'Admin panel for the GATE Lebanon website.',
         'email' => 'Email',
         'password' => 'Password',
         'submit' => 'Sign in',
@@ -316,7 +316,7 @@ return [
         'upload_done' => 'Backup uploaded: :file. You can restore it below.',
         'upload_missing' => 'Choose a backup file (.tar.gz, up to :limit).',
         'upload_too_big' => 'The file is larger than this server accepts (:limit).',
-        'upload_not_backup' => 'This file is not a BM-Matic backup.',
+        'upload_not_backup' => 'This file is not a GATE Lebanon backup.',
         'restore_title' => 'Restore a backup',
         'restore_desc' => 'Replaces the whole website — texts, settings, accounts, appointments and images — with the backup, also one made on another installation (for example before a new installation). A backup of the current state is made first. Afterwards everyone signs in again; you keep your current email address and password.',
         'restore_file' => 'Backup',

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 return [
     'login' => [
-        'document_title' => 'Connexion — administration BM-Matic',
+        'document_title' => 'Connexion — administration GATE Lebanon',
         'title' => 'Connexion',
-        'subtitle' => 'Panneau d’administration du site BM-Matic.',
+        'subtitle' => 'Panneau d’administration du site GATE Lebanon.',
         'email' => 'E-mail',
         'password' => 'Mot de passe',
         'submit' => 'Se connecter',
@@ -316,7 +316,7 @@ return [
         'upload_done' => 'Sauvegarde envoyée : :file. Vous pouvez la restaurer ci-dessous.',
         'upload_missing' => 'Choisissez un fichier de sauvegarde (.tar.gz, max. :limit).',
         'upload_too_big' => 'Le fichier dépasse ce que ce serveur accepte (:limit).',
-        'upload_not_backup' => 'Ce fichier n’est pas une sauvegarde BM-Matic.',
+        'upload_not_backup' => 'Ce fichier n’est pas une sauvegarde GATE Lebanon.',
         'restore_title' => 'Restaurer une sauvegarde',
         'restore_desc' => 'Remplace tout le site — textes, réglages, comptes, rendez-vous et images — par la sauvegarde, même une sauvegarde faite sur une autre installation (par exemple avant une nouvelle installation). Une sauvegarde de l’état actuel est faite d’abord. Ensuite, tout le monde se reconnecte ; vous gardez votre adresse e-mail et votre mot de passe actuels.',
         'restore_file' => 'Sauvegarde',
