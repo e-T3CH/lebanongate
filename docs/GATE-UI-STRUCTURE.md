@@ -113,21 +113,32 @@ Rules:
 - No preloader and no auto-playing hero slider (they slow the first view and cause accessibility problems).
 - RTL: slide-in directions mirror (`inset-inline-start`, logical properties); marquee runs the other way.
 
-## 7. Colour palette tokens (to be decided)
+## 7. Brand and colour palette
 
-The palette will replace `ThemeDefaults::COLORS`. BM-Matic's design is dark; an NGO site reads better light, so the
-site tokens change from "dark page, light text" to "light page, dark text", with one strong colour band for the
-counters and the call to action.
+From the logo: **GATE Lebanon / غايت لبنان — For Humanitarian Aid, Development & Peace**
+(للمساعدات الإنسانية، التنمية والسلام). White Lebanese cedar and white wordmark on a single mid-blue, with the
+tagline in the same blue. The logo is bilingual, so Arabic (RTL) is a first-class language, not an extra.
 
-| Token | Role | Value |
-| --- | --- | --- |
-| `c-page` | Page background | TBD |
-| `c-surface` / `c-card` | Section and card backgrounds | TBD |
-| `c-text-1` … `c-text-3` | Headings, body, muted text | TBD |
-| `c-primary` / `c-primary-hover` | Buttons, links, active menu | TBD (from the GATE logo) |
-| `c-accent` | Tags, icons, highlights | TBD |
-| `c-band` | Counter band and CTA band | TBD |
-| `c-footer` | Footer | TBD |
+Brand blue sampled from the logo: **`#5091CD`**. White text on it is 3.4:1, which only passes WCAG AA for large
+text (24px+, or 19px bold). Buttons, links and body-size text therefore use a darker shade of the same hue; the
+logo blue is kept for large surfaces, the logo panel, icons and decoration.
+
+The site switches from BM-Matic's dark design to a light one, with one strong blue band for the counters and the
+call to action. Proposed values (to confirm with GATE):
+
+| Token | Role | Value | Note |
+| --- | --- | --- | --- |
+| `c-brand` | Logo blue: logo panel, icons, large headings on white, decoration | `#5091CD` | 3.4:1 on white, large text only |
+| `c-primary` | Buttons, links, active menu | `#2F6FA8` | White on it 5.3:1 (AA) |
+| `c-primary-hover` | Hover and pressed | `#245A8C` | |
+| `c-band` | Counter band, CTA band, footer | `#173F66` | Deep blue from the same hue |
+| `c-tint` | Soft section backgrounds, chips | `#EAF2FA` | |
+| `c-page` | Page background | `#FFFFFF` | |
+| `c-surface` | Alternate section background | `#F5F8FB` | |
+| `c-text-1` | Headings | `#12263A` | |
+| `c-text-2` | Body text | `#3C4F63` | |
+| `c-text-3` | Muted text | `#5E7185` | AA on white and on `c-surface` |
+| `c-accent` | Small highlights (tags, a line under headings) | TBD | A warm counterpoint to the blue, e.g. a cedar green or a sand/gold; one only, used sparingly |
 
 The Appearance screen's live contrast check keeps every pair at WCAG AA or better.
 
@@ -139,8 +150,10 @@ messages inbox), Google reviews (optional; can stay off), the `AutoRepair` / `Lo
 
 ## 9. Open points
 
-1. GATE logo and brand colours (the RFQ requires the existing visual identity).
-2. The official expansion of "GATE", if there is one.
+1. The logo in vector form (SVG or PDF) and whether a horizontal or white-only version exists; the brand blue
+   above was sampled from a 250px PNG.
+2. The official expansion of "GATE", if there is one (the Arabic name غايت is a transliteration, which suggests
+   it is a name rather than an acronym).
 3. Photos from the field (the design depends on real imagery).
 4. Final list of sectors, regions and donors for the project filters.
 5. The BM-Matic source repository (`resources/`, `tools/`, `tests/`, `design/`): the zip holds only minified CSS/JS.
