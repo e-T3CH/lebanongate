@@ -37,7 +37,7 @@
 /* Filters inside a card, dates on one line. */
 .acard>.filters-row{padding:20px 20px 0;margin-bottom:8px}
 .filters-row .actions{padding:0;margin:0}
-@media (min-width:900px){td.t-muted{white-space:nowrap}}
+@media (min-width:900px){td.t-date{white-space:nowrap}}
 /* Media: the replace form wraps instead of overflowing the card. */
 .media-item__actions form{flex-wrap:wrap}
 .media-item__actions .btn-row{white-space:nowrap}
@@ -62,13 +62,15 @@
 .texts__reset:hover{text-decoration:underline}
 .texts__save{position:sticky;bottom:0;background:var(--a-card,#fff);padding:14px 0;margin-top:8px;border-top:1px solid var(--a-divider);z-index:2}
 /* Phones: long tab rows scroll sideways, file pickers and section rows fit the screen. */
-.tabs{max-width:100%;overflow-x:auto;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tabs a{white-space:nowrap;flex-shrink:0}
+/* Tab rows wrap onto a second line instead of running off the screen. */
+.tabs{max-width:100%;flex-wrap:wrap;row-gap:0}
+.tabs--settings{overflow-x:visible}
+.tabs a{white-space:nowrap}
+@media (max-width:1100px){.tabs--settings{column-gap:22px}}
 .file-field,.file-field input[type=file]{max-width:100%;min-width:0}
 @media (max-width:600px){
   .sections-wide .sortable__item{flex-wrap:wrap}
-  .sections-wide .sortable__label{flex:1 1 100%;flex-direction:column;gap:2px}
+  .sections-wide .sortable__label{flex:1 1 100%;flex-direction:column;align-items:stretch;gap:2px}
 }
 @media (max-width:600px){
   .media-item{flex-direction:column}
@@ -76,3 +78,13 @@
   .media-item__body,.media-item__actions{width:100%;min-width:0}
   .tbl td{overflow-wrap:anywhere;min-width:0}
 }
+/* Buttons in a card's action row wrap on narrow screens; media items wrap their details under the thumbnail. */
+.acard .actions{flex-wrap:wrap}
+.media-item{flex-wrap:wrap}
+.media-item__body{flex:1 1 220px;min-width:0}
+.media-item__actions,.media-item__actions form{min-width:0;max-width:100%}
+.file-field input[type=file]{max-width:100%}
+/* Long unbroken values (log details, emails, message excerpts) break instead of widening the page. */
+td.t-muted:not(.t-date){overflow-wrap:anywhere}
+/* Badges keep their label on one line (they have a fixed height). */
+.pill{white-space:nowrap;max-width:100%}

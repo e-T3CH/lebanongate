@@ -50,7 +50,7 @@ foreach ($rows as $row) {
       'columns' => [
           ['key' => 'email', 'label' => $view->t('site.form.email'), 'class' => 't-strong'],
           ['key' => 'lang', 'label' => $view->t('admin.messages.language')],
-          ['key' => 'since', 'label' => $view->t('admin.subscribers.since'), 'class' => 't-muted'],
+          ['key' => 'since', 'label' => $view->t('admin.subscribers.since'), 'class' => 't-muted t-date'],
           ['key' => 'actions', 'label' => $view->t('admin.messages.actions'), 'hideLabel' => true],
       ],
       'rows' => $tableRows,

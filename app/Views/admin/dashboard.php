@@ -46,7 +46,7 @@ foreach ($recent as $m) {
     <?= $view->component('data-table', [
         'caption' => $view->t('admin.dashboard.recent_title'),
         'columns' => [
-            ['key' => 'when', 'label' => $view->t('admin.messages.received'), 'class' => 't-muted'],
+            ['key' => 'when', 'label' => $view->t('admin.messages.received'), 'class' => 't-muted t-date'],
             ['key' => 'who', 'label' => $view->t('admin.messages.sender'), 'class' => 't-strong'],
             ['key' => 'subject', 'label' => $view->t('site.form.subject')],
             ['key' => 'status', 'label' => $view->t('admin.messages.status')],

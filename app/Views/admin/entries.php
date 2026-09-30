@@ -34,7 +34,7 @@ foreach ($rows as $row) {
 }
 $columns = [
     ['key' => 'title', 'label' => $view->t('admin.entries.title_col'), 'class' => 't-strong'],
-    ['key' => 'date', 'label' => $view->t('admin.entries.date'), 'class' => 't-muted'],
+    ['key' => 'date', 'label' => $view->t('admin.entries.date'), 'class' => 't-muted t-date'],
 ];
 if (in_array($type, ['project', 'publication'], true)) {
     $columns[] = ['key' => 'status', 'label' => $view->t($type === 'project' ? 'site.entries.status' : 'site.entries.kind')];

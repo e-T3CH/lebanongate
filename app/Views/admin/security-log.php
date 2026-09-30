@@ -57,7 +57,7 @@ foreach ($rows as $row) {
     <?= $view->component('data-table', [
         'caption' => $view->t('admin.log.card_title'),
         'columns' => [
-            ['key' => 'when', 'label' => $view->t('admin.log.when'), 'class' => 't-muted'],
+            ['key' => 'when', 'label' => $view->t('admin.log.when'), 'class' => 't-muted t-date'],
             ['key' => 'event', 'label' => $view->t('admin.log.event')],
             ['key' => 'user', 'label' => $view->t('admin.log.user'), 'class' => 't-strong'],
             ['key' => 'ip', 'label' => $view->t('admin.log.ip'), 'class' => 't-muted'],

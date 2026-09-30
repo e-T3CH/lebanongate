@@ -44,7 +44,7 @@ foreach ($pages as $page) {
           ['key' => 'states', 'label' => $view->t('admin.pages.translations')],
           ['key' => 'nav', 'label' => $view->t('admin.pages.in_nav')],
           ['key' => 'status', 'label' => $view->t('admin.users.status')],
-          ['key' => 'updated', 'label' => $view->t('admin.pages.updated'), 'class' => 't-muted'],
+          ['key' => 'updated', 'label' => $view->t('admin.pages.updated'), 'class' => 't-muted t-date'],
       ],
       'rows' => $rows,
       'empty' => $view->component('empty-state', ['title' => $view->t('admin.pages.card_title'), 'icon' => 'fa-regular fa-file-lines']),
