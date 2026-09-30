@@ -1,12 +1,12 @@
 # GATE Lebanon website: structure and transitions
 
 Blueprint for turning the BM-Matic codebase (`bm-matic-v3-final.zip`) into the GATE Lebanon website described in
-`Website.docx` (the RFQ). The page structure and motion follow the pattern of the Careox non-profit template
-(bracketweb), rebuilt in BM-Matic's own components. **No Careox code, CSS or images are copied**, so no template
-license is needed. The colour palette is still to be chosen and is left as tokens here.
+`Website.docx` (the RFQ). The page structure and motion follow common non-profit template patterns, rebuilt in
+BM-Matic's own components. **No template code, CSS or images are copied.** The colour palette is still to be
+chosen and is left as tokens here.
 
-> Status: draft. The Careox demo could not be inspected from the build environment (the host is blocked), so the
-> Careox column describes the usual layout of this template family; check it against the live demo.
+> Status: draft. The visual reference template is still being chosen; the template column in §2 names the usual
+> page type in charity templates and gets updated once a reference is confirmed.
 
 ## 1. Sitemap
 
@@ -34,7 +34,7 @@ Partners, Gallery and the legal pages are reached from the footer and from the h
 
 ## 2. Page mapping
 
-| GATE page | Careox equivalent | BM-Matic starting point | Work |
+| GATE page | Usual template page | BM-Matic starting point | Work |
 | --- | --- | --- | --- |
 | Home | Home (boxed) | `site/pages/home.php` + `page_sections` | New section set (§3) |
 | About + 3 sub-pages | About, Team | `site/pages/about.php` | Add parent/child pages and dropdown navigation |
