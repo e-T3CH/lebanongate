@@ -11,3 +11,4 @@
 /phpunit.xml
 .phpunit.cache/
 .DS_Store
+/storage/installed.lock
