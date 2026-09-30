@@ -192,17 +192,19 @@ final class SettingsController extends AdminController
     }
 
     /**
-     * Share of the interface strings that exist in each language (the progress bar of the approved screen).
+     * Share of the website's interface strings (site.*: menus, buttons, forms, messages) that exist in each language.
+     * Admin panel strings are left out: the panel has its own languages (LanguageRules::ADMIN), so counting them
+     * would make a fully translated website language look unfinished.
      *
      * @return array<string, int>
      */
     private function translationProgress(): array
     {
-        $total = (int) $this->app->db()->scalar('SELECT COUNT(DISTINCT `key`) FROM {ui_translations}');
+        $total = (int) $this->app->db()->scalar("SELECT COUNT(DISTINCT `key`) FROM {ui_translations} WHERE `key` LIKE 'site.%'");
         $out = [];
         foreach ($this->app->languages()->all() as $language) {
             $code = $language['code'];
-            $done = (int) $this->app->db()->scalar("SELECT COUNT(*) FROM {ui_translations} WHERE `lang_code` = :c AND `value` <> ''", ['c' => $code]);
+            $done = (int) $this->app->db()->scalar("SELECT COUNT(*) FROM {ui_translations} WHERE `lang_code` = :c AND `key` LIKE 'site.%' AND `value` <> ''", ['c' => $code]);
             $out[$code] = $total > 0 ? (int) round($done / $total * 100) : 0;
         }
         return $out;
