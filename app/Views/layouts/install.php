@@ -31,6 +31,7 @@ $current = $view->locale();
 <?php endif; ?>
 <?= $content ?>
   </div>
+  <?= $view->partial('credit') ?>
 </main>
 </body>
 </html>

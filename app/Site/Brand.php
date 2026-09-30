@@ -21,6 +21,8 @@ final class Brand
     public const TOUCH_ICON = '/assets/img/apple-touch-icon.png';
     /** The developer credit in the footer ("Developed by"): the logo version for dark backgrounds (asset path). */
     public const CREDIT_LOGO = 'img/e5hop-logo-light.png';
+    /** Dark letters, for the light backgrounds of the admin panel, sign-in, installer and error pages. */
+    public const CREDIT_LOGO_DARK = 'img/e5hop-logo-dark.png';
     public const CREDIT_URL = 'https://www.e-5hop.com';
 
     public function __construct(private readonly Settings $settings)

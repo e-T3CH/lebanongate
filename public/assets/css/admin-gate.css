@@ -42,3 +42,10 @@ td.t-muted{white-space:nowrap}
 .media-item__actions form{flex-wrap:wrap}
 .media-item__actions .btn-row{white-space:nowrap}
 .sortable__fields>:last-child:nth-child(odd){grid-column:1/-1}
+/* "Developed by" + E-5HOP logo under the admin, sign-in, installer and error screens. */
+.dev-credit{display:flex;align-items:center;justify-content:center;gap:8px;margin:32px 0 8px;font-size:12px;color:var(--a-text-3)}
+.dev-credit a{display:inline-flex;border-radius:4px;opacity:.85;transition:opacity .15s}
+.dev-credit a:hover,.dev-credit a:focus-visible{opacity:1}
+.dev-credit img{display:block;height:18px;width:auto}
+.auth .dev-credit{margin-top:20px}
+.auth{flex-direction:column}

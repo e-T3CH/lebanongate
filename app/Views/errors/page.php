@@ -24,6 +24,7 @@
     <?= $view->component('button', ['label' => $view->t('site.errors.home'), 'variant' => 'admin-secondary', 'href' => '/', 'class' => 'auth__submit']) ?>
 
   </div>
+  <?= $view->partial('credit') ?>
 </main>
 </body>
 </html>

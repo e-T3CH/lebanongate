@@ -23,6 +23,7 @@
 
 <main class="amain">
 <?= $content ?>
+<?= $view->partial('credit') ?>
 </main>
 </div>
 <?php if (!empty($toast)): ?>
