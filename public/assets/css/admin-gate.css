@@ -49,3 +49,15 @@ td.t-muted{white-space:nowrap}
 .dev-credit img{display:block;height:18px;width:auto}
 .auth .dev-credit{margin-top:20px}
 .auth{flex-direction:column}
+/* Content → Website texts */
+.texts>.filters-row{padding:20px 20px 0}
+.texts__intro{padding:0 20px;margin:0 0 4px;font-size:13px}
+.texts form[method=post]{padding:0 20px 20px}
+.texts__part{margin:28px 0 8px;padding-bottom:8px;border-bottom:1px solid var(--a-divider)}
+.texts__row{display:flex;gap:16px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--a-divider)}
+.texts__row.is-custom{background:linear-gradient(90deg,var(--a-tint),transparent 60%);margin:0 -12px;padding:10px 12px;border-radius:8px}
+.texts__field{flex:1 1 auto;min-width:0}
+.texts__state{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0;padding-top:18px}
+.texts__reset{background:none;border:0;padding:0;cursor:pointer;font:inherit;font-size:13px;color:var(--a-primary);font-weight:600}
+.texts__reset:hover{text-decoration:underline}
+.texts__save{position:sticky;bottom:0;background:var(--a-card,#fff);padding:14px 0;margin-top:8px;border-top:1px solid var(--a-divider);z-index:2}

@@ -89,6 +89,21 @@ final class Request
         return is_array($v) ? array_values(array_map('strval', array_filter($v, 'is_scalar'))) : [];
     }
 
+    /** @return array<string, string> a keyed array field such as text[site.footer.about] (non-scalar values dropped) */
+    public function inputMap(string $key): array
+    {
+        $v = $this->post[$key] ?? [];
+        $out = [];
+        if (is_array($v)) {
+            foreach ($v as $k => $item) {
+                if (is_scalar($item)) {
+                    $out[(string) $k] = (string) $item;
+                }
+            }
+        }
+        return $out;
+    }
+
     public function has(string $key): bool
     {
         return array_key_exists($key, $this->post);

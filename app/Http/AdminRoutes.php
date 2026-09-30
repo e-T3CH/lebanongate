@@ -18,6 +18,7 @@ use Gate\Http\Controllers\Admin\PasswordResetController;
 use Gate\Http\Controllers\Admin\ProfileController;
 use Gate\Http\Controllers\Admin\SecurityController;
 use Gate\Http\Controllers\Admin\SecurityLogController;
+use Gate\Http\Controllers\Admin\WebsiteTextController;
 use Gate\Http\Controllers\Admin\ExpertiseController;
 use Gate\Http\Controllers\Admin\EntryController;
 use Gate\Http\Controllers\Admin\SubscriberController;
@@ -47,6 +48,7 @@ final class AdminRoutes
         $subscribers = new SubscriberController($app);
         $pages = new PageController($app);
         $expertise = new ExpertiseController($app);
+        $texts = new WebsiteTextController($app);
         $entries = new EntryController($app);
         $lists = new ContentListController($app);
         $media = new MediaController($app);
@@ -95,6 +97,8 @@ final class AdminRoutes
         $router->post($prefix . '/pages/{id}/sections', $pages->saveSections(...), 'admin.pages.sections', ['auth', 'perm:content.edit']);
         $router->get($prefix . '/pages/{id}/sections/{section}', $pages->editSection(...), 'admin.pages.section', ['auth', 'perm:content.view']);
         $router->post($prefix . '/pages/{id}/sections/{section}', $pages->saveSection(...), 'admin.pages.section.save', ['auth', 'perm:content.edit']);
+        $router->get($prefix . '/website-texts', $texts->index(...), 'admin.texts', ['auth', 'perm:content.view']);
+        $router->post($prefix . '/website-texts', $texts->save(...), 'admin.texts.save', ['auth', 'perm:content.edit']);
         $router->get($prefix . '/expertise', $expertise->index(...), 'admin.expertise', ['auth', 'perm:content.view']);
         $router->post($prefix . '/expertise/new', $expertise->create(...), 'admin.expertise.create', ['auth', 'perm:content.edit']);
         $router->post($prefix . '/expertise/order', $expertise->reorder(...), 'admin.expertise.order', ['auth', 'perm:content.edit']);

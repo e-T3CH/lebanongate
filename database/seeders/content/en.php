@@ -164,7 +164,10 @@ return [
         ],
         'news' => ['label' => 'News & updates', 'title' => 'Latest from GATE Lebanon'],
         'partners' => ['title' => 'Our partners & donors'],
-        'cta' => [],
+        'cta' => [
+            'title' => 'Let’s build resilient communities together',
+            'intro' => 'Partner with GATE Lebanon on education, protection and livelihoods programmes, or get in touch to learn more about our work.',
+        ],
     ],
 
     'expertise' => [

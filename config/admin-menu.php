@@ -35,6 +35,7 @@ return [
             ['key' => 'partners', 'label' => 'admin.nav.partners', 'icon' => 'fa-regular fa-handshake', 'path' => 'content/partners', 'route' => 'admin.content.list', 'permission' => 'content.view'],
             ['key' => 'stats', 'label' => 'admin.nav.stats', 'icon' => 'fa-solid fa-chart-simple', 'path' => 'content/stats', 'route' => 'admin.content.list', 'permission' => 'content.view'],
             ['key' => 'media', 'label' => 'admin.nav.media', 'icon' => 'fa-regular fa-image', 'path' => 'media', 'route' => 'admin.media', 'permission' => 'media.view'],
+            ['key' => 'texts', 'label' => 'admin.nav.texts', 'icon' => 'fa-solid fa-language', 'path' => 'website-texts', 'route' => 'admin.texts', 'permission' => 'content.view'],
         ],
     ],
     [

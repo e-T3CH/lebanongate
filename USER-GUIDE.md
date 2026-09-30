@@ -8,6 +8,7 @@ here needs technical knowledge.
 [Newsletter](#newsletter) · [Projects, news, publications and the gallery](#projects-news-publications-and-the-gallery) ·
 [Pages and the home page](#pages-and-the-home-page) · [Areas of expertise](#areas-of-expertise) ·
 [Partners, donors and impact figures](#partners-donors-and-impact-figures) · [Media](#media) ·
+[Website texts](#website-texts) ·
 [Languages](#languages) · [Appearance](#appearance) · [Settings](#settings) · [Users](#users) ·
 [Two-factor authentication](#two-factor-authentication) · [When something goes wrong](#when-something-goes-wrong)
 
@@ -156,6 +157,24 @@ Change the order with the arrows or by dragging, and press **Save changes**.
   accident.
 
 Wherever you pick an image (a cover, a logo, a header image) a small preview shows the chosen picture.
+
+## Website texts
+
+**Website texts** holds the fixed wording of the website: the "Partner with us" button, the footer blurb, the
+newsletter box, form labels and messages, "Read more" and similar buttons, the texts of the emails visitors receive,
+and the error pages.
+
+- Choose the language with the tabs (EN · AR · FR). Under each text you see the default language's wording as a
+  reference; Arabic texts are typed right to left.
+- **Part of the website** and **Search** narrow the list. Change what you need and press **Save changes**; only the
+  texts you changed are saved.
+- A changed text gets a **Changed** mark and a **Reset to original** link. Your wording is kept when the website is
+  updated.
+- Words that start with a colon, such as `:year` or `:name`, are filled in automatically (the year, a name, a
+  number). Keep them in the text; the panel refuses a text without them.
+
+The call-to-action banner at the bottom of the inner pages uses the texts of the home page's **Call to action**
+section (Pages → Home → Call to action → Edit), so one change updates it everywhere.
 
 ## Languages
 

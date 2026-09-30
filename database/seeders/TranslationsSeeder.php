@@ -10,8 +10,8 @@ use Gate\I18n\Translator;
 
 /**
  * Copies the lang/{code}/*.php strings into ui_translations: new keys are added, and a key whose text changed in the
- * files gets the new text, so wording fixed in a release reaches installed sites. Nothing in the panel edits these
- * rows (page and service texts live in their own tables), so no owner edit is overwritten.
+ * files gets the new text, so wording fixed in a release reaches installed sites. A row the team changed under
+ * Content → Website texts is marked is_custom and is never overwritten.
  */
 final class TranslationsSeeder
 {
@@ -28,14 +28,18 @@ final class TranslationsSeeder
         foreach ($this->db->select('languages', [], ['code']) as $lang) {
             $code = (string) $lang['code'];
             $existing = [];
-            foreach ($this->db->select('ui_translations', ['lang_code' => $code], ['key', 'value']) as $row) {
+            $custom = [];
+            foreach ($this->db->select('ui_translations', ['lang_code' => $code], ['key', 'value', 'is_custom']) as $row) {
                 $existing[(string) $row['key']] = (string) $row['value'];
+                if ((int) $row['is_custom'] === 1) {
+                    $custom[(string) $row['key']] = true;
+                }
             }
             foreach ($translator->fileStrings($code) as $key => $value) {
                 if (!array_key_exists($key, $existing)) {
                     $this->db->insert('ui_translations', ['lang_code' => $code, 'key' => $key, 'value' => $value, 'updated_at' => $now]);
                     $changed++;
-                } elseif ($existing[$key] !== $value) {
+                } elseif ($existing[$key] !== $value && !isset($custom[$key])) {
                     $this->db->update('ui_translations', ['value' => $value, 'updated_at' => $now], ['lang_code' => $code, 'key' => $key]);
                     $changed++;
                 }

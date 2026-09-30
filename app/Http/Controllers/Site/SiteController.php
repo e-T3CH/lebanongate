@@ -757,9 +757,14 @@ final class SiteController
     {
         $contact = $this->content->page('contact', $lang);
         $profile = $this->content->page('profile', $lang);
+        // One call to action for the whole site: the texts of the home page's CTA section (Pages → Home), with the
+        // interface strings (Website texts) when a field is left empty.
+        $section = $this->content->section('home', 'cta', $lang);
+        $title = $section !== null ? trim($section['title']) : '';
+        $text = $section !== null ? trim($section['intro']) : '';
         return [
-            'title' => $this->t('site.cta.title'),
-            'text' => $this->t('site.cta.text'),
+            'title' => $title !== '' ? $title : $this->t('site.cta.title'),
+            'text' => $text !== '' ? $text : $this->t('site.cta.text'),
             'primary' => $contact !== null ? ['label' => $this->t('site.cta.contact'), 'href' => $this->urls->page('contact', $lang)] : null,
             'secondary' => $profile !== null ? ['label' => $this->t('site.cta.profile'), 'href' => $this->urls->page('profile', $lang)] : null,
         ];

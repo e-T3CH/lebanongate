@@ -163,7 +163,10 @@ return [
         ],
         'news' => ['label' => 'Actualités', 'title' => 'Les dernières nouvelles de GATE Lebanon'],
         'partners' => ['title' => 'Nos partenaires et bailleurs'],
-        'cta' => [],
+        'cta' => [
+            'title' => 'Construisons ensemble des communautés résilientes',
+            'intro' => 'Devenez partenaire de GATE Lebanon pour des programmes d’éducation, de protection et de moyens de subsistance, ou contactez-nous pour en savoir plus sur notre action.',
+        ],
     ],
 
     'expertise' => [

@@ -1,7 +1,7 @@
 {
-  "css/admin-gate.css": "9c8b21a555",
+  "css/admin-gate.css": "5fc98687b8",
   "css/admin.css": "b01088c855",
-  "css/icons.css": "679e58dabf",
+  "css/icons.css": "6098fec55e",
   "css/motion-off.css": "2fc9ddf1d7",
   "css/site.css": "720e7083f9",
   "fonts/IBMPlexSans-Bold.woff2": "c277d7b83f",
@@ -22,5 +22,5 @@
   "js/site.js": "f316e2800c",
   "webfonts/fa-brands-400.woff2": "ab869ed1e0",
   "webfonts/fa-regular-400.woff2": "a042e42d85",
-  "webfonts/fa-solid-900.woff2": "44a07fddda"
+  "webfonts/fa-solid-900.woff2": "bb2b8a93c4"
 }

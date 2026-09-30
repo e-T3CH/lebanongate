@@ -85,6 +85,7 @@ request → public/index.php → Core\App::handle()
 | `media`, `media_translations` | Images (re-encoded) and PDF documents, with alt text or title per language |
 | `messages`, `message_notes` | The contact form inbox and internal notes |
 | `subscribers` | Newsletter sign-ups (double opt-in; only an HMAC of the tokens is stored) |
+| `ui_translations` | Interface strings per language, copied from `lang/` on every update; rows the team edits under Content → Website texts (`site.*` only) are marked `is_custom` and kept |
 | `mail_queue`, `redirects` | Outgoing email; old URL → new URL with a hit counter |
 
 A translation that is missing or not published falls back to the default language, including its slug, so a page is
