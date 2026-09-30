@@ -295,6 +295,11 @@ p{margin:0 0 1em}
 .footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-block:20px;font-size:13px}
 .footer-bottom .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .footer-bottom nav{display:flex;gap:18px}
+.footer-bottom .end{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.dev-by{display:inline-flex;align-items:center;gap:8px;color:#8FA6BD}
+.dev-by a{display:inline-flex;opacity:.85;transition:opacity var(--dur-hover)}
+.dev-by a:hover,.dev-by a:focus-visible{opacity:1}
+.dev-by img{height:20px;width:auto}
 
 /* ---------- Back to top with scroll progress ---------- */
 .to-top{position:fixed;inset-block-end:24px;inset-inline-start:24px;width:48px;height:48px;border-radius:50%;background:#fff;box-shadow:var(--shadow-2);border:0;cursor:pointer;display:grid;place-items:center;opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity var(--dur-s),transform var(--dur-s),visibility var(--dur-s);z-index:60}
@@ -658,7 +663,12 @@ p{margin:0 0 1em}
   <div class="footer-bottom">
     <div class="wrap">
       <span>© 2026 GATE Lebanon. <span data-i18n="rights">All rights reserved.</span></span>
-      <nav aria-label="Legal"><a href="#" data-i18n="privacy">Privacy</a><a href="#" data-i18n="cookies">Cookies</a><a href="#" data-i18n="terms">Terms</a></nav>
+      <div class="end">
+        <nav aria-label="Legal"><a href="#" data-i18n="privacy">Privacy</a><a href="#" data-i18n="cookies">Cookies</a><a href="#" data-i18n="terms">Terms</a></nav>
+        <span class="dev-by"><span data-i18n="devBy">Developed by</span>
+          <a href="https://www.e-5hop.com" target="_blank" rel="noopener" dir="ltr"><img src="assets/e5hop-logo-light.png" width="107" height="20" alt="E-5HOP"></a>
+        </span>
+      </div>
     </div>
   </div>
 </footer>
@@ -765,7 +775,7 @@ p{margin:0 0 1em}
     wEyebrow:'أين نعمل',wTitle:'حاضرون حيث الحاجة أكبر',wText:'تتركز برامجنا في شمال لبنان، مع أنشطة في محافظات أخرى بحسب الحاجة والشراكات.',north:'الشمال',beirut:'بيروت',rMain:'منطقة العمل الرئيسية',rOffice:'المكتب الرئيسي',
     nEyebrow:'الأخبار والمستجدات',nTitle:'آخر أخبار غايت لبنان',nAll:'كل الأخبار',n1:'تدريب الفسيفساء يفتح آفاقاً جديدة للنساء في عكار',n2:'مخيمات صيفية أكثر أماناً للكشافة في شمال لبنان',n3:'تمكين الشباب عبر الرياضة في عكار',
     partners:'شركاؤنا والجهات المانحة',ctaTitle:'لنبنِ معاً مجتمعات أكثر صموداً',ctaText:'كن شريكاً لغايت لبنان في برامج التعليم والحماية وسبل العيش، أو تواصل معنا لمعرفة المزيد عن عملنا.',ctaBtn1:'اتصل بنا',ctaBtn2:'حمّل ملفنا التعريفي',
-    fAbout:'منظمة لبنانية غير حكومية مستقلة للمساعدات الإنسانية والتنمية والسلام، تعمل مع المجتمعات الأكثر ضعفاً منذ عام 2014.',fLinks:'روابط سريعة',fGallery:'معرض الصور',fPartners:'الشركاء والمانحون',fContact:'تواصل',fNews:'ابقَ على اطلاع',fNewsText:'أخبار من الميدان في بريدك بضع مرات في السنة.',fEmail:'بريدك الإلكتروني',fSub:'اشترك',rights:'جميع الحقوق محفوظة.',privacy:'الخصوصية',cookies:'ملفات تعريف الارتباط',terms:'الشروط'};
+    fAbout:'منظمة لبنانية غير حكومية مستقلة للمساعدات الإنسانية والتنمية والسلام، تعمل مع المجتمعات الأكثر ضعفاً منذ عام 2014.',fLinks:'روابط سريعة',fGallery:'معرض الصور',fPartners:'الشركاء والمانحون',fContact:'تواصل',fNews:'ابقَ على اطلاع',fNewsText:'أخبار من الميدان في بريدك بضع مرات في السنة.',fEmail:'بريدك الإلكتروني',fSub:'اشترك',rights:'جميع الحقوق محفوظة.',devBy:'تطوير',privacy:'الخصوصية',cookies:'ملفات تعريف الارتباط',terms:'الشروط'};
   var EN={};
   document.querySelectorAll('[data-i18n]').forEach(function(el){EN[el.dataset.i18n]=el.id==='heroTitle'?'Empowering Communities in Lebanon':el.innerHTML});
   document.querySelectorAll('[data-i18n-ph]').forEach(function(el){EN[el.dataset.i18nPh]=el.placeholder});
