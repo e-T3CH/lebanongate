@@ -89,6 +89,7 @@ final class App
     public function handle(Request $request): Response
     {
         $this->request = $request;
+        Url::setBase($request->basePath());
         try {
             if (self::isInstalled() && Health::authorized($this, $request)) {
                 // Before the database is touched: the health check must answer even when the database is down.
@@ -217,12 +218,7 @@ final class App
 
     public function urls(string $lang = ''): UrlGenerator
     {
-        $base = $this->config->string('app.url');
-        if ($base === '') {
-            $host = $this->request->server('HTTP_HOST') ?? 'localhost';
-            $base = ($this->request->isSecure() ? 'https://' : 'http://') . $host;
-        }
-        return new UrlGenerator($base, $this->languages()->enabledCodes(), $this->languages()->defaultCode());
+        return new UrlGenerator($this->baseUrl(), $this->languages()->enabledCodes(), $this->languages()->defaultCode());
     }
 
     public function request(): Request
@@ -263,7 +259,7 @@ final class App
         $base = $this->config->string('app.url');
         if ($base === '') {
             $host = $this->request->server('HTTP_HOST') ?? 'localhost';
-            $base = ($this->request->isSecure() ? 'https://' : 'http://') . $host;
+            $base = ($this->request->isSecure() ? 'https://' : 'http://') . $host . Url::base();
         }
         return rtrim($base, '/');
     }

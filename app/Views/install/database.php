@@ -13,7 +13,7 @@
 <?= $view->component('notice', ['title' => $view->t($error), 'icon' => 'fa-solid fa-database', 'role' => 'alert']) ?>
 
 <?php endif; ?>
-<form class="panel-fields panel-fields--flush" method="post" action="/install/database" novalidate>
+<form class="panel-fields panel-fields--flush" method="post" action="<?= e_url('/install/database') ?>" novalidate>
   <?= $view->csrfField() ?>
   <div class="fields-2">
     <?= $view->component('input', ['name' => 'db_host', 'label' => $view->t('install.database.host'), 'value' => $db['host'], 'required' => true]) ?>

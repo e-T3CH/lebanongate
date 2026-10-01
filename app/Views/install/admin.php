@@ -10,7 +10,7 @@ $err = static fn (string $f): ?string => isset($errors[$f]) ? $view->t($errors[$
   <h1 class="atop__title"><?= e($view->t('install.admin.title')) ?></h1>
   <span class="muted"><?= e($view->t('install.admin.intro')) ?></span>
 </div>
-<form class="panel-fields panel-fields--flush" method="post" action="/install/admin" novalidate>
+<form class="panel-fields panel-fields--flush" method="post" action="<?= e_url('/install/admin') ?>" novalidate>
   <?= $view->csrfField() ?>
   <div class="fields-2">
     <?= $view->component('input', ['name' => 'name', 'label' => $view->t('install.admin.name'), 'value' => $admin['name'], 'autocomplete' => 'name', 'required' => true, 'error' => $err('name')]) ?>

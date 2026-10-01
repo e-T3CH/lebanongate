@@ -26,7 +26,7 @@ $pill = $check['ok']
 
 <?php endforeach; ?>
 </div>
-<form class="actions" method="post" action="/install/requirements">
+<form class="actions" method="post" action="<?= e_url('/install/requirements') ?>">
   <?= $view->csrfField() ?>
 <?php if (!$passes): ?>
   <span class="muted install-note"><?= e($view->t('install.requirements.fix_first')) ?></span>

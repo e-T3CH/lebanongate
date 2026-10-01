@@ -99,14 +99,35 @@ final class Paths
         $parent = dirname(rtrim($webRoot, '/\\'));
         return match ($layout) {
             'standard' => $parent,
-            'split' => $parent . DIRECTORY_SEPARATOR . self::safeDirName($appDir),
+            'split' => self::normalize($parent . DIRECTORY_SEPARATOR . self::safeDirName($appDir)),
             default => throw new \InvalidArgumentException('Unknown deploy layout: ' . $layout),
         };
     }
 
+    /** Resolves '..' segments ('/x/public_html/../gate-app' becomes '/x/gate-app'), also for a folder not created yet. */
+    private static function normalize(string $path): string
+    {
+        $real = realpath($path);
+        if ($real !== false) {
+            return $real;
+        }
+        $parts = [];
+        foreach (explode('/', str_replace('\\', '/', $path)) as $part) {
+            if ($part === '..') {
+                array_pop($parts);
+            } elseif ($part !== '.' && ($part !== '' || $parts === [])) {
+                $parts[] = $part;
+            }
+        }
+        return implode(DIRECTORY_SEPARATOR, $parts);
+    }
+
     private static function safeDirName(string $name): string
     {
-        if (preg_match('/^[A-Za-z0-9._-]{1,64}$/', $name) !== 1 || $name === '.' || $name === '..') {
+        // A folder name ('gate-app'), optionally a level or more up ('../gate-app') for a web folder that sits inside
+        // public_html (https://example.org/gate/) while the application stays outside the web root.
+        $last = basename(str_replace('\\', '/', $name));
+        if (preg_match('#^(\.\./){0,5}[A-Za-z0-9._-]{1,64}$#', $name) !== 1 || $last === '.' || $last === '..') {
             throw new \InvalidArgumentException('Invalid application folder name: ' . $name);
         }
         return $name;

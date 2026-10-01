@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Gate\Http;
 
+use Gate\Core\Url;
 use Gate\Security\IpAddress;
 
 final class Request
@@ -30,6 +31,7 @@ final class Request
         private readonly array $cookies = [],
         array $trustedProxies = [],
         private readonly array $files = [],
+        private readonly string $basePath = '',
     ) {
         $this->ip = IpAddress::client($server, $trustedProxies);
         $this->secure = self::detectSecure($server, $trustedProxies);
@@ -39,18 +41,24 @@ final class Request
     public static function fromGlobals(array $trustedProxies): self
     {
         $uri = is_string($_SERVER['REQUEST_URI'] ?? null) ? $_SERVER['REQUEST_URI'] : '/';
-        $path = rawurldecode((string) parse_url($uri, PHP_URL_PATH));
+        $path = self::normalizePath(rawurldecode((string) parse_url($uri, PHP_URL_PATH)));
         /** @var array<string, mixed> $server */
         $server = $_SERVER;
+        // Installed in a folder (https://example.org/gate/): the application sees '/en/…', never '/gate/en/…'.
+        $base = Url::detect($path, is_string($_SERVER['SCRIPT_NAME'] ?? null) ? $_SERVER['SCRIPT_NAME'] : '');
+        if ($base !== '') {
+            $path = self::normalizePath(substr($path, strlen($base)));
+        }
         return new self(
             strtoupper(is_string($_SERVER['REQUEST_METHOD'] ?? null) ? $_SERVER['REQUEST_METHOD'] : 'GET'),
-            self::normalizePath($path),
+            $path,
             $_GET,
             $_POST,
             $server,
             $_COOKIE,
             $trustedProxies,
             $_FILES,
+            $base,
         );
     }
 
@@ -63,6 +71,12 @@ final class Request
     public function method(): string
     {
         return $this->method;
+    }
+
+    /** The folder the site is installed in ('' at the domain root, '/gate' in a folder). */
+    public function basePath(): string
+    {
+        return $this->basePath;
     }
 
     public function path(): string

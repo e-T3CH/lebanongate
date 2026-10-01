@@ -31,7 +31,7 @@ if ($detail !== null) {
 <?= $view->component('form-errors', ['messages' => $messages, 'icon' => 'fa-solid fa-globe']) ?>
 
 <?php endif; ?>
-<form method="post" action="/install/languages" novalidate>
+<form method="post" action="<?= e_url('/install/languages') ?>" novalidate>
   <?= $view->csrfField() ?>
   <?= $view->component('data-table', ['columns' => [
       ['key' => 'language', 'label' => $view->t('install.languages.language')],

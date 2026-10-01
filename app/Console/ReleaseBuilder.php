@@ -40,6 +40,11 @@ final class ReleaseBuilder
         }
         $appDirName = $options['app-dir'] ?? 'gate-app';
         Paths::appRootFor(Paths::root('public'), 'split', $appDirName); // validates the folder name
+        if (str_contains($appDirName, '/')) {
+            // The zip holds the two folders side by side; for a web folder deeper in public_html, edit paths.php after
+            // uploading ('app_dir' => '../gate-app').
+            throw new \InvalidArgumentException('--app-dir must be a folder name (edit paths.php after uploading for ../ paths).');
+        }
         $output = rtrim($options['output'] ?? Paths::root('build'), '/\\');
         $composer = $this->findComposer($options['composer'] ?? '');
         $root = Paths::root();

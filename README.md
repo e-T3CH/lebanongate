@@ -160,6 +160,24 @@ under `public/assets`, run `python3 tools/assets/manifest.py` (cache-busting has
 
 After installation `/install` returns 404 for good.
 
+### Installing in a folder
+
+The site runs at the domain root (`https://example.org/`) or in any folder (`https://example.org/gate/`,
+`https://example.org/demo/gate/`). Nothing has to be configured: the folder is detected from the request
+(`Core\Url::detect()`), removed from incoming paths and added to every link, redirect, asset, image and form
+(`Url::to()`, through `e_url()`, `View::asset()` and `Response::redirect()`). The installer suggests the site address
+with the folder, and robots.txt rules carry it.
+
+- **Everything in one folder:** unzip the full project into `public_html/gate/`. The root `.htaccess` routes requests
+  into `public/` and refuses every private file.
+- **cPanel / hPanel split:** put the contents of `public_html/` from the cPanel zip into `public_html/gate/`, put
+  `gate-app/` outside the web root (for example next to `public_html`), and set `'app_dir' => '../gate-app'` in
+  `public_html/gate/paths.php`. `app_dir` accepts up to five `../` levels.
+
+Checked on Apache 2.4 with PHP-FPM: installation, the public site in three languages, every admin screen, uploads,
+PDF downloads, backups and restore, the scheduler and monitor addresses, and email links, both in folders (one and two
+levels deep) and at the domain root.
+
 ### Updating
 
 Upload a new release except `config/config.local.php`, `storage/` and the uploads folder. The first request applies

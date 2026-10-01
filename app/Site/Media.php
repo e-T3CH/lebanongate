@@ -46,7 +46,7 @@ final class Media
             if (!is_file($target) && !$this->generate($file, $target, $w, $size)) {
                 return $result;
             }
-            $set[$w] = '/' . $name . ' ' . $w . 'w';
+            $set[$w] = \Gate\Core\Url::to('/' . $name) . ' ' . $w . 'w';
         }
         ksort($set);
         $result['webp'] = implode(', ', $set);

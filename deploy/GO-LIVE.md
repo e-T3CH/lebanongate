@@ -228,5 +228,15 @@ Hostinger's cron jobs (hPanel → **Advanced → Cron Jobs**) take the full path
 If hPanel's **PHP** type only accepts a file path, choose the **Custom** type and paste the whole line. Hostinger's
 SMTP server is usually `smtp.hostinger.com` (port 465 SSL or 587 TLS).
 
+**Installing in a folder** (for example `https://yourdomain.org/gate/` instead of the domain root): it works the same
+way, there is nothing to configure.
+
+- Simplest: unzip the full project zip into the folder (`public_html/gate/`) and open `https://yourdomain.org/gate/`.
+- cPanel / hPanel zip: copy the contents of its `public_html/` into `public_html/gate/`, put `gate-app/` next to
+  `public_html` (outside the web root), then edit `public_html/gate/paths.php` and set `'app_dir' => '../gate-app'`.
+
+The installer suggests the address with the folder; keep it. The scheduler and monitor addresses shown in
+Settings → Maintenance already include the folder.
+
 **A host where you can choose the document root** (VPS, nginx): use the `standard` zip and point the document root
 at `gate-lebanon/public` (nginx: `deploy/nginx.conf.example`).

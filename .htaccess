@@ -1,4 +1,4 @@
-# The application folder as document root — the "webroot" layout for hosts where everything has to live inside the
+# The application folder as document root (at the domain root or in any sub-folder) — the "webroot" layout for hosts where everything has to live inside the
 # web root (one.com and similar), and the fallback for the standard layout when the document root cannot point to
 # /public. Every request is routed into /public; every other folder and file is unreachable.
 # Where you can, set the document root to /public instead (or use the split layout) and this file is never used.
@@ -12,7 +12,8 @@ DirectoryIndex index.php
     RewriteRule ^(app|bin|build|config|database|deploy|design|docs|lang|mockups|resources|storage|tests|tools|vendor)(/|$) - [F,L]
     RewriteRule (^|/)\.(?!well-known/) - [F,L]
     RewriteRule ^(composer\.(json|lock)|phpunit\.xml(\.dist)?|phpstan\.neon\.dist|.*\.md)$ - [F,L]
-    RewriteCond %{REQUEST_URI} !^/public/
+    # Relative to this folder, so the site works at the domain root and in any sub-folder (/gate/, /demo/gate/).
+    RewriteRule ^public/ - [L]
     RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
 

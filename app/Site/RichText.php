@@ -24,7 +24,7 @@ final class RichText
                 $html = str_replace(':' . $name, htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5, 'UTF-8'), $html);
             }
         }
-        return self::purifier()->purify($html);
+        return self::withBase(self::purifier()->purify($html));
     }
 
     /**
@@ -53,5 +53,21 @@ final class RichText
             self::$purifier = new \HTMLPurifier($config);
         }
         return self::$purifier;
+    }
+
+    /**
+     * Links and images inside rich text are stored root-relative ('/uploads/…', '/en/projects'); in a site installed
+     * in a folder they need the folder in front (Url::to). Runs on purified HTML, whose attributes are double-quoted.
+     */
+    private static function withBase(string $html): string
+    {
+        if (\Gate\Core\Url::base() === '') {
+            return $html;
+        }
+        return (string) preg_replace_callback(
+            '/\b(href|src)="(\/(?!\/)[^"]*)"/',
+            static fn (array $m): string => $m[1] . '="' . htmlspecialchars(\Gate\Core\Url::to(html_entity_decode($m[2], ENT_QUOTES | ENT_HTML5, 'UTF-8')), ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5, 'UTF-8') . '"',
+            $html,
+        );
     }
 }

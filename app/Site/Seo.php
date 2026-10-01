@@ -121,6 +121,9 @@ final class Seo
     /** robots.txt: everything public is crawlable; the admin path is never revealed. */
     public static function robots(string $baseUrl): string
     {
-        return "User-agent: *\nDisallow: /install\nDisallow: /*/consent\nDisallow: /*/newsletter/\n\nSitemap: " . rtrim($baseUrl, '/') . "/sitemap.xml\n";
+        // In a folder install the rules carry the folder (search engines read robots.txt at the domain root only, so
+        // the site owner can copy these lines there).
+        $dir = rtrim((string) parse_url($baseUrl, PHP_URL_PATH), '/');
+        return "User-agent: *\nDisallow: {$dir}/install\nDisallow: {$dir}/*/consent\nDisallow: {$dir}/*/newsletter/\n\nSitemap: " . rtrim($baseUrl, '/') . "/sitemap.xml\n";
     }
 }

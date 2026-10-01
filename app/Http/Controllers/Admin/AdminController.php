@@ -70,7 +70,7 @@ abstract class AdminController extends Controller
             $size = $kind === 'image' && $item['width'] > 0 ? ' · ' . $item['width'] . '×' . $item['height'] : '';
             $options[] = ['value' => (string) $item['id'], 'label' => $item['original_name'] . $size];
             if ($kind === 'image') {
-                $urls[(string) $item['id']] = $item['url'];
+                $urls[(string) $item['id']] = \Gate\Core\Url::to($item['url']);
             }
         }
         // The layout prints these for admin-gate.js, which shows a thumbnail next to image pickers.

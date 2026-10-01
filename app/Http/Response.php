@@ -22,9 +22,10 @@ final class Response
         return (new self($body, $status))->withHeader('Content-Type', 'text/html; charset=utf-8');
     }
 
+    /** @param string $location a root-relative path ('/en/') gets the installation folder; absolute URLs pass unchanged */
     public static function redirect(string $location, int $status = 302): self
     {
-        return (new self('', $status))->withHeader('Location', $location);
+        return (new self('', $status))->withHeader('Location', \Gate\Core\Url::to($location));
     }
 
     public static function text(string $body, int $status = 200): self

@@ -9,7 +9,7 @@
   <h1 class="atop__title"><?= e($view->t('install.site.title')) ?></h1>
   <span class="muted"><?= e($view->t('install.site.intro')) ?></span>
 </div>
-<form class="panel-fields panel-fields--flush" method="post" action="/install/site" novalidate>
+<form class="panel-fields panel-fields--flush" method="post" action="<?= e_url('/install/site') ?>" novalidate>
   <?= $view->csrfField() ?>
   <div class="fields-2">
     <?= $view->component('input', ['name' => 'site_name', 'label' => $view->t('install.site.name'), 'value' => $site['site_name'], 'required' => true, 'error' => isset($errors['site_name']) ? $view->t($errors['site_name']) : null]) ?>

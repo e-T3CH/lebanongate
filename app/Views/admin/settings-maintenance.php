@@ -40,7 +40,7 @@ foreach ($backups as $backup) {
         'file' => $backup['name'],
         'at' => $backup['at'],
         'size' => MaintenanceController::formatBytes($backup['size']),
-        'download' => Html::trusted('<a class="link-sm" href="' . e_attr($base . '/backups/' . rawurlencode($backup['name'])) . '" download>' . $view->component('icon', ['icon' => 'fa-solid fa-download', 'size' => '14']) . ' ' . e($view->t('admin.maintenance.download')) . '</a>'),
+        'download' => Html::trusted('<a class="link-sm" href="' . e_url($base . '/backups/' . rawurlencode($backup['name'])) . '" download>' . $view->component('icon', ['icon' => 'fa-solid fa-download', 'size' => '14']) . ' ' . e($view->t('admin.maintenance.download')) . '</a>'),
     ];
 }
 $backupOptions = array_map(static fn (array $b): array => ['value' => $b['name'], 'label' => $b['at'] . ' — ' . $b['name']], $backups);

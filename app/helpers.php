@@ -32,7 +32,8 @@ if (!function_exists('e_url')) {
     /** Escape a URL for href/src (blocks javascript:, data:, ...). */
     function e_url(mixed $value): string
     {
-        return Escape::url($value);
+        // Root-relative paths get the installation folder (Url::to); absolute URLs pass unchanged.
+        return Escape::url(is_string($value) ? \Gate\Core\Url::to($value) : $value);
     }
 }
 

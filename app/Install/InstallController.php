@@ -69,7 +69,7 @@ final class InstallController
             default => $this->languages($request),
         };
         if ($request->query('lang') !== '') {
-            $response->withCookie('gate_install_lang', $this->app->translator()->locale(), ['expires' => 0, 'path' => '/install', 'secure' => $request->isSecure(), 'httponly' => true, 'samesite' => 'Strict']);
+            $response->withCookie('gate_install_lang', $this->app->translator()->locale(), ['expires' => 0, 'path' => \Gate\Core\Url::base() . '/install', 'secure' => $request->isSecure(), 'httponly' => true, 'samesite' => 'Strict']);
         }
         return $response;
     }
@@ -77,7 +77,7 @@ final class InstallController
     private function requirements(Request $request): Response
     {
         $host = (string) ($request->server('HTTP_HOST') ?? '');
-        $base = preg_match('/^[A-Za-z0-9.\-]+(:\d{1,5})?$/', $host) === 1 ? ($request->isSecure() ? 'https://' : 'http://') . $host : null;
+        $base = preg_match('/^[A-Za-z0-9.\-]+(:\d{1,5})?$/', $host) === 1 ? ($request->isSecure() ? 'https://' : 'http://') . $host . \Gate\Core\Url::base() : null;
         $checks = Requirements::check($request->isSecure(), $base);
         $passes = Requirements::passes($checks);
         if ($request->method() === 'POST' && $passes) {
@@ -117,7 +117,7 @@ final class InstallController
     private function site(Request $request): Response
     {
         $state = $this->state();
-        $guessUrl = ($request->isSecure() ? 'https://' : 'http://') . preg_replace('/[^A-Za-z0-9.:\-\[\]]/', '', $request->server('HTTP_HOST') ?? 'localhost');
+        $guessUrl = ($request->isSecure() ? 'https://' : 'http://') . preg_replace('/[^A-Za-z0-9.:\-\[\]]/', '', $request->server('HTTP_HOST') ?? 'localhost') . \Gate\Core\Url::base();
         /** @var array{site_name: string, site_url: string} $site */
         $site = $state['data']['site'] ?? ['site_name' => 'GATE Lebanon', 'site_url' => $guessUrl];
         $errors = [];

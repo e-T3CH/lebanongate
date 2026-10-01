@@ -117,10 +117,10 @@ final class View
         $path = ltrim($path, '/');
         $manifest = self::manifest();
         if (isset($manifest[$path])) {
-            return '/assets/' . $path . '?v=' . $manifest[$path];
+            return Url::to('/assets/' . $path . '?v=' . $manifest[$path]);
         }
         $file = Paths::publicDir('assets/' . $path);
-        return '/assets/' . $path . '?v=' . (is_file($file) ? (string) filemtime($file) : '1');
+        return Url::to('/assets/' . $path . '?v=' . (is_file($file) ? (string) filemtime($file) : '1'));
     }
 
     /** @return array<string, string> */
